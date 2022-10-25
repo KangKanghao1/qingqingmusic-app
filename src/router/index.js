@@ -1,23 +1,50 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import DiscovrView from '@/views/DiscovrView/DiscovrView.vue'
+import MyMusic from '@/views/MyMusic/MyMusic.vue'
+import VideoClipView from '@/views/VideoClipView/VideoClipView.vue'
+import UserView from '@/views/UserView/UserView.vue'
+
+
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    // 自定义重定义跳转到主页
+    path: '',
+    redirect: '/discovr',
+
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/',
+    redirect: '/discovr',
+
+  },
+  {
+    path: '/discovr',
+    name: 'discovr',
+    component: DiscovrView
+  },
+  {
+    path: '/mymusic',
+    name: 'mymusic',
+    component: MyMusic
+  },
+
+  {
+    path: '/video',
+    name: 'video',
+    component: VideoClipView
+  },
+
+  {
+    path: '/user',
+    name: 'user',
+    component: UserView
   }
+
+
 ]
 
 const router = new VueRouter({
