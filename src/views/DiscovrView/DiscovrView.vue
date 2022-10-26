@@ -9,7 +9,9 @@
       />
       <div class="music-img"></div>
     </div>
+
     <discover-content :bannerimgdata="bannerimgdata" />
+    
   </div>
 </template>
 <script>
