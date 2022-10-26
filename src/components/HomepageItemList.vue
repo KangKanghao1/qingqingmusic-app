@@ -17,22 +17,26 @@ export default {
 </script>
 <style lang="scss" scoped>
 .recommend-content {
+  padding: 0 20px;
   width: 100vw;
+  height: 10vh;
   display: flex;
-  justify-content: space-around;
+//   justify-content: space-around;
   align-items: center;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgb(142, 142, 142);
   background-color: rgb(253, 188, 188);
   font-size: 12px;
-  overflow: auto;
+  overflow-x: auto;
+//   overflow: hidden;
 
   .homepage-icon-title {
     display: flex;
     flex-flow: column;
     justify-content: center;
     text-align: center;
+
     .recommend-icon {
-      width: 50px;
+      width: 50x;
       height: 50px;
     }
   }
