@@ -9,7 +9,10 @@ import VantConfig from './vant-config'
 
 Vue.use(VueAxiosPlugin, {
   // 请求拦截处理
-  reqHandleFunc: config => config,
+  reqHandleFunc: config => ({
+    ...config,
+    baseURL: 'http://localhost:3000',
+  }),
   reqErrorFunc: error => Promise.reject(error),
   // 响应拦截处理
   resHandleFunc: response => response,
