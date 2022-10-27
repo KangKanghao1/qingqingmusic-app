@@ -23,21 +23,21 @@ export default {
 </script>
 <style lang="scss" scoped>
 .recommend-song {
+   width: 100vw;
   padding: 15px 0;
   overflow: hidden;
 
   .recommend-title {
     padding: 0px 15px 15px;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 400;
     display: flex;
     justify-content: space-between;
   }
 
   .song-content {
     background-color: rgb(255, 207, 207);
-
-    width: 100vw;
+    width: 100%;
     height: 30vh;
     padding: 0px 15px 15px;
     display: flex;
@@ -46,12 +46,12 @@ export default {
     overflow: auto;
 
     .song-img-title {
+
       margin-bottom: 5px;
       border-radius: 10px;
       overflow: hidden;
-      flex: 0 0 1;
-      width: 28vw;
-      height: 15vh;
+      width: 30vw;
+  
 
       .song-img {
         width: 100%;
