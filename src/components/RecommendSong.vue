@@ -30,9 +30,9 @@ export default {
   overflow: hidden;
 
   .recommend-title {
-    padding: 0px 15px 15px;
+    padding: 15px;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: bold;
     display: flex;
     justify-content: space-between;
   }
@@ -49,12 +49,13 @@ export default {
   
     .song-img-title {
       margin-bottom: 5px;
-      border-radius: 10px;
       overflow: hidden;
       width: 25vw;
 
       .song-img {
         width: 100%;
+        display: block;
+        border-radius: 10px;
       }
     }
   }
