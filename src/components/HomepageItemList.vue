@@ -1,9 +1,11 @@
 <template>
-  <div class="recommend-content">
+  <div class="homepage-content">
     <div v-for="h in HomepageItemList" :key="h.id">
-      <div class="homepage-icon-title">
-        <img class="recommend-icon" v-lazy="h.iconUrl" alt="" />
-        <h3>{{ h.name }}</h3>
+      <div class="homepage-list">
+        <div class="homepage-icon-title">
+          <img class="homepage-icon" v-lazy="h.iconUrl" alt="" />
+          <h3>{{ h.name }}</h3>
+        </div>
       </div>
     </div>
   </div>
@@ -16,28 +18,28 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.recommend-content {
-  padding: 0 20px;
-  width: 100vw;
+.homepage-content {
   height: 10vh;
   display: flex;
-//   justify-content: space-around;
   align-items: center;
   border-bottom: 1px solid rgb(142, 142, 142);
   background-color: rgb(253, 188, 188);
   font-size: 12px;
   overflow-x: auto;
-//   overflow: hidden;
 
-  .homepage-icon-title {
+  .homepage-list {
+    width: 100%;
     display: flex;
     flex-flow: column;
     justify-content: center;
     text-align: center;
-
-    .recommend-icon {
-      width: 50x;
-      height: 50px;
+    padding: 0 10px;
+    .homepage-icon-title {
+      width: 100%;
+      .homepage-icon {
+        width: 50x;
+        height: 50px;
+      }
     }
   }
 }

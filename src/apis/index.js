@@ -3,7 +3,7 @@ export const getSongDetail = id => `/song/detail?ids=${id}`
 
 // 推荐歌单
 // /top/playlist/highquality
-export const getPlaylistdata = `/personalized?limit=9`
+export const getPlaylistdata = `/personalized?limit=6`
 
 
 // 每日推荐/recommend/songs
