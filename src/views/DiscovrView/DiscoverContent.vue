@@ -2,15 +2,16 @@
   <div class="discover-content">
     <DiscoverBanner :bannerimgdata="bannerimgdata" />
     <HomepageItemList :HomepageItemList="HomepageItemList" />
-    <NewMusic :NewMusic="NewMusic"/>
+    <NewMusic :NewMusic="NewMusic" />
     <RecommendSong :RecommendSong="RecommendSong" />
+    <PersonalizedMv :personalizedmv="personalizedmv" />
   </div>
 </template>
 <script>
 import DiscoverBanner from "@/components/DiscoverBanner.vue";
 import RecommendSong from "@/components/RecommendSong.vue";
 import NewMusic from "@/components/NewMusic.vue";
-
+import PersonalizedMv from "@/components/PersonalizedMv.vue";
 import HomepageItemList from "@/components/HomepageItemList.vue";
 // nav icon
 import { getHomepageItemList } from "../../apis/discover.js";
@@ -18,8 +19,11 @@ import { getHomepageItemList } from "../../apis/discover.js";
 import { getPlaylistdata } from "../../apis/index.js";
 // 新音乐
 import { NEWSONGSAPI } from "../../apis/play.js";
-// 电台
-import { getRadioStationData } from "../../apis/radiostation.js";
+// 推荐mv
+import { getpersonalizedmv } from "../../apis/play.js";
+// 歌手
+import { gettoplistartistData } from "../../apis/singer.js";
+
 export default {
   data() {
     return {
@@ -29,8 +33,11 @@ export default {
       RecommendSong: [],
       // 新音乐
       NewMusic: [],
-      // 电台
-      radioStation: [],
+      // 推荐mv
+      personalizedmv: [],
+
+      // 歌手
+      toplistartistData:[]
     };
   },
 
@@ -43,7 +50,9 @@ export default {
     this.getHomepageItemList();
     this.getPlaylistdata();
     this.getnewsongsapi();
-    this.getradiostation();
+    this.getpersonalizedmv();
+    // 歌手
+    this.gettoplistartistData();
   },
 
   methods: {
@@ -63,13 +72,23 @@ export default {
     async getnewsongsapi() {
       let { data } = await this.$axios(NEWSONGSAPI);
       this.NewMusic = data.result;
-      console.log("1", data.result);
     },
-    // 电台
-    async getradiostation() {
-      let { data } = await this.$axios(getRadioStationData);
-      this.radioStation = data.categories;
-      console.log(this.radioStation);
+    // 每日推荐
+    async getpersonalizedmv() {
+      let { data } = await this.$axios(getpersonalizedmv);
+      this.personalizedmv = data.result;
+
+      // 取前三个数据
+      // for (let i = 0; i < 3; i++) {
+      //   if (this.radioStation.indexOf(data.categories[i]) == -1) {
+      //     this.radioStation.push(data.categories[i]);
+      //   }
+      // }
+    },
+
+    async gettoplistartistData() {
+      let { data } = await this.$axios(gettoplistartistData);
+      console.log(data.list);
     },
   },
 
@@ -78,6 +97,7 @@ export default {
     HomepageItemList,
     RecommendSong,
     NewMusic,
+    PersonalizedMv,
   },
 };
 </script>
