@@ -2,6 +2,7 @@
   <div class="new-music">
     <div class="music-title-icon">
       <h3 class="music-title">推荐歌曲</h3>
+      <span>更多</span>
     </div>
     <div class="music-list">
       <div v-for="n in NewMusic" :key="n.id">
@@ -28,9 +29,12 @@ export default {
 .new-music {
   height: 20vh;
 
-  .music-title {
+  .music-title-icon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 15px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
   }
 
@@ -48,7 +52,6 @@ export default {
       border-radius: 15px;
       overflow: hidden;
       box-shadow: 2px 0 7px 0;
-      
 
       .music-mask {
         width: 100%;
@@ -67,16 +70,16 @@ export default {
           background-color: rgba(66, 77, 88, 0.6);
           background-image: url("../assets/imgs/gdt_ic_play.png");
           background-position: center center;
-          background-size: 34px;
+          background-size: 20px;
           background-repeat: no-repeat;
         }
       }
 
       .music-title {
         text-align: center;
-        font-size: 12px;
-        white-space: nowrap;
-     
+        font-size: 14px;
+        white-space: 400;
+        padding: 10px ;
       }
     }
   }
