@@ -5,6 +5,7 @@
     <NewMusic :NewMusic="NewMusic" />
     <RecommendSong :RecommendSong="RecommendSong" />
     <PersonalizedMv :personalizedmv="personalizedmv" />
+    <BangSinger :toplistartistData="toplistartistData"/>
   </div>
 </template>
 <script>
@@ -13,6 +14,7 @@ import RecommendSong from "@/components/RecommendSong.vue";
 import NewMusic from "@/components/NewMusic.vue";
 import PersonalizedMv from "@/components/PersonalizedMv.vue";
 import HomepageItemList from "@/components/HomepageItemList.vue";
+import BangSinger from "@/components/BangSinger.vue";
 // nav icon
 import { getHomepageItemList } from "../../apis/discover.js";
 // 推荐歌单
@@ -35,9 +37,10 @@ export default {
       NewMusic: [],
       // 推荐mv
       personalizedmv: [],
-
       // 歌手
-      toplistartistData:[]
+      toplistartistData: [],
+      // 控制每次获取10个歌手
+      toplistdata: 0,
     };
   },
 
@@ -86,9 +89,18 @@ export default {
       // }
     },
 
+    // 歌手
     async gettoplistartistData() {
+      this.toplistdata += 10;
       let { data } = await this.$axios(gettoplistartistData);
-      console.log(data.list);
+
+      // 每次调用请求都会给  this.toplistartistData 添加10个数据
+      for (let i = 0; i < this.toplistdata; i++) {
+        if (this.toplistartistData.indexOf(data.list.artists[i] == -1)) {
+          this.toplistartistData.push(data.list.artists[i]);
+        }
+      }
+      console.log(this.toplistartistData);
     },
   },
 
@@ -98,12 +110,13 @@ export default {
     RecommendSong,
     NewMusic,
     PersonalizedMv,
+    BangSinger,
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .discover-content {
-  padding: 55px 0 0;
+  padding: 55px 0;
 }
 </style>
