@@ -1,4 +1,4 @@
-import { NavBar, Tabbar, TabbarItem, Icon, Search, Swipe, SwipeItem,Lazyload } from 'vant'
+import { NavBar, Tabbar, TabbarItem, Icon, Search, Swipe, SwipeItem, Lazyload, Tab, Tabs } from 'vant'
 
 const vantCompontents = [
     NavBar,
@@ -8,7 +8,9 @@ const vantCompontents = [
     Search,
     Swipe,
     SwipeItem,
-    Lazyload
+    Lazyload,
+    Tab,
+    Tabs
 ]
 
 export default {
