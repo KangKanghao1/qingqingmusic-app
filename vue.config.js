@@ -7,6 +7,7 @@ module.exports = defineConfig({
         target: "http://localhost:3000",
         ws:true,
         changeOrigin: true,
+        withCredentials: true
       },
     },
   },
