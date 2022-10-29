@@ -38,9 +38,8 @@ export default {
   }
 
   .song-content {
-    background-color: rgb(255, 207, 207);
+    background-color: pink;
     width: 100%;
-    height: 36vh;
     padding: 10px 15px;
     display: flex;
     justify-content: space-between;
