@@ -28,7 +28,7 @@ export default {
   height: 20vh;
   padding: 0 10px;
   // overflow: auto;
-  background-color: rgb(253, 188, 188);
+  background-color: pink;
 
   .van-swipe {
     height: 100%;

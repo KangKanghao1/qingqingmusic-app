@@ -1,7 +1,9 @@
 <template>
   <div class="personalized-mv">
-    <div>推荐MV</div>
-
+    <div class="mv-content">
+      <h3 class="mv-title">推荐MV</h3>
+      <span>更多</span>
+    </div>
     <div class="mv-title-contnet">
       <div v-for="r in personalizedmv" :key="r.id">
         <div class="permv">
@@ -19,9 +21,7 @@ export default {
     personalizedmv: Array,
   },
   data() {
-    return {
-
-    };
+    return {};
   },
 
   created() {},
@@ -32,14 +32,25 @@ export default {
 
 <style lang="scss" scoped>
 .personalized-mv {
-  width: 100vw;
-  height: 20vh;
+  // width: 100vw;
+  // height: 20vh;
   padding: 15px;
-  overflow: auto;
+
+  .mv-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px 15px;
+    font-weight: bold;
+    font-size: 16px;
+  }
 
   .mv-title-contnet {
     display: flex;
     justify-content: space-between;
+    overflow: auto;
+    background-color: pink;
+    padding: 10px 0;
     .permv {
       position: relative;
       width: 100px;
@@ -61,7 +72,6 @@ export default {
         font-size: 16px;
         font-weight: bold;
         transform: translateX(-50%);
-
       }
     }
   }
