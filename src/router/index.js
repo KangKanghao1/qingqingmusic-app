@@ -4,7 +4,7 @@ import DiscovrView from '@/views/DiscovrView/DiscovrView.vue'
 import MyMusic from '@/views/MyMusic/MyMusic.vue'
 import VideoClipView from '@/views/VideoClipView/VideoClipView.vue'
 import UserView from '@/views/UserView/UserView.vue'
-
+import UserPage from "@/views/UserView/UserPage.vue"
 
 
 Vue.use(VueRouter)
@@ -24,12 +24,7 @@ const routes = [
   {
     path: '/discovr',
     name: 'discovr',
-    component: DiscovrView,
-    children: [{
-      path: 'rankinglist',
-      name: 'rankinglist',
-      component: () => import("../views/TypeNav/RankingList.vue"),
-    }],
+    component: DiscovrView
   },
   {
     path: '/mymusic',
@@ -46,7 +41,12 @@ const routes = [
   {
     path: '/user',
     name: 'user',
-    component: UserView
+    component: UserView,
+    children:[{
+      path: "user-page",
+      name: "user-page",
+      component: UserPage
+    }]
   }
 
 
