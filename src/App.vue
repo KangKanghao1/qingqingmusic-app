@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <van-tabbar class="router-title" route>
+      <van-tabbar route>
         <van-tabbar-item to="/discovr">发现</van-tabbar-item>
         <van-tabbar-item to="/mymusic">我的音乐</van-tabbar-item>
         <van-tabbar-item to="/video">视频</van-tabbar-item>
@@ -12,8 +12,5 @@
 </template>
 
 <style>
-.router-title {
-  font-size: 30px;
-  font-weight: bold;
-}
+
 </style>

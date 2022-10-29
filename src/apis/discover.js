@@ -20,31 +20,3 @@ export const getHomepageItemList = '/homepage/dragon/ball'
 
 // 轮播图
 export const getBannerList = 'banner?type=1'
-
-// 搜索 必选参数 : keywords : 
-// 关键词    /search?keywords=海阔天空
-
-
-// 默认搜索关键词// 说明 : 调用此接口 , 可获取默认搜索关键词
-// 接口地址 : /search/default
-
-// 热搜列表(简略)
-// 说明 : 调用此接口,可获取热门搜索列表
-
-// 接口地址 : /search/hot
-
-// 调用例子 : /search/hot
-
-
-// 热搜列表(详细)
-// 说明 : 调用此接口,可获取热门搜索列表
-
-// 接口地址 : /search/hot/detail
-
-// 调用例子 : /search/hot/detail
-
-// 搜索建议  调用例子 : /search/suggest?keywords=海阔天空
-
-// 搜索多重匹配  /search/multimatch?keywords=海阔天空
-
-
