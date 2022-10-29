@@ -25,7 +25,6 @@ export default {
     };
   },
   mounted() {
-    // 轮播图
     this.getBannerList();
   },
   methods: {
@@ -47,8 +46,11 @@ export default {
 
 <style lang="scss" scoped>
 .discover-view {
+
   padding:50px 0 50px;
   overflow: auto;
+=======
+
   .search-tab {
     position: fixed;
     top: 0;
