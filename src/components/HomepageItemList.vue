@@ -23,7 +23,7 @@ export default {
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgb(142, 142, 142);
-  background-color: rgb(253, 188, 188);
+  background-color: pink;
   font-size: 12px;
   overflow-x: auto;
 

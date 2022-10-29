@@ -38,24 +38,24 @@ export default {
   }
 
   .song-content {
-    background-color: rgb(255, 207, 207);
+    background-color: pink;
     width: 100%;
-    height: 35vh;
-    padding: 15px 15px 15px;
+    padding: 10px 15px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    overflow: auto;
+
   
     .song-img-title {
       margin-bottom: 5px;
       overflow: hidden;
-      width: 25vw;
+      width: 27vw;
 
       .song-img {
         width: 100%;
         display: block;
         border-radius: 10px;
+        margin-bottom: 5px;
       }
     }
   }

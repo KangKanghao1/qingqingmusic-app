@@ -1,4 +1,5 @@
 <template>
+
   <div class="my-music">
     <div class="nav"><span>我的音乐</span></div>
 <!-- 是 -->
@@ -91,3 +92,7 @@
   }
 }
 </style>
+
+    <div>我的音乐</div>
+</template>
+
