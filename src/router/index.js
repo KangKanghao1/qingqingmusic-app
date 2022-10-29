@@ -24,7 +24,14 @@ const routes = [
   {
     path: '/discovr',
     name: 'discovr',
-    component: DiscovrView
+    component: DiscovrView,
+    children: [
+      {
+        path: "search",
+        name: "search",
+        component: ()=> import('@/views/DiscovrView/SearchView')
+      }
+    ]
   },
   {
     path: '/mymusic',
