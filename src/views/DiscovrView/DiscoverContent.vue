@@ -116,7 +116,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.discover-content {
-  padding: 55px 0;
-}
+// .discover-content {
+//   padding: 55px 0;
+// }
 </style>
