@@ -32,7 +32,7 @@ export default {
     async getHomepageItemList() {
       let { data } = await this.$axios(getHomepageItemList);
       this.HomepageItemList = data.data;
-      // console.log(data.data);
+      console.log(this.HomepageItemList);
     },
 
     async getPlaylistdata() {
