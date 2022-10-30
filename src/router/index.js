@@ -24,8 +24,24 @@ const routes = [
   {
     path: '/discovr',
     name: 'discovr',
-    component: DiscovrView
-  },
+    component: DiscovrView,
+
+    children:[{
+      path: "ranking-list",
+      name: "ranking-list",
+      component: () => import("../views/TypeNavView/RankingList.vue")
+    },{
+      path: "esch-rankingList",
+      name: "esch-rankingList",
+      component: () => import("../views/TypeNavView/EschRankingList.vue")
+    },
+        {
+        path: "search",
+        name: "search",
+        component: ()=> import('@/views/DiscovrView/SearchView')
+      }
+  ]
+
   {
     path: '/mymusic',
     name: 'mymusic',

@@ -1,3 +1,4 @@
+
 import { NavBar, Tabbar, List, TabbarItem, Icon, Search, Swipe, SwipeItem, Lazyload, Tab, Tabs } from 'vant'
 
 const vantCompontents = [
@@ -11,7 +12,9 @@ const vantCompontents = [
     Lazyload,
     Tab,
     Tabs,
+
     List
+
 ]
 
 export default {
