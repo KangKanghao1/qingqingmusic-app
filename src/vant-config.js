@@ -12,9 +12,7 @@ const vantCompontents = [
     Lazyload,
     Tab,
     Tabs,
-
     List
-
 ]
 
 export default {

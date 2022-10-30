@@ -96,6 +96,7 @@ export default {
 
 <style lang="scss" scoped>
 .discover-view {
+
   overflow: auto;
   .search-tab {
     position: fixed;

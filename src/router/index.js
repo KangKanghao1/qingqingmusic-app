@@ -26,21 +26,27 @@ const routes = [
     name: 'discovr',
     component: DiscovrView,
 
-    children:[{
+    children: [{
       path: "ranking-list",
       name: "ranking-list",
       component: () => import("../views/TypeNavView/RankingList.vue")
-    },{
+    }, {
       path: "esch-rankingList",
       name: "esch-rankingList",
       component: () => import("../views/TypeNavView/EschRankingList.vue")
     },
-        {
-        path: "search",
-        name: "search",
-        component: ()=> import('@/views/DiscovrView/SearchView')
-      }
-  ]
+
+    {
+      path: "search",
+      name: "search",
+      component: () => import("@/views/DiscovrView/SearchView")
+    },
+
+    ]
+
+
+
+  },
 
   {
     path: '/mymusic',
@@ -58,7 +64,7 @@ const routes = [
     path: '/user',
     name: 'user',
     component: UserView,
-    children:[{
+    children: [{
       path: "user-page",
       name: "user-page",
       component: UserPage
