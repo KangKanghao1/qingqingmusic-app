@@ -29,6 +29,7 @@ export default {
       bannerimgdata: [],
       timer: null,
       placeholder: "原谅我改变 经典老歌",
+      searchPlaceholderIndex: 0
     };
   },
   created() {
@@ -41,14 +42,14 @@ export default {
   },
   // 销毁计时器
   beforeDestroy() {
-    console.log('aa');
+
     clearInterval(this.timer)
   },
 
   beforeRouteUpdate(to, from, next) {
 
     if (to.path !== "/discovr" || from.path == "/discovr") {
-      console.log('a');
+
         clearInterval(this.timer)
     }else {
       //开启计时器
@@ -78,13 +79,14 @@ export default {
 
     },
 
-    // 随机推荐搜索关键字
+    // 切换推荐搜索关键字
     randomPlaceholder() {
-
+       
       this.timer = setInterval(() => {
-        let RandomIndex = parseInt(Math.random() * SEARCH_PLACEHOLDER.length);
-
-        this.placeholder = SEARCH_PLACEHOLDER[RandomIndex];
+        
+        this.searchPlaceholderIndex = (1 + this.searchPlaceholderIndex) % SEARCH_PLACEHOLDER.length; 
+        
+        this.placeholder = SEARCH_PLACEHOLDER[this.searchPlaceholderIndex];
 
       }, 2000);
     },
