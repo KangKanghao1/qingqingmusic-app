@@ -32,6 +32,8 @@ import { NEWSONGSAPI } from "../../apis/play.js";
 import { getpersonalizedmv } from "../../apis/play.js";
 // 歌手
 import { gettoplistartistData } from "../../apis/singer.js";
+// mapMutations
+import { mapActions } from "vuex";
 
 export default {
   data() {
@@ -70,6 +72,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(["getNewSong"]),
+    // ...mapMutations(["setSongsList"]),
     // nav icon
     async getHomepageItemList() {
       let { data } = await this.$axios(getHomepageItemList);
@@ -86,18 +90,14 @@ export default {
     async getnewsongsapi() {
       let { data } = await this.$axios(NEWSONGSAPI);
       this.NewMusic = data.result;
+      // 存到本地缓存
+      localStorage.songsList = JSON.stringify(this.NewMusic);
+      // this.setSongsList(this.NewMusic);
     },
-    // 每日推荐
+    // 每日推荐mv
     async getpersonalizedmv() {
       let { data } = await this.$axios(getpersonalizedmv);
       this.personalizedmv = data.result;
-
-      // 取前三个数据
-      // for (let i = 0; i < 3; i++) {
-      //   if (this.radioStation.indexOf(data.categories[i]) == -1) {
-      //     this.radioStation.push(data.categories[i]);
-      //   }
-      // }
     },
 
     // 歌手
@@ -117,15 +117,11 @@ export default {
 
     // 加载
     onLoad() {
-   
-      // 异步更新数据
-      // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-     
-        this.gettoplistartistData();
-        // 加载状态结束
-        // this.loading = false;
-        // 数据全部加载完成
-    
+      this.gettoplistartistData();
+      // 加载状态结束
+      // this.loading = false;
+      // 数据全部加载完成
+
       if (this.toplistartistData) {
         this.finished = true;
       }
@@ -146,6 +142,5 @@ export default {
 <style lang="scss" scoped>
 .discover-content {
   padding: 55px 0 0px;
-
 }
 </style>

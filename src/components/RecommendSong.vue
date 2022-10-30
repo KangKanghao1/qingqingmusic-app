@@ -46,7 +46,7 @@ export default {
     flex-wrap: wrap;
 
     .song-img-title {
-      margin-bottom: 5px;
+      margin-bottom: 10px;
       overflow: hidden;
       width: 27vw;
       color: #fff;
