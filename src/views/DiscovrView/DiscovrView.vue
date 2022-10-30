@@ -5,28 +5,57 @@
         class="search-input"
         shape="round"
         background="#fff"
-        placeholder="搜索歌曲"
+        :placeholder="placeholder"
+        @click="searchSong"
       />
       <div class="music-img"></div>
     </div>
 
     <discover-content :bannerimgdata="bannerimgdata" />
-    
+
+    <transition name="drawer">
+      <router-view />
+    </transition>
   </div>
 </template>
 <script>
 import { getBannerList } from "../../apis/discover.js";
 import DiscoverContent from "./DiscoverContent.vue";
+import { SEARCH_PLACEHOLDER } from "@/Tools/defaultSearch";
 export default {
   components: { DiscoverContent },
   data() {
     return {
       bannerimgdata: [],
+      timer: null,
+      placeholder: "原谅我改变 经典老歌",
     };
+  },
+  created() {
+
+    this.randomPlaceholder();
   },
   mounted() {
     // 轮播图
     this.getBannerList();
+  },
+  // 销毁计时器
+  beforeDestroy() {
+    console.log('aa');
+    clearInterval(this.timer)
+  },
+
+  beforeRouteUpdate(to, from, next) {
+
+    if (to.path !== "/discovr" || from.path == "/discovr") {
+      console.log('a');
+        clearInterval(this.timer)
+    }else {
+      //开启计时器
+      this.randomPlaceholder()
+    }
+    next()
+   
   },
   methods: {
     async getBannerList() {
@@ -41,13 +70,30 @@ export default {
         };
       });
     },
+
+    // 搜索
+    searchSong() {
+
+      this.$router.push(`/discovr/search?keywords=${this.placeholder}`);
+
+    },
+
+    // 随机推荐搜索关键字
+    randomPlaceholder() {
+
+      this.timer = setInterval(() => {
+        let RandomIndex = parseInt(Math.random() * SEARCH_PLACEHOLDER.length);
+
+        this.placeholder = SEARCH_PLACEHOLDER[RandomIndex];
+
+      }, 2000);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .discover-view {
-
   overflow: auto;
   .search-tab {
     position: fixed;
@@ -73,5 +119,19 @@ export default {
       border-radius: 999px;
     }
   }
+}
+
+// 路由动画
+.drawer-enter,
+.drawer-leave-to {
+  transform: translateY(100%);
+}
+.drawer-enter-active,
+.drawer-leave-active {
+  transition: all 0.15s linear;
+}
+.drawer-enter-to,
+.drawer-leave {
+  transform: translateY(0);
 }
 </style>

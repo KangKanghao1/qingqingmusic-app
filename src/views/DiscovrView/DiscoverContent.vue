@@ -100,7 +100,7 @@ export default {
           this.toplistartistData.push(data.list.artists[i]);
         }
       }
-      console.log(this.toplistartistData);
+      // console.log(this.toplistartistData);
     },
   },
 
