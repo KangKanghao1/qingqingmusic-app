@@ -5,7 +5,14 @@
     <NewMusic :NewMusic="NewMusic" />
     <RecommendSong :RecommendSong="RecommendSong" />
     <PersonalizedMv :personalizedmv="personalizedmv" />
-    <BangSinger :toplistartistData="toplistartistData"/>
+    <BangSinger :toplistartistData="toplistartistData" />
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="onLoad"
+    >
+    </van-list>
   </div>
 </template>
 <script>
@@ -41,6 +48,10 @@ export default {
       toplistartistData: [],
       // 控制每次获取10个歌手
       toplistdata: 0,
+
+      // 加载list: [],
+      loading: false,
+      finished: false,
     };
   },
 
@@ -55,7 +66,7 @@ export default {
     this.getnewsongsapi();
     this.getpersonalizedmv();
     // 歌手
-    this.gettoplistartistData();
+    // this.gettoplistartistData();
   },
 
   methods: {
@@ -96,11 +107,28 @@ export default {
 
       // 每次调用请求都会给  this.toplistartistData 添加10个数据
       for (let i = 0; i < this.toplistdata; i++) {
-        if (this.toplistartistData.indexOf(data.list.artists[i] == -1)) {
+        //
+        if (this.toplistartistData.indexOf(data.list.artists[i]) == -1) {
           this.toplistartistData.push(data.list.artists[i]);
         }
       }
       // console.log(this.toplistartistData);
+    },
+
+    // 加载
+    onLoad() {
+   
+      // 异步更新数据
+      // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+     
+        this.gettoplistartistData();
+        // 加载状态结束
+        // this.loading = false;
+        // 数据全部加载完成
+    
+      if (this.toplistartistData) {
+        this.finished = true;
+      }
     },
   },
 
@@ -117,7 +145,7 @@ export default {
 
 <style lang="scss" scoped>
 .discover-content {
-  padding: 55px 0 0;
-  // background-color: pink;
+  padding: 55px 0 0px;
+
 }
 </style>

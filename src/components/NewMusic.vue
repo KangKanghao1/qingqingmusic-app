@@ -27,6 +27,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .new-music {
+ background-color: #222325;
   .music-title-icon {
     display: flex;
     justify-content: space-between;
@@ -34,6 +35,7 @@ export default {
     padding: 15px;
     font-size: 16px;
     font-weight: bold;
+    color: #fff;
   }
 
   .music-list {
@@ -43,7 +45,7 @@ export default {
     justify-content: space-between;
     overflow: auto;
     padding: 10px 0;
-    background-color: pink;
+   background-color: #222325;
     .music-img-title {
       margin: 0 10px;
       width: 100px;

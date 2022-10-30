@@ -35,6 +35,7 @@ export default {
   // width: 100vw;
   // height: 20vh;
   padding: 15px;
+ background-color: #222325;
 
   .mv-content {
     display: flex;
@@ -43,13 +44,14 @@ export default {
     padding: 0 15px 15px;
     font-weight: bold;
     font-size: 16px;
+     color: #fff;
   }
 
   .mv-title-contnet {
     display: flex;
     justify-content: space-between;
     overflow: auto;
-    background-color: pink;
+    color: #fff;
     padding: 10px 0;
     .permv {
       position: relative;
@@ -68,7 +70,6 @@ export default {
         position: absolute;
         top: 40%;
         left: 50%;
-        color: #fff;
         font-size: 16px;
         font-weight: bold;
         transform: translateX(-50%);
