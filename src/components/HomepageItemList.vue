@@ -1,20 +1,31 @@
 <template>
   <div class="homepage-content">
     <div v-for="h in HomepageItemList" :key="h.id">
-      <div class="homepage-list">
+      <div class="homepage-list" @click="gotoTypeNav(h.id)">
         <div class="homepage-icon-title">
           <img class="homepage-icon" v-lazy="h.iconUrl" alt="" />
           <h3>{{ h.name }}</h3>
         </div>
       </div>
     </div>
+    <router-view />
   </div>
 </template>
 <script>
+
+
 export default {
-  props: {
-    HomepageItemList: Array,
-  },
+    props: {
+        HomepageItemList: Array,
+    },
+    methods: {
+        gotoTypeNav(id) {
+            if (id == -3) {
+                this.$router.push(`/discovr/ranking-list?id=${id}`);
+            }
+        }
+    },
+  
 };
 </script>
 <style lang="scss" scoped>
@@ -23,7 +34,7 @@ export default {
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgb(142, 142, 142);
-  background-color: pink;
+ background-color: #222325;
   font-size: 12px;
   overflow-x: auto;
 
@@ -34,6 +45,7 @@ export default {
     justify-content: center;
     text-align: center;
     padding: 0 10px;
+    color: #fff;
     .homepage-icon-title {
       width: 100%;
       .homepage-icon {

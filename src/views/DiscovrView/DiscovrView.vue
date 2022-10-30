@@ -13,9 +13,11 @@
 
     <discover-content :bannerimgdata="bannerimgdata" />
 
+
     <transition name="drawer">
       <router-view />
     </transition>
+
   </div>
 </template>
 <script>
@@ -96,6 +98,7 @@ export default {
 
 <style lang="scss" scoped>
 .discover-view {
+
   overflow: auto;
   .search-tab {
     position: fixed;
@@ -108,10 +111,13 @@ export default {
     overflow: auto;
     z-index: 10;
     width: 100vw;
-    background-color: #fff;
-
+    background-color: #222325;
+    .search-input {
+      background-color: #222325 !important;
+    }
     .van-search {
       width: 85vw;
+      background-color: #222325;
     }
 
     .music-img {
