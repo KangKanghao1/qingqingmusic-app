@@ -12,7 +12,12 @@
     </div>
 
     <discover-content :bannerimgdata="bannerimgdata" />
-    
+
+
+    <transition name="drawer">
+      <router-view />
+    </transition>
+
   </div>
 </template>
 <script>
