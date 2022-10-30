@@ -23,7 +23,7 @@ export default {
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgb(142, 142, 142);
-  background-color: pink;
+ background-color: #222325;
   font-size: 12px;
   overflow-x: auto;
 
@@ -34,6 +34,7 @@ export default {
     justify-content: center;
     text-align: center;
     padding: 0 10px;
+    color: #fff;
     .homepage-icon-title {
       width: 100%;
       .homepage-icon {

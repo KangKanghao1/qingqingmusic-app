@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <van-tabbar class="router-title" fixed route>
+    <van-tabbar class="router-title" fixed route active-color="#">
       <van-tabbar-item to="/discovr">发现</van-tabbar-item>
       <van-tabbar-item to="/mymusic">我的音乐</van-tabbar-item>
       <van-tabbar-item to="/video">视频</van-tabbar-item>
@@ -13,7 +13,7 @@
 
 <style>
 .router-title {
-
+  background-color: #222325 !important;
   font-weight: bold;
 }
 </style>

@@ -10,7 +10,7 @@
           <img class="bang-img" v-lazy="t.picUrl" />
 
           <div class="score-data">
-            <i>1111</i>
+            <i class="score-iocn"></i>
             <span class="score">{{
               t.score > 10000
                 ? (t.score = Math.floor(t.score / 1000) / 10 + "万")
@@ -46,18 +46,19 @@ export default {
 .bang-singer {
   width: 100%;
   padding: 0px 30px;
-
+background-color: #222325;
   .mv-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 15px 0;
     font-weight: bold;
+    color: #fff;
     font-size: 16px;
+   background-color: #222325;
   }
 
   .bang {
-    padding: 15px;
 
     .bang-img-title {
       position: relative;
@@ -66,6 +67,7 @@ export default {
       border-radius: 15px;
       overflow: hidden;
       margin-top: 20px;
+
       .score-data {
         position: absolute;
         top: 10px;
@@ -75,8 +77,23 @@ export default {
         border-radius: 999px;
         font-size: 20px;
         transform-origin: top right;
-         transform: scale(0.5);
-         color: #ff3333;
+        transform: scale(0.5);
+        color: #ff3333;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .score-iocn {
+          display: block;
+          width: 20px;
+          height: 20px;
+          background-image: url("../assets/imgs/skin_center_hot_category_icon.png");
+          background-position: center center;
+          background-size: cover;
+          background-repeat: no-repeat;
+          content: "";
+        }
+
         .score {
           margin-left: 5px;
         }
@@ -96,15 +113,15 @@ export default {
           position: absolute;
           left: 0px;
           bottom: 40px;
-          font-size: 30px;
+          font-size: 26px;
           font-weight: bold;
           color: rgb(250, 87, 87);
         }
 
         .alias {
-          font-size: 20px;
+          font-size: 15px;
           font-weight: bold;
-          color: #FF0000 ;
+          color: #ff0000;
         }
       }
     }

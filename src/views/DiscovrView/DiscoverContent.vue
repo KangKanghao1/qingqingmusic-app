@@ -146,6 +146,6 @@ export default {
 <style lang="scss" scoped>
 .discover-content {
   padding: 55px 0 0px;
-  // background-color: pink;
+
 }
 </style>
