@@ -5,7 +5,7 @@ import MyMusic from '@/views/MyMusic/MyMusic.vue'
 import VideoClipView from '@/views/VideoClipView/VideoClipView.vue'
 import UserView from '@/views/UserView/UserView.vue'
 import UserPage from "@/views/UserView/UserPage.vue"
-
+// import CommentsView from "@/views/VideoClipView/CommentsView.vue"
 
 Vue.use(VueRouter)
 
@@ -57,7 +57,7 @@ const routes = [
   {
     path: '/video',
     name: 'video',
-    component: VideoClipView
+    component: VideoClipView,
   },
 
   {
@@ -69,6 +69,11 @@ const routes = [
       name: "user-page",
       component: UserPage
     }]
+  },
+  {
+    path: "/Comments-list",
+    name: "comments-list",
+    component: () => import("../views/VideoClipView/CommentsView")
   }
 
 
