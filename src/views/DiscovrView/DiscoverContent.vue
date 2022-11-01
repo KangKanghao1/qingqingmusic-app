@@ -7,10 +7,13 @@
     <PersonalizedMv :personalizedmv="personalizedmv" />
     <BangSinger :toplistartistData="toplistartistData" />
     <van-list
+    van-clearfixz
       v-model="loading"
       :finished="finished"
       finished-text="没有更多了"
       @load="onLoad"
+  
+      class="van-clearfix"
     >
     </van-list>
   </div>
@@ -112,14 +115,14 @@ export default {
           this.toplistartistData.push(data.list.artists[i]);
         }
       }
-      // console.log(this.toplistartistData);
+      console.log(this.toplistartistData);
     },
 
     // 加载
     onLoad() {
       this.gettoplistartistData();
       // 加载状态结束
-      // this.loading = false;
+      this.loading = false;
       // 数据全部加载完成
 
       if (this.toplistartistData) {
@@ -141,6 +144,7 @@ export default {
 
 <style lang="scss" scoped>
 .discover-content {
-  padding: 55px 0 0px;
+
+  padding: 55px 0 55px;
 }
 </style>
