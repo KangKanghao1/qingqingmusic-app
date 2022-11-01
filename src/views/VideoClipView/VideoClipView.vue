@@ -1,14 +1,12 @@
 <template>
 <div  class="mv-module">
-    <div class=" mv-title" >MV</div>        
+    <div class=" mv-title" >MV</div>  
+          
         <div class="video-list"  v-for="m in mvList" :key="m.id" >
-          <!-- <div> 视频 {{m.id}}</div> -->
-          <!-- v-for="m in mvList" :key="m.id" -->
+            <!-- 播放与暂停 -->
+           <div class="toggle-play"  @click="playMV(m.id)"></div>
 
-           <div class="toggle-play"   @click="playMV(m.id)"></div>
-
-            <!-- 视频 -->
-            
+              <!-- 视频区 -->
               <div class="video-container" >        
                     <video 
                         :poster="m.cover"
@@ -16,24 +14,27 @@
                         width="300px" height="160px"
                         controls 
                         >
-            
                     </video>
               </div>  
 
               <!-- 视频文本区     -->
               <div class="mv-text">
+
                 <div class="song-name">{{m.name}}
                 </div>
-                <div class="author ">
+
+              <div class="author ">
+
                    <h3>{{m.artistName}}</h3>
 
                    <div class="like-comments">  
                     <div class="like">
                     <img src="../../assets/imgs/me_ico_chuanshao.png" alt="">
                     <span>{{m.playCount}}</span>
-                   
-                  </div>
-                  <div class="comments" @click="goToComments">
+                   </div>
+
+                  <div class="comments"
+                   @click="goToComments(id)">
                     <img src="../../assets/imgs/me_ico_comment.png" alt="">
                   </div>
                    </div>
@@ -44,9 +45,7 @@
       
     </div>
    
-    <transition name="drawer">
-      <router-view />
-    </transition>
+   
 </div>
    
 </template>
@@ -54,13 +53,15 @@
 
 import { getMVList} from "../../apis/mvList";
 import {playMV} from "../../apis/mvList";
-import {getComments} from "../../apis/mvList"
+// import {getComments} from "../../apis/mvList"
 export default {
     data() {
         return {
             mvList:[],
             mvId:{},
-            mvcomments:[],
+            // getSongId:'',
+            id:''
+
         }
     },
 //     created() {
@@ -74,6 +75,8 @@ export default {
      async getMVList() {
       let { data } = await this.$axios(getMVList);
       this.mvList = data.data;
+      // this.getSongId = data.data[0].id
+      // console.log( this.getSongId);
       console.log(this.mvList);
       // this.playMV(this.mvList.id)
      
@@ -85,24 +88,16 @@ export default {
       this.mvId = data.data
       console.log( this.mvId);
       console.log('11111111');
-        this.getComments(id)
+        this.id=id
     },
-    // 获取MV评论
-     async getComments(id) {
-      let { data } =  await this.$axios(getComments(id));
-      this.mvcomments = data.hotComments
-      console.log( this.mvcomments);
-      console.log('2222222');
-    },
-
     // 跳转到评论列表
-     goToComments() {
-
-      this.$router.push('Comments-list');
+     goToComments(id) {
+      this.$router.push(`Comments-list?mv=${id}`);
       console.log("我进来了");
+      //  console.log( '我拿到评论了',this.mvcomments);
+      
 
-    }
-
+    },
     },
 
     
@@ -116,6 +111,7 @@ export default {
 .mv-module {
     background-color: #222325;
     color: #ffffff;
+    padding-bottom: 90px;
 
   .mv-title {
     font-size: 28px;
@@ -134,7 +130,7 @@ export default {
       background-size: 35px 35px;
       background-repeat: no-repeat;
       background-position: center center;
-
+      z-index: 1;
       position: absolute;
       top:65px;
       left: 150px;
@@ -156,7 +152,7 @@ export default {
     display: block;
    margin: 0 auto;
     overflow: hidden;
-    // z-index: -888;
+    z-index: -888;
   }
   }
   .mv-text {
@@ -209,21 +205,7 @@ export default {
     }
   }
   }
-   
- 
- 
 }
 
-.drawer-enter,
- .drawer-leave-to{
-   transform: translateY(100%);
-}
-.drawer-enter-active,
-.drawer-leave-active {
-  transition: all .15s linear;
-}
-.drawer-enter-to,
-.drawer-leave {
-  transform: translateY(0);
-}
+
 </style>
