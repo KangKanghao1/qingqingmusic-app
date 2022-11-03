@@ -45,7 +45,9 @@
           </div>
         </div>
       </li>
+      <div class="muscilist-show" v-show="songsList.length == 0">列表中还没有歌曲哦！</div>
     </ul>
+    
   </div>
 </template>
 <script>
@@ -54,6 +56,7 @@ import { Dialog } from "vant";
 export default {
   computed: {
     ...mapState(["songsList", "playingMusic", "audioPlayState"]),
+
   },
   methods: {
     ...mapMutations(["changeoverMusci", "delallSongList"]),
@@ -72,6 +75,7 @@ export default {
           // on cancel
         });
     },
+
   },
 };
 </script>
@@ -79,7 +83,6 @@ export default {
 <style lang="scss" scoped>
 .current-palylist {
   width: 100vw;
-
   margin: 0 auto 15px;
   border-radius: 15px;
   padding: 15px;
@@ -136,6 +139,11 @@ export default {
     max-height: 60vh;
     min-height: 45vh;
     overflow: auto;
+
+    .muscilist-show {
+      text-align: center;
+      line-height: 250px;
+    }
 
     .songslist-content {
       .songsList {

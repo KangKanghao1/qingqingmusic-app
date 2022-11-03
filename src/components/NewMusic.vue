@@ -6,10 +6,10 @@
     </div>
     <div class="music-list">
       <div v-for="n in NewMusic" :key="n.id">
-        <div class="music-img-title">
+        <div class="music-img-title" >
           <div class="music-mask">
-            <img class="music-img" v-lazy="n.picUrl" />
-            <div class="mask"></div>
+            <img  class="music-img" v-lazy="n.picUrl" />
+            <div :class="{maskanime:0}" class="mask"></div>
           </div>
           <p class="music-title van-ellipsis">{{ n.name }}</p>
         </div>
@@ -19,10 +19,17 @@
 </template>
 
 <script>
+import {mapMutations, mapState,} from 'vuex'
 export default {
   props: {
     NewMusic: Array,
   },
+  computed: {
+    ...mapState([])
+  },
+  methods: {
+    ...mapMutations([])
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -73,6 +80,10 @@ export default {
           background-position: center center;
           background-size: 20px;
           background-repeat: no-repeat;
+
+          &.maskanime {
+             background-image: url("../assets/imgs/play2.png");
+          }
         }
       }
 
@@ -81,7 +92,7 @@ export default {
         font-size: 14px;
         white-space: 400;
         padding: 10px;
-        background-color: #fff;
+        background-color: #ddd;
       }
     }
   }

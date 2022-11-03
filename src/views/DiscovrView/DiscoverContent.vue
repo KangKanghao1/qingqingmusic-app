@@ -65,7 +65,7 @@ export default {
   },
 
   mounted() {
-    //
+    
     this.getHomepageItemList();
     this.getPlaylistdata();
     this.getnewsongsapi();
@@ -115,11 +115,12 @@ export default {
           this.toplistartistData.push(data.list.artists[i]);
         }
       }
-      console.log(this.toplistartistData);
+      // console.log(this.toplistartistData);
     },
 
     // 加载
     onLoad() {
+      // 歌手数据
       this.gettoplistartistData();
       // 加载状态结束
       this.loading = false;
