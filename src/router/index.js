@@ -41,10 +41,7 @@ const routes = [
       name: "search",
       component: () => import("@/views/DiscovrView/SearchView")
     },
-
     ]
-
-
 
   },
 
@@ -74,6 +71,12 @@ const routes = [
     path: "/Comments-list",
     name: "comments-list",
     component: () => import("../views/VideoClipView/CommentsView")
+  },
+
+  {
+    path: "/songdata/:id",
+    name: "songdata",
+    component: () => import("../views/SongDetailView/SongDetailView.vue")
   }
 
 

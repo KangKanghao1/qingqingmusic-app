@@ -1,7 +1,8 @@
 
-import { NavBar, Tabbar, List, TabbarItem, Icon, Search, Swipe, SwipeItem, Lazyload, Tab, Tabs,Popup,Dialog } from 'vant'
+import {Slider, NavBar, Tabbar, List, TabbarItem, Icon, Search, Swipe, SwipeItem, Lazyload, Tab, Tabs,Popup,Dialog ,NoticeBar} from 'vant'
 
 const vantCompontents = [
+    Slider,
     NavBar,
     Tabbar,
     TabbarItem,
@@ -14,7 +15,8 @@ const vantCompontents = [
     Tabs,
     List,
     Popup,
-    Dialog
+    Dialog,
+    NoticeBar
 ]
 
 export default {

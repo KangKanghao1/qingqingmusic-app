@@ -1,10 +1,14 @@
 <template>
   <div class="paly-control">
-    <div class="song-disc" :class="{ discrotate: audioPlayState }">
+    <div
+      class="song-disc"
+      :class="{ discrotate: audioPlayState }"
+    @click="gotoDetalil"
+    >
       <img class="disc-img" :src="playingMusic?.picUrl" alt="" />
     </div>
-    <p class="song-desc">
-      {{ playingMusic?.name }} <span class="artists">- {{ artists }}</span>
+    <p class="song-desc" @click="gotoDetalil">
+      {{ playingMusic?.name }} <span class="artists"> - {{ artists }}</span>
     </p>
     <div class="paly-icon">
       <i
@@ -35,6 +39,11 @@ export default {
   },
   methods: {
     ...mapMutations(["showSongList", "audioPlayandstop"]),
+
+    // 跳转到音乐详情页
+    gotoDetalil() {
+      this.$router.push(`/songdata/${this.playingMusic.id}`);
+    },
   },
 
   mounted() {
@@ -54,7 +63,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 50;
+  z-index: 1;
 
   .song-disc {
     display: flex;
@@ -87,7 +96,13 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    .artists {
+      font-size: 12px;
+      color: #ddd;
+    }
   }
+
 
   .paly-icon {
     display: flex;
