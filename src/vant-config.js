@@ -1,8 +1,5 @@
 
-
 import {Slider, NavBar, Tabbar, List, TabbarItem, Icon, Search, Swipe, SwipeItem, Lazyload, Tab, Tabs,Popup,Dialog ,NoticeBar,Loading} from 'vant'
-
-
 const vantCompontents = [
     Slider,
     NavBar,
@@ -16,7 +13,7 @@ const vantCompontents = [
     Tab,
     Tabs,
     List,
-    Loading 
+    Loading ,
     Popup,
     Dialog,
     NoticeBar

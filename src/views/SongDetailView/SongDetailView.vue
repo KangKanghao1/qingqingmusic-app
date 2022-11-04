@@ -13,7 +13,10 @@
         </div>
 
         <div class="music-content">
-          <div class="music-content-img" :class="{rotateanime:audioPlayState}">
+          <div
+            class="music-content-img"
+            :class="{ rotateanime: audioPlayState }"
+          >
             <img class="content-img" v-lazy="playingMusic.picUrl" />
           </div>
           <div class="music-content-text">
@@ -36,33 +39,35 @@
             </div>
           </div>
         </div>
-        <div class="slider-content-ipt">
-          <van-slider
-            v-model="value"
-            button-size="10"
-            bar-height="4px"
-            class="slider"
-            active-color="rgb(72, 163, 253)"
-          />
-          <div class="duration">
-            <p class="initial-duration">00:00</p>
-            <p class="end-duration">{{ palyTime }}</p>
+        <div class="footer-paly-list">
+          <div class="slider-content-ipt">
+            <van-slider
+              v-model="value"
+              button-size="10"
+              bar-height="4px"
+              class="slider"
+              active-color="rgb(72, 163, 253)"
+            />
+            <div class="duration">
+              <p class="initial-duration">00:00</p>
+              <p class="end-duration">{{ palyTime }}</p>
+            </div>
           </div>
-        </div>
 
-        <div class="music-paly-icon">
-          <div class="lastone-icon"></div>
-          <div
-            class="paly-icon"
-            :class="{ pausemusic: audioPlayState }"
-            @click="audioPlayandstop"
-          ></div>
-          <div class="nex-icon"></div>
-        </div>
-        <div class="footer-random-icon">
-          <i class="random-icon"></i>
-          <p class="footer-text">当前歌曲</p>
-          <i class="list-icon"></i>
+          <div class="music-paly-icon">
+            <div class="lastone-icon" @click="NextsongMusic"></div>
+            <div
+              class="paly-icon"
+              :class="{ pausemusic: audioPlayState }"
+              @click="audioPlayandstop"
+            ></div>
+            <div class="nex-icon" @click="NextsongMusic"></div>
+          </div>
+          <div class="footer-random-icon">
+            <i class="random-icon"></i>
+            <p class="footer-text">当前歌曲</p>
+            <i class="list-icon"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -98,7 +103,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["audioPlayandstop"]),
+    ...mapMutations(["audioPlayandstop", "NextsongMusic"]),
     // 路由跳转到上一个页面
     quitgodiscover() {
       this.$router.go(-1);
@@ -118,20 +123,32 @@ export default {
   overflow: auto;
   overflow: hidden;
 
+  .footer-paly-list {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 20vh;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
   .postion-bg {
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
     z-index: -1;
-    filter: blur(60px);
+    filter: blur(50px);
+    box-shadow: 0px 9px 37px 15px;
   }
 
   .song-detail {
-    padding: 0 20px;
-
     .slider-content-ipt {
-      margin-top: 120px;
-      height: 20px;
+
       .duration {
         margin-top: 10px;
         font-size: 12px;
@@ -147,7 +164,6 @@ export default {
       top: 0;
       left: 0;
       width: 100%;
-      height: 7vh;
       padding: 20px;
       background-color: transparent;
       display: flex;
@@ -176,12 +192,13 @@ export default {
         text-overflow: ellipsis;
 
         .music-title {
-          font-size: 20px;
+          font-size: 18px;
           margin-bottom: 5px;
+          font-weight: bold;
         }
         .artists-name {
           font-size: 12px;
-          color: #ddd;
+          color: #666;
         }
       }
 
@@ -198,12 +215,12 @@ export default {
     .music-content {
       width: 100%;
       height: 65vh;
-      padding: 150px 20px 0;
+      padding: 20vh 20px 0;
 
       .music-content-img {
         margin: 0 auto;
-        width: calc(100% - 50px);
-        animation: imgrotateanime 10s linear;
+        width: 65vw;
+        animation: imgrotateanime 15s linear infinite;
         animation-play-state: paused;
 
         &.rotateanime {
@@ -220,7 +237,7 @@ export default {
       }
 
       .music-content-text {
-        margin-top: 100px;
+        padding: 5vh 0 0 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -263,7 +280,7 @@ export default {
     }
 
     .music-paly-icon {
-      padding: 40px 40px 20px;
+      padding: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
