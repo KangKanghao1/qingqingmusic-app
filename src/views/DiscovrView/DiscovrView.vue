@@ -49,7 +49,7 @@ export default {
 
   beforeRouteUpdate(to, from, next) {
     if (to.path !== "/discovr" || from.path == "/discovr") {
-      console.log("a");
+   
       clearInterval(this.timer);
     } else {
       //开启计时器
@@ -140,7 +140,7 @@ export default {
 }
 .drawer-enter-active,
 .drawer-leave-active {
-  transition: all 0.15s linear;
+  transition: all 0.3s linear;
 }
 .drawer-enter-to,
 .drawer-leave {
