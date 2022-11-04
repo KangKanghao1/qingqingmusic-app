@@ -6,6 +6,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    keywords: '', // 搜索关键字,
+    synthesisData: [] // 搜索模块综合数据
     // 歌曲列表
     songsList: [],
     // 当前播放歌曲  等于本地缓存中的 changerMusci
@@ -17,10 +19,20 @@ export default new Vuex.Store({
     // 播放时长
     duration: 0,
 
+
   },
   getters: {
   },
   mutations: {
+
+    onSearchKeyword(state, keywords) {
+      state.keywords = keywords
+    },
+
+    onSynthesisData(state,  data ){
+      state.synthesisData = data
+    }
+
     // 歌曲列表
     setSongsList(state, songsList) {
       state.songsList = songsList
@@ -78,6 +90,7 @@ export default new Vuex.Store({
     delallSongList(state) {
       state.songsList = []
     }
+
 
   },
   actions: {

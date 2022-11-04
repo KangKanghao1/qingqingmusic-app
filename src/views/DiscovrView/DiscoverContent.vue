@@ -16,6 +16,7 @@
       class="van-clearfix"
     >
     </van-list>
+
   </div>
 </template>
 <script>

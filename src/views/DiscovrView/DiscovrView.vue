@@ -32,6 +32,7 @@ export default {
       bannerimgdata: [],
       timer: null,
       placeholder: "原谅我改变 经典老歌",
+      searchPlaceholderIndex: 0
     };
   },
   created() {
@@ -43,6 +44,16 @@ export default {
   },
   // 销毁计时器
   beforeDestroy() {
+    clearInterval(this.timer)
+  },
+
+  beforeRouteUpdate(to, from, next) {
+    next()
+    if (to.path !== "/discovr" || from.path == "/discovr") {
+
+        clearInterval(this.timer)
+    }else {
+
     console.log("aa");
     clearInterval(this.timer);
   },
@@ -52,15 +63,18 @@ export default {
       console.log("a");
       clearInterval(this.timer);
     } else {
+
       //开启计时器
       this.randomPlaceholder();
     }
+
     next();
   },
   // 计算属性
   computed: {
     // 引入vuex playingMusic 数据
     ...mapState(["playingMusic"]),
+
   },
   methods: {
     async getBannerList() {
@@ -81,13 +95,16 @@ export default {
       this.$router.push(`/discovr/search?keywords=${this.placeholder}`);
     },
 
-    // 随机推荐搜索关键字
-    randomPlaceholder() {
+    // 切换推荐搜索关键字
+    randomPlaceholder() { 
       this.timer = setInterval(() => {
-        let RandomIndex = parseInt(Math.random() * SEARCH_PLACEHOLDER.length);
+        
+        this.searchPlaceholderIndex = (1 + this.searchPlaceholderIndex) % SEARCH_PLACEHOLDER.length; 
+        
+        this.placeholder = SEARCH_PLACEHOLDER[this.searchPlaceholderIndex];
 
-        this.placeholder = SEARCH_PLACEHOLDER[RandomIndex];
-      }, 2000);
+      }, 2500);
+
     },
   },
 };
