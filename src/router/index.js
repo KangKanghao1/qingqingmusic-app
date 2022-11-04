@@ -35,13 +35,13 @@ const routes = [
       name: "esch-rankingList",
       component: () => import("../views/TypeNavView/EschRankingList.vue")
     },
-
     {
       path: "search",
       name: "search",
-      component: () => import("@/views/DiscovrView/SearchView")
-    },
-    ]
+
+      component: ()=> import('@/views/DiscovrView/SearchView/SearchView'),
+    }
+  ]
 
   },
 
