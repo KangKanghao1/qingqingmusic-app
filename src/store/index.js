@@ -10,7 +10,8 @@ export default new Vuex.Store({
     // 歌曲列表
     songsList: [],
     // 当前播放歌曲  等于本地缓存中的 changerMusci
-    playingMusic: JSON.parse(localStorage.changerMusci),
+    playingMusic: '',
+    // JSON.parse(localStorage.changerMusci),
     // 显示隐藏歌曲列表组件 的控件 Popup 弹出层
     showSongList: false,
     // 音乐是否正在播放 默认不播放

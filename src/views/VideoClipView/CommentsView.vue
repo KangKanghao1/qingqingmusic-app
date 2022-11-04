@@ -1,4 +1,7 @@
 <template>
+<div class="page">
+
+
   <div class="comments-list">
     <div class="return" @click="onClickLeft">
       <img src="../../assets/imgs/8W.png" alt="">
@@ -34,6 +37,7 @@
      <transition name="drawer">
       <router-view />
     </transition>
+  </div>
   </div>
 </template>
 <script>
@@ -73,13 +77,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
+.page {
+  background-color: #222325;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
     .comments-list {
-      width: 100%;
-      height: 100%;
-      background-color: #222325;
       color: #d6d3d3;
-      padding-bottom: 60px;
+      padding-bottom: 100px;
        
       .return {
      
@@ -162,7 +170,7 @@ export default {
        
       }
     }
-
+}
     .drawer-enter,
  .drawer-leave-to{
    transform: translateY(100%);
