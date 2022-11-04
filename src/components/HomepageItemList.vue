@@ -8,24 +8,20 @@
         </div>
       </div>
     </div>
-    <!-- <router-view /> -->
   </div>
 </template>
 <script>
-
-
 export default {
-    props: {
-        HomepageItemList: Array,
+  props: {
+    HomepageItemList: Array,
+  },
+  methods: {
+    gotoTypeNav(id) {
+      if (id == -3) {
+        this.$router.push(`/discovr/ranking-list?id=${id}`);
+      }
     },
-    methods: {
-        gotoTypeNav(id) {
-            if (id == -3) {
-                this.$router.push(`/discovr/ranking-list?id=${id}`);
-            }
-        }
-    },
-  
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -34,7 +30,7 @@ export default {
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgb(142, 142, 142);
- background-color: #222325;
+  background-color: #222325;
   font-size: 12px;
   overflow-x: auto;
 

@@ -115,13 +115,14 @@ background-color: #222325;
           bottom: 40px;
           font-size: 26px;
           font-weight: bold;
-          color: #222325;
+          color: #9a8cc8;
+      
         }
 
         .alias {
           font-size: 15px;
           font-weight: bold;
-          color: #ff0000;
+          color: #ff007b;
         }
       }
     }
