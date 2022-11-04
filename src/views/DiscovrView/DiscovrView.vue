@@ -141,7 +141,7 @@ export default {
 }
 .drawer-enter-active,
 .drawer-leave-active {
-  transition: all 0.15s linear;
+  transition: all 0.3s linear;
 }
 .drawer-enter-to,
 .drawer-leave {

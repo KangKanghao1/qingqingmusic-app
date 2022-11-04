@@ -2,7 +2,9 @@
     <div class="box">
 
         <div class="rankinglist-nav">
-            <div @click="gotoPreviousPage">&lt;</div>
+            <div @click="gotoPreviousPage">
+                <van-icon name="arrow-left" size="24" />
+            </div>
             <div class="nav-text">排行榜</div>
         </div>
 
@@ -20,7 +22,7 @@
                         <img :src="l.coverImgUrl" alt="">
                     </div>
                     <div class="tracks">
-                        <div class="first" v-for="(t,i) in l?.tracks" :key="i">1  {{t?.first}} <span>- {{t?.second}}</span> </div>
+                        <div class="first" v-for="(t,i) in l?.tracks" :key="i">{{i+1}}  {{t?.first}} <span>- {{t?.second}}</span> </div>
                       
                     </div>
                 </div>
@@ -47,9 +49,7 @@ export default {
         async getRankingListdata() {
             let { data } = await this.$axios(getRankingListdata);
                this.RankingListdata=data.list;
-            //    this.track= data.list.tracks
-            //    console.log(data);
-            //    console.log('ttt',this.track);
+         
             
             console.log('aaaa',this.RankingListdata);
            
@@ -59,7 +59,7 @@ export default {
             this.$router.go(-1);
         },
         getId(id){
-            this.$router.push(`/discovr/esch-rankingList?w=${id}`);
+            this.$router.push(`/discovr/esch-rankingList?i=${id}`);
         }
     }
 }
@@ -73,7 +73,7 @@ export default {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: #fff;
+    background-color: #222325;
     overflow: auto;
     z-index: 11;
 
@@ -89,7 +89,7 @@ export default {
         font-weight: bolder;
         color: #fff;
         align-items: center;
-        background-color: cadetblue;
+        background-color: #222325;
 
         .nav-text {
             margin: 0 auto;
@@ -101,6 +101,7 @@ export default {
         .text{
             font-size: 14px;
            margin:10px;
+           color: #fff;
         }
         .minibox {
             padding: 15px;
@@ -108,7 +109,7 @@ export default {
             width: 100%;
             // height: 150px;
             border-radius: 15px;
-            background-color: rgb(85, 85, 85);
+            background-color: rgb(59 59 59);
 
             .minibox-tou {
                 margin-bottom: 5px;
@@ -125,6 +126,7 @@ export default {
                     font-size: 20px;
                     transform: scale(0.5);
                     transform-origin: right top;
+                    color: #9a9a9a;
                 }
             }
 
