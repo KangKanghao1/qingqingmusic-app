@@ -49,7 +49,7 @@ export default {
   },
 
   beforeRouteUpdate(to, from, next) {
-
+    next()
     if (to.path !== "/discovr" || from.path == "/discovr") {
 
         clearInterval(this.timer)
@@ -57,7 +57,7 @@ export default {
       //开启计时器
       this.randomPlaceholder()
     }
-    next()
+   
    
   },
   methods: {
@@ -76,7 +76,7 @@ export default {
 
     // 搜索
     searchSong() {
-
+      console.log('aa');
       this.$router.push(`/discovr/search?keywords=${this.placeholder}`);
 
     },
@@ -90,7 +90,7 @@ export default {
         
         this.placeholder = SEARCH_PLACEHOLDER[this.searchPlaceholderIndex];
 
-      }, 2000);
+      }, 2500);
     },
   },
 };

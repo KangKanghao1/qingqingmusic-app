@@ -1,9 +1,9 @@
 <template>
   <!--  background="#da433a" -->
-  <div class="search-content">
+  <div class="search-content" v-show="!loadingShow">
     <div class="search-history">
       <div class="history-title">搜索历史</div>
-      <van-icon name="delete-o" color="#777" />
+      <van-icon name="delete-o" color="#828282" size="16px" />
     </div>
 
     <!-- 热门搜索 -->
@@ -15,17 +15,18 @@
         </div>
       </div>
     </div>
-    <!-- 音乐排行榜 -->
-    <div class="music-ranking">
-      <div class="history-title">排行榜</div>
-      <van-icon name="arrow" color="#777" />
-    </div>
+
+    <MusicRankingList />
   </div>
 </template>
 
 <script>
+import MusicRankingList from "./MusicRankingList.vue"
 import { hotSearchList } from "@/apis/search";
 export default {
+  props: {
+    loadingShow:Boolean
+  },
   data() {
     return {
       hotSearchData: [], // 热门搜索
@@ -42,18 +43,26 @@ export default {
       await this.$axios.get(hotSearchList).then(({ data: { data } }) => {
         this.hotSearchData = data.slice(0, 10);
 
-        console.log(this.hotSearchData);
+      
       });
     },
+  },
+
+  components: {
+    MusicRankingList
   }
+  
 }
 </script>
 
 <style lang="scss" scoped>
 .search-content {
+  position: relative;
+  z-index: 26;
   width: 100%;
   height: 100%;
-  padding: 20px 30px 0px;
+  padding: 20px 15px 0px;
+
 
   .search-history,
   .music-ranking {
@@ -62,9 +71,9 @@ export default {
     justify-content: space-between;
     align-items: center;
     line-height: 30px;
-    color: #555;
-    font-size: 16px;
-    font-weight: 600;
+    color: #f3f3f3;
+    font-size: 14px;
+    font-weight: normal;
     letter-spacing: 3px;
   }
 
@@ -73,8 +82,8 @@ export default {
 
     p {
       margin-bottom: 5px;
-      font-size: 16px;
-      color: #555;
+      font-size: 14px;
+      color: #f3f3f3;
       letter-spacing: 3px;
       font-weight: 600;
       line-height: 30px;
@@ -86,13 +95,13 @@ export default {
       align-items: center;
 
       .hot-song {
-        font-size: 14px;
-        color: #999;
+        font-size: 12px;
+        color: #c1c1c1;
         padding: 5px 7px;
         margin-bottom: 10px;
         margin-right: 10px;
         border-radius: 2px;
-        background-color: rgba(225, 213, 213, 0.21);
+        background-color:#2d2d2d;
       }
     }
   }

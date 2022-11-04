@@ -13,6 +13,7 @@
       @load="onLoad"
     >
     </van-list>
+
   </div>
 </template>
 <script>
