@@ -75,7 +75,7 @@ background-color: #222325;
         background-color: rgba(255, 255, 255, 0.5);
         padding: 10px;
         border-radius: 999px;
-        font-size: 20px;
+        font-size: 25px;
         transform-origin: top right;
         transform: scale(0.5);
         color: #ff3333;
@@ -115,13 +115,14 @@ background-color: #222325;
           bottom: 40px;
           font-size: 26px;
           font-weight: bold;
-          color: rgb(250, 87, 87);
+          color: #9a8cc8;
+      
         }
 
         .alias {
           font-size: 15px;
           font-weight: bold;
-          color: #ff0000;
+          color: #ff007b;
         }
       }
     }

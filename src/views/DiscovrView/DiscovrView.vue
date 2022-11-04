@@ -8,19 +8,20 @@
         :placeholder="placeholder"
         @click="searchSong"
       />
-      <div class="music-img"></div>
+      <div class="music-img">
+        <img class="home-img" :src="playingMusic?.picUrl" alt="" />
+      </div>
     </div>
 
     <discover-content :bannerimgdata="bannerimgdata" />
 
-
     <transition name="drawer">
       <router-view />
     </transition>
-
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import { getBannerList } from "../../apis/discover.js";
 import DiscoverContent from "./DiscoverContent.vue";
 import { SEARCH_PLACEHOLDER } from "@/Tools/defaultSearch";
@@ -35,7 +36,6 @@ export default {
     };
   },
   created() {
-
     this.randomPlaceholder();
   },
   mounted() {
@@ -44,7 +44,6 @@ export default {
   },
   // 销毁计时器
   beforeDestroy() {
-
     clearInterval(this.timer)
   },
 
@@ -54,11 +53,28 @@ export default {
 
         clearInterval(this.timer)
     }else {
+
+    console.log("aa");
+    clearInterval(this.timer);
+  },
+
+  beforeRouteUpdate(to, from, next) {
+    if (to.path !== "/discovr" || from.path == "/discovr") {
+      console.log("a");
+      clearInterval(this.timer);
+    } else {
+
       //开启计时器
-      this.randomPlaceholder()
+      this.randomPlaceholder();
     }
-   
-   
+
+    next();
+  },
+  // 计算属性
+  computed: {
+    // 引入vuex playingMusic 数据
+    ...mapState(["playingMusic"]),
+
   },
   methods: {
     async getBannerList() {
@@ -76,14 +92,11 @@ export default {
 
     // 搜索
     searchSong() {
-      console.log('aa');
       this.$router.push(`/discovr/search?keywords=${this.placeholder}`);
-
     },
 
     // 切换推荐搜索关键字
-    randomPlaceholder() {
-       
+    randomPlaceholder() { 
       this.timer = setInterval(() => {
         
         this.searchPlaceholderIndex = (1 + this.searchPlaceholderIndex) % SEARCH_PLACEHOLDER.length; 
@@ -91,6 +104,7 @@ export default {
         this.placeholder = SEARCH_PLACEHOLDER[this.searchPlaceholderIndex];
 
       }, 2500);
+
     },
   },
 };
@@ -98,7 +112,7 @@ export default {
 
 <style lang="scss" scoped>
 .discover-view {
-
+  background-color: #222325;
   overflow: auto;
   .search-tab {
     position: fixed;
@@ -123,8 +137,15 @@ export default {
     .music-img {
       width: 35px;
       height: 35px;
-      background-color: rgb(227, 111, 111);
+      // background-color: rgb(227, 111, 111);
       border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+
+      .home-img {
+        display: block;
+        width: 100%;
+      }
     }
   }
 }

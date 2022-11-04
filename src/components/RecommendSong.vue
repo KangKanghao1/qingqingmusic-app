@@ -2,13 +2,13 @@
   <div class="recommend-song">
     <div class="recommend-title">
       <h3>推荐歌单</h3>
-      <span>更多</span>
+      <span>歌单广场</span>
     </div>
     <div class="song-content">
       <div class="song-list" v-for="r in RecommendSong" :key="r.id">
         <div class="song-img-title">
           <img class="song-img" v-lazy="r.picUrl" />
-          <p class="van-multi-ellipsis--l2">{{ r.name }}</p>
+          <p class="van-multi-ellipsis--l2 song-text">{{ r.name }}</p>
         </div>
       </div>
     </div>
@@ -35,6 +35,7 @@ export default {
     display: flex;
     justify-content: space-between;
     color: #fff;
+
   }
 
   .song-content {
@@ -46,7 +47,7 @@ export default {
     flex-wrap: wrap;
 
     .song-img-title {
-      margin-bottom: 5px;
+      margin-bottom: 10px;
       overflow: hidden;
       width: 27vw;
       color: #fff;
@@ -56,6 +57,11 @@ export default {
         display: block;
         border-radius: 10px;
         margin-bottom: 5px;
+      }
+      .song-text {
+        font-size: 12px;
+        line-height: 15px;
+        text-align:center;
       }
     }
   }
