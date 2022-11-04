@@ -25,7 +25,7 @@
       >
         <CurrentPalyList
       /></van-popup>
-      <!-- @canplay="setMusicdurationdata" 获取音乐总时长 -->
+      <!-- @canplay="setMusicdurationdata" 获取音乐总时长  -->
       <audio :src="songUrl" ref="audio" @canplay="setMusicdurationdata" />
     </div>
   </transition>

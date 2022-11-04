@@ -1,7 +1,7 @@
 // 获取歌词 /lyric?id=33894312
 
 // 推荐歌曲  新音乐
-export const NEWSONGSAPI =  '/personalized/newsong'
+export const NEWSONGSAPI = '/personalized/newsong'
 
 
 // 获取音乐 url
@@ -16,7 +16,7 @@ export const getLryic = id => `/lyric?id=${id}`
 // 接口地址 : /personalized/mv
 
 // 调用例子 : /personalized/mv
-export const getpersonalizedmv =  '/personalized/mv'
+export const getpersonalizedmv = '/personalized/mv'
 
 // mv 地址
 // 说明 : 调用此接口 , 传入 mv id,可获取 mv 播放地址
