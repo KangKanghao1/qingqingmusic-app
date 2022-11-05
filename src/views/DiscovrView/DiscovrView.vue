@@ -9,7 +9,7 @@
         @click="searchSong"
       />
       <div class="music-img">
-        <img class="home-img" :src="playingMusic?.picUrl" alt="" />
+        <img class="home-img" :src="playingMusic?.picUrl" @click="gotoDetalil" />
       </div>
     </div>
 
@@ -76,6 +76,10 @@ export default {
       });
     },
 
+    // 跳转到音乐详情页
+    gotoDetalil() {
+      this.$router.push(`/songdata/${this.playingMusic.id}`);
+    },
     // 搜索
     searchSong() {
       this.$router.push(`/discovr/search?keywords=${this.placeholder}`);
