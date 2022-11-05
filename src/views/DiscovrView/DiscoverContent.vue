@@ -20,12 +20,12 @@
   </div>
 </template>
 <script>
-import DiscoverBanner from "@/components/DiscoverBanner.vue";
-import RecommendSong from "@/components/RecommendSong.vue";
-import NewMusic from "@/components/NewMusic.vue";
-import PersonalizedMv from "@/components/PersonalizedMv.vue";
-import HomepageItemList from "@/components/HomepageItemList.vue";
-import BangSinger from "@/components/BangSinger.vue";
+import DiscoverBanner from "@/components/DiscoverComponent/DiscoverBanner.vue";
+import RecommendSong from "@/components/DiscoverComponent/RecommendSong.vue";
+import NewMusic from "@/components/DiscoverComponent/NewMusic.vue";
+import PersonalizedMv from "@/components/DiscoverComponent/PersonalizedMv.vue";
+import HomepageItemList from "@/components/DiscoverComponent/HomepageItemList.vue";
+import BangSinger from "@/components/DiscoverComponent/BangSinger.vue";
 // nav icon
 import { getHomepageItemList } from "../../apis/discover.js";
 // 推荐歌单
@@ -126,7 +126,6 @@ export default {
       // 加载状态结束
       this.loading = false;
       // 数据全部加载完成
-
       if (this.toplistartistData) {
         this.finished = true;
       }
