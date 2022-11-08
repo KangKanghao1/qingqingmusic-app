@@ -11,9 +11,11 @@
           </div>
           <i class="plus-icon"></i>
         </div>
-
         <div class="music-content">
-          <div class="music-content-img" :class="{rotateanime:audioPlayState}">
+          <div
+            class="music-content-img"
+            :class="{ rotateanime: audioPlayState }"
+          >
             <img class="content-img" v-lazy="playingMusic.picUrl" />
           </div>
           <div class="music-content-text">
@@ -25,9 +27,16 @@
                 speed="40"
                 :text="artists + ' - ' + playingMusic.name"
               />
-              <span class="company"
-                >企业：{{ playingMusic.song.album.company }}</span
-              >
+              <!-- 歌词 -->
+              <div class="company" @click="show = true">
+                <p
+                  :class="{ active: i == currentTwoIndex }"
+                  v-for="(l, i) in lyricTwo"
+                  :key="l?.time"
+                >
+                  {{ l?.lrc }}
+                </p>
+              </div>
             </div>
 
             <div class="right-icon">
@@ -36,49 +45,77 @@
             </div>
           </div>
         </div>
-        <div class="slider-content-ipt">
-          <van-slider
-            v-model="value"
-            button-size="10"
-            bar-height="4px"
-            class="slider"
-            active-color="rgb(72, 163, 253)"
-          />
-          <div class="duration">
-            <p class="initial-duration">00:00</p>
-            <p class="end-duration">{{ palyTime }}</p>
+        <div class="footer-paly-list">
+          <div class="slider-content-ipt">
+            <van-slider
+              v-model="progressValue"
+              button-size="14"
+              bar-height="4px"
+              class="slider"
+              active-color="linear-gradient(to right, #eec9a3 0%, #ef629f 100%)"
+            />
+            <div class="duration">
+              <p class="initial-duration">{{ currentTimedata }}</p>
+              <p class="end-duration">{{ palyTime }}</p>
+            </div>
+          </div>
+
+          <div class="music-paly-icon">
+            <div class="lastone-icon" @click="NextsongMusic"></div>
+            <div
+              class="paly-icon"
+              :class="{ pausemusic: audioPlayState }"
+              @click="audioPlayandstop"
+            ></div>
+            <div class="nex-icon" @click="NextsongMusic"></div>
+          </div>
+          <div class="footer-random-icon">
+            <i class="random-icon"></i>
+            <p class="footer-text">当前歌曲</p>
+            <i class="list-icon" @click="showSongList"></i>
           </div>
         </div>
-
-        <div class="music-paly-icon">
-          <div class="lastone-icon"></div>
-          <div
-            class="paly-icon"
-            :class="{ pausemusic: audioPlayState }"
-            @click="audioPlayandstop"
-          ></div>
-          <div class="nex-icon"></div>
-        </div>
-        <div class="footer-random-icon">
-          <i class="random-icon"></i>
-          <p class="footer-text">当前歌曲</p>
-          <i class="list-icon"></i>
-        </div>
       </div>
+      <!-- 歌词 -->
+      <van-overlay :lock-scroll="false" class-name="lyric" :show="show" @click="show = false">
+        <img class="bg-img" v-lazy="playingMusic.picUrl" />
+        <div class="wrapper" ref="lyc">
+          
+           <LyricView 
+           :lyric="lyric" 
+           :currentIndex="currentIndex"
+          />
+        </div>
+
+      </van-overlay>
+
     </div>
   </transition>
 </template>
 <script>
+import LyricView from "./LyricView.vue"
 import { mapState, mapMutations } from "vuex";
+import { getLryic } from "@/apis/play";
+
 export default {
-  data() {
+  data() {0
     return {
-      value: 0,
+      lyric: [], // 高亮歌词,
+      lyricTwo: [], // 显示二项歌词
+      currentIndex: 0, // 歌词
+      currentTwoIndex: 0, // 高亮二项歌词
+      show: false,
     };
   },
 
   computed: {
-    ...mapState(["playingMusic", "duration", "audioPlayState"]),
+    ...mapState([
+      "songsList",
+      "playingMusic",
+      "audioPlayState",
+      "duration",
+      "currentTime",
+    ]),
     // 计算属性 如果是多个名字
     artists() {
       let arr = this.playingMusic?.song?.artists;
@@ -87,6 +124,7 @@ export default {
       }
       return null;
     },
+
     // 播放总时长
     palyTime() {
       let m = Math.floor(this.duration / 60);
@@ -95,18 +133,146 @@ export default {
       s = s >= 10 ? s : "0" + s;
       return m + ":" + s;
     },
+    // 当前播放时长
+    currentTimedata() {
+      let m = Math.floor(this.currentTime / 60);
+      let s = Math.floor(this.currentTime % 60);
+      m = m >= 10 ? m : "0" + m;
+      s = s >= 10 ? s : "0" + s;
+      return m + ":" + s;
+    },
+
+    // 计算属性修改 需要用到 get 和 set 方法，根据当前的duiation 和currentTime 计算当前进度条的值
+    progressValue: {
+      // 自动进度条
+      get() {
+        return (this.currentTime / this.duration) * 100;
+      },
+      // 拖拽进度条 需要 接收一个 由app 在路由传过来的方法
+      set(value) {
+        let currentTime = (value / 100) * this.duration;
+        // 反向传值接收的方法
+        this.$emit("setAudioCurrentTimevalue", currentTime);
+      },
+    },
+
+    // 拖拽进度条
   },
 
   methods: {
-    ...mapMutations(["audioPlayandstop"]),
+    ...mapMutations(["audioPlayandstop", "NextsongMusic", "showSongList"]),
     // 路由跳转到上一个页面
     quitgodiscover() {
       this.$router.go(-1);
     },
+
+    // 歌词
+    getLyricFun() {
+      this.$axios.get(getLryic(this.playingMusic.id)).then(({ data }) => {
+        let lrc = data.lrc.lyric;
+        this.lyric = [];
+        console.log(lrc);
+        let lrcReg = /^\[(\d+):(\d+\.\d+)\]([\S ]+)$/gim;
+
+        while (lrcReg.test(lrc)) {
+          this.lyric.push({
+            time: parseInt(RegExp.$1) * 60 + parseFloat(RegExp.$2),
+            lrc: RegExp.$3,
+          });
+        }
+
+        console.log(this.currentTime);
+      });
+    },
+    // 高亮歌词
+    getCurrentActiveLyric() {
+      this.currentIndex = 0;
+      this.lyricTwo = [];
+      for (let i = 0; i < this.lyric.length; i++) {
+        let time = this.lyric[i].time;
+
+        if (
+          i + 1 == this.lyric.length ||
+          (this.currentTime >= time &&
+            this.currentTime < this.lyric[i + 1].time)
+        ) {
+          // 第i条高亮
+          this.currentIndex = i;
+         
+          this.lyricTwo.push(
+            this.lyric[i],
+            this.lyric[i + 1] ? this.lyric[i + 1] : "1"
+          );
+          this.lyricTwoFun();
+          break;
+        }
+      }
+    },
+
+    // 高亮两项歌词数据
+    lyricTwoFun() {
+      this.currentTwoIndex = 0;
+
+      for (let i = 0; i < this.lyricTwo.length; i++) {
+        let time = this.lyricTwo[i].time;
+
+        if (
+          this.currentTime >= time &&
+          this.currentTime < this.lyricTwo[i + 1].time
+        ) {
+          // 第i条高亮
+          this.currentTwoIndex = i;
+          break;
+        }
+      }
+    },
   },
+  created() {
+    this.getLyricFun();
+  },
+
+  watch: {
+    currentTime() {
+      // this.$refs.lyric.scrollTop = 0;
+      this.getCurrentActiveLyric();
+    },
+    playingMusic() {
+      this.getLyricFun();
+    },
+  },
+  components:{
+    LyricView
+  }
 };
 </script>
 <style lang="scss" scoped>
+.lyric {
+  position: fixed;
+  width: 100%;
+  height: 69%;
+  top: 10%;
+  left: 0;
+  margin: auto 0;
+  background: transparent;
+  backdrop-filter: blur(40px);
+  .bg-img {
+    position: absolute;
+    top: 0;
+    height: 100%;
+   width: 100%;
+   display: block;
+    filter: blur(50px);
+  }
+  .wrapper{
+    height: 95%;
+    position: relative;
+    overflow: hidden;
+    overflow-y: auto;
+
+    
+  }
+
+}
 .song-detail-View {
   position: fixed;
   top: 0;
@@ -118,20 +284,31 @@ export default {
   overflow: auto;
   overflow: hidden;
 
+  .footer-paly-list {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 20vh;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
   .postion-bg {
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
     z-index: -1;
-    filter: blur(60px);
+    filter: blur(50px);
+    box-shadow: 0px 9px 37px 15px;
   }
 
   .song-detail {
-    padding: 0 20px;
-
     .slider-content-ipt {
-      margin-top: 120px;
-      height: 20px;
       .duration {
         margin-top: 10px;
         font-size: 12px;
@@ -147,7 +324,6 @@ export default {
       top: 0;
       left: 0;
       width: 100%;
-      height: 7vh;
       padding: 20px;
       background-color: transparent;
       display: flex;
@@ -176,12 +352,13 @@ export default {
         text-overflow: ellipsis;
 
         .music-title {
-          font-size: 20px;
+          font-size: 18px;
           margin-bottom: 5px;
+          font-weight: bold;
         }
         .artists-name {
           font-size: 12px;
-          color: #ddd;
+          color: #666;
         }
       }
 
@@ -198,12 +375,12 @@ export default {
     .music-content {
       width: 100%;
       height: 65vh;
-      padding: 150px 20px 0;
+      padding: 20vh 20px 0;
 
       .music-content-img {
         margin: 0 auto;
-        width: calc(100% - 50px);
-        animation: imgrotateanime 10s linear;
+        width: 65vw;
+        animation: imgrotateanime 15s linear infinite;
         animation-play-state: paused;
 
         &.rotateanime {
@@ -220,23 +397,32 @@ export default {
       }
 
       .music-content-text {
-        margin-top: 100px;
+        padding: 5vh 0 0 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
         color: #fff;
 
         .music-artists-title {
-          width: 80%;
+          width: 88%;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
 
           .company {
             margin-top: 20px;
-            font-size: 20px;
-            color: #666;
-            font-weight: bold;
+            font-size: 13px;
+            color: #fff;
+            text-align: center;
+            p {
+              line-height: 20px;
+
+              &.active {
+                font-size: 14px;
+                font-weight: 600;
+                color: rgb(243, 89, 89);
+              }
+            }
           }
         }
         .right-icon {
@@ -263,7 +449,7 @@ export default {
     }
 
     .music-paly-icon {
-      padding: 40px 40px 20px;
+      padding: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;

@@ -74,7 +74,7 @@ export default {
     border-radius: 999px;
     overflow: hidden;
     border: 1px solid #ddd;
-    animation: discrotate 10s linear infinite;
+    animation: discrotate 15s linear infinite;
     // 动画开始时暂停
     animation-play-state: paused;
 

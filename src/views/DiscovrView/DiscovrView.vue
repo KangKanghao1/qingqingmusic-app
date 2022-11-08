@@ -9,7 +9,7 @@
         @click="searchSong"
       />
       <div class="music-img">
-        <img class="home-img" :src="playingMusic?.picUrl" alt="" />
+        <img class="home-img" :src="playingMusic?.picUrl" @click="gotoDetalil" />
       </div>
     </div>
 
@@ -32,7 +32,7 @@ export default {
       bannerimgdata: [],
       timer: null,
       placeholder: "原谅我改变 经典老歌",
-      searchPlaceholderIndex: 0
+      searchPlaceholderIndex: 0,
     };
   },
   created() {
@@ -56,13 +56,14 @@ export default {
     } else {
       //开启计时器
       this.randomPlaceholder();
-    }
+
+    clearInterval(this.timer);
+  }
   },
   // 计算属性
   computed: {
     // 引入vuex playingMusic 数据
     ...mapState(["playingMusic"]),
-
   },
   methods: {
     async getBannerList() {
@@ -78,6 +79,10 @@ export default {
       });
     },
 
+    // 跳转到音乐详情页
+    gotoDetalil() {
+      this.$router.push(`/songdata/${this.playingMusic.id}`);
+    },
     // 搜索
     searchSong() {
       this.$router.push(`/discovr/search?keywords=${this.placeholder}`);
@@ -86,16 +91,12 @@ export default {
     // 切换推荐搜索关键字
     randomPlaceholder() {
       this.timer = setInterval(() => {
-        
-        this.searchPlaceholderIndex = (1 + this.searchPlaceholderIndex) % SEARCH_PLACEHOLDER.length; 
-        
+        this.searchPlaceholderIndex =
+          (1 + this.searchPlaceholderIndex) % SEARCH_PLACEHOLDER.length;
+
         this.placeholder = SEARCH_PLACEHOLDER[this.searchPlaceholderIndex];
-
-
       }, 2500);
-
-     
-  },
+    },
   }
 };
 </script>
@@ -147,7 +148,7 @@ export default {
 }
 .drawer-enter-active,
 .drawer-leave-active {
-  transition: all 0.15s linear;
+  transition: all 0.3s linear;
 }
 .drawer-enter-to,
 .drawer-leave {

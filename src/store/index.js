@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { NEWSONGSAPI } from '../apis/play'
+import { NEWSONGSAPI} from '../apis/play'
 
 Vue.use(Vuex)
 
@@ -10,26 +10,34 @@ export default new Vuex.Store({
     synthesisData: [], // 搜索模块综合数据
     // 歌曲列表
     songsList: [],
+
     // 当前播放歌曲  等于本地缓存中的 changerMusci
+    // 当前播放歌曲  等于本地缓存中的 
     playingMusic: {},
     // 显示隐藏歌曲列表组件 的控件 Popup 弹出层
     showSongList: false,
     // 音乐是否正在播放 默认不播放
     audioPlayState: false,
-    // 播放时长
+    // 当前播放时间
+    currentTime: 0,
+    // 播放总时长
     duration: 0,
     // 控制上一首下一首music
-    randommusic: 0
+
+    randommusic: 0,
+    // 音乐歌词
+    musiclyric: []
 
   },
   getters: {
   },
   mutations: {
+
     onSearchKeyword(state, keywords) {
       state.keywords = keywords
     },
 
-    onSynthesisData(state,  data ){
+    onSynthesisData(state, data) {
       state.synthesisData = data
     },
     // 歌曲列表
@@ -42,10 +50,13 @@ export default new Vuex.Store({
       state.playingMusic = music
     },
 
-    // 音乐播放时长
-    setMusicduration(state, duration) {
+    // 修改音乐播放总时长
+    Musicduration(state, duration) {
       state.duration = duration
-
+    },
+    // 修改当前播放时间
+    currenpalytTime(state, currentTime) {
+      state.currentTime = currentTime
     },
 
     // 切换歌曲
@@ -99,10 +110,10 @@ export default new Vuex.Store({
 
     },
 
+
     // LastoneMusic(state) {
     //   state.playingMusic = state.songsList[state.randommusic]
     // },
-
 
     // 控制播放暂停 如果控制页面上的推荐歌曲点击动画需要给事件设置事件冒泡
     audioPlayandstop(state) {
@@ -149,14 +160,16 @@ export default new Vuex.Store({
       }
       commit('setSongsList', songsList)
 
+      // 如果当前播放歌曲等于空 则等于数据持久化的当前歌曲 否则页还是等于数据持久化的当前歌曲
       if (state.playingMusic == {}) {
         commit('setPlayingMusic', JSON.parse(localStorage.changerMusci))
-      }else {
+      } else {
+
         commit('setPlayingMusic', JSON.parse(localStorage.changerMusci))
       }
 
+    },
 
-    }
   },
   modules: {
   }
