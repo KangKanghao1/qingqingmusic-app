@@ -1,21 +1,34 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { NEWSONGSAPI} from '../apis/play'
+
+import { NEWSONGSAPI } from '../apis/play'
+import { getPhoneLigin} from "../apis/login";
+
 
 Vue.use(Vuex)
 
+
 export default new Vuex.Store({
+//   modules: {
+//     user
+// },
   state: {
     keywords: '', // 搜索关键字,
     synthesisData: [], // 搜索模块综合数据
     // 歌曲列表
     songsList: [],
+    // 当前播放歌曲  等于本地缓存中的 changerMusci
+    // JSON.parse(localStorage.changerMusci),
     // 当前播放歌曲  等于本地缓存中的 
     playingMusic: {},
     // 显示隐藏歌曲列表组件 的控件 Popup 弹出层
     showSongList: false,
     // 音乐是否正在播放 默认不播放
     audioPlayState: false,
+    //判断是否登录
+    isLogin:true,
+    // 是否需要显示底部播放组件
+    isFooterMusic:true,
     // 当前播放时间
     currentTime: 0,
     // 播放总时长
@@ -56,6 +69,11 @@ export default new Vuex.Store({
     // 修改当前播放时间
     currenpalytTime(state, currentTime) {
       state.currentTime = currentTime
+    },
+    // 是否登录
+    setisLogin(state, isLogin) {
+      state.isLogin = isLogin
+
     },
 
     // 切换歌曲
@@ -160,10 +178,24 @@ export default new Vuex.Store({
 
 
     },
+   //封装一个 ajax 方法
 
-
-
+  //  getLogin (context) {this.$axios({
+      
+  //         method:'get',
+          
+  //         url:`/login/cellphone?phone=${context.phone}&password=${context.password}`,
+          
+  //         // data: context
+          
+  //         })
+          
+  //         },
+    async getLogin(value) {
+      let res = await this.$axios (getPhoneLigin(value));
+      // this.mvList = data.data;
+      console.log('res ==>',res); 
+    },
   },
-  modules: {
-  }
+
 })

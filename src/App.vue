@@ -1,8 +1,10 @@
 <template>
   <transition name="fadeout" appear>
     <div class="app">
+      <router-view v-show="$store.state.isFooterMusic" />
       <!-- 路由也可以反向传值 -->
       <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
+
       <PlayControl />
       <van-tabbar
         class="router-title"
@@ -14,7 +16,7 @@
         <van-tabbar-item to="/discovr">发现</van-tabbar-item>
         <van-tabbar-item to="/mymusic">我的音乐</van-tabbar-item>
         <van-tabbar-item to="/video">视频</van-tabbar-item>
-        <van-tabbar-item to="/user">我的</van-tabbar-item>
+        <van-tabbar-item to="/user" >我的</van-tabbar-item>
       </van-tabbar>
 
       <van-popup
@@ -58,7 +60,7 @@ export default {
   },
   methods: {
     // 引入的vuex的方法数据
-    ...mapMutations(["hideSongList", "Musicduration", "currenpalytTime",'getmusiclyricdata']),
+    ...mapMutations(["hideSongList","setMusicduration" , "Musicduration", "currenpalytTime",'getmusiclyricdata']),
     ...mapActions(["getNewSong"]),
     // 获取音乐的总播放时长
     getMusicdurationdata() {
