@@ -64,8 +64,10 @@ export default {
     return {
       searchText: "",
       placeholder: "",
-      componentShow: false, // 详细/搜素列表显示/隐藏
-      SearchListShow: false, // 显示/隐藏
+      // componentShow: false, // 详细/搜素列表显示/隐藏
+      componentShow: JSON.parse(localStorage.componentShow),
+      // SearchListShow: false, // 显示/隐藏
+      SearchListShow: JSON.parse(localStorage.SearchListShow),
       loadingShow: false,
       inexistenceShow: false, // 搜索加载失败
       show: true,
@@ -80,8 +82,12 @@ export default {
 
     // 组件显示、隐藏
     onSearchListShow() {
-      this.componentShow = true;
-      this.SearchListShow = false;
+      // this.componentShow = true;
+      localStorage.componentShow = JSON.stringify(true);
+      this.componentShow = JSON.parse(localStorage.componentShow);
+      // this.SearchListShow = false;
+      localStorage.SearchListShow = JSON.stringify(false);
+      this.SearchListShow = JSON.parse(localStorage.SearchListShow);
     },
 
     // 更改搜索关键字
@@ -98,13 +104,21 @@ export default {
     // 点击清除按钮后触发
     onClear() {
       this.searchText = "";
-      this.SearchListShow = true;
+      // this.SearchListShow = true;
+      localStorage.SearchListShow = JSON.stringify(true);
+      this.SearchListShow = JSON.parse(localStorage.SearchListShow);
       // this.inexistenceShow = false;
     },
     //确定搜索时触发
     async onSearch(val) {
-      this.SearchListShow = false;
-      this.componentShow = true;
+      // this.SearchListShow = false;
+      localStorage.SearchListShow = JSON.stringify(false);
+      this.SearchListShow = JSON.parse(localStorage.SearchListShow);
+      console.log(this.SearchListShow);
+      // this.componentShow = true;
+      localStorage.componentShow = JSON.stringify(true);
+      this.componentShow = JSON.parse(localStorage.componentShow);
+      console.log(this.componentShow);
 
       if (val == "") {
         this.searchText = this.placeholder;
@@ -131,10 +145,16 @@ export default {
     // 输入框内容变化时触发
     onInput(val) {
       if (val == "") {
-        this.SearchListShow = true;
+        // this.SearchListShow = true;
+        localStorage.SearchListShow = JSON.stringify(true);
+        this.SearchListShow = JSON.parse(localStorage.SearchListShow);
       } else {
-        this.SearchListShow = false;
-        this.componentShow = false;
+        // this.SearchListShow = false;
+        localStorage.SearchListShow = JSON.stringify(false);
+        this.SearchListShow = JSON.parse(localStorage.SearchListShow);
+        // this.componentShow = false;
+        localStorage.componentShow = JSON.stringify(false);
+        this.componentShow = JSON.parse(localStorage.componentShow);
       }
     },
 
@@ -145,7 +165,7 @@ export default {
   },
 
   created() {
-    this.SearchListShow = true;
+    // this.SearchListShow = true;
     this.placeholder = this.$route.query.keywords;
   },
 

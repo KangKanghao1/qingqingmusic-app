@@ -85,6 +85,8 @@ export default {
     },
     // 搜索
     searchSong() {
+      localStorage.SearchListShow = JSON.stringify(true);
+      localStorage.componentShow = JSON.stringify(false);
       this.$router.push(`/discovr/search?keywords=${this.placeholder}`);
     },
 

@@ -61,6 +61,7 @@ export default new Vuex.Store({
 
     // 切换歌曲
     changeoverMusci(state, music) {
+      console.log(music);
       state.playingMusic = music
 
       // 检测遍历传进来的music map遍历如果数组中已近有了传进来的歌曲则不添加
@@ -94,6 +95,8 @@ export default new Vuex.Store({
       let randomdigit = Math.floor(Math.random() * state.songsList.length)
 
       state.playingMusic = state.songsList[randomdigit]
+      
+      localStorage.changerMusci = JSON.stringify(state.playingMusic);
 
       if (state.audioPlayState == false) {
         setTimeout(() => {
@@ -162,10 +165,10 @@ export default new Vuex.Store({
 
       // 如果当前播放歌曲等于空 则等于数据持久化的当前歌曲 否则页还是等于数据持久化的当前歌曲
       if (state.playingMusic == {}) {
-        commit('setPlayingMusic', JSON.parse(localStorage.changerMusci))
+        commit('setPlayingMusic', JSON.parse(localStorage.changerMusci??"{}"))
       } else {
 
-        commit('setPlayingMusic', JSON.parse(localStorage.changerMusci))
+        commit('setPlayingMusic', JSON.parse(localStorage.changerMusci??"{}"))
       }
 
     },

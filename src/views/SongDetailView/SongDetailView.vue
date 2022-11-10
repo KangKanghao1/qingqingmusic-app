@@ -1,7 +1,7 @@
 <template>
   <transition name="anime" appear>
     <div class="song-detail-View">
-      <img class="postion-bg" v-lazy="playingMusic.picUrl" />
+      <img class="postion-bg" v-lazy="onPicUrl" />
       <div class="song-detail">
         <div class="nav-icon-title">
           <i class="nav-quit-icon" @click="quitgodiscover"></i>
@@ -16,7 +16,7 @@
             class="music-content-img"
             :class="{ rotateanime: audioPlayState }"
           >
-            <img class="content-img" v-lazy="playingMusic.picUrl" />
+            <img class="content-img" v-lazy="onPicUrl" />
           </div>
           <div class="music-content-text">
             <div class="music-artists-title">
@@ -40,7 +40,22 @@
             </div>
 
             <div class="right-icon">
-              <div class="live-icon-one"></div>
+              <div
+                class="live-icon-one"
+                :class="{ live: liveShow }"
+                @click="liveSong()"
+              >
+                <img
+                  v-if="!liveShow"
+                  class="no-live"
+                  src="@/assets/imgs/未收藏 .png"
+                />
+                <img
+                  v-if="liveShow"
+                  class="live"
+                  src="@/assets/imgs/已收藏.png"
+                />
+              </div>
               <div class="live-icon-tow"></div>
             </div>
           </div>
@@ -77,34 +92,35 @@
         </div>
       </div>
       <!-- 歌词 -->
-      <van-overlay :lock-scroll="false" class-name="lyric" :show="show" @click="show = false">
+      <van-overlay
+        :lock-scroll="false"
+        class-name="lyric"
+        :show="show"
+        @click="show = false"
+      >
         <img class="bg-img" v-lazy="playingMusic.picUrl" />
         <div class="wrapper" ref="lyc">
-          
-           <LyricView 
-           :lyric="lyric" 
-           :currentIndex="currentIndex"
-          />
+          <LyricView :lyric="lyric" :currentIndex="currentIndex" />
         </div>
-
       </van-overlay>
-
     </div>
   </transition>
 </template>
 <script>
-import LyricView from "./LyricView.vue"
+import LyricView from "./LyricView.vue";
 import { mapState, mapMutations } from "vuex";
 import { getLryic } from "@/apis/play";
 
 export default {
-  data() {0
+  data() {
+    0;
     return {
       lyric: [], // 高亮歌词,
       lyricTwo: [], // 显示二项歌词
       currentIndex: 0, // 歌词
       currentTwoIndex: 0, // 高亮二项歌词
       show: false,
+      liveShow: false,
     };
   },
 
@@ -157,6 +173,11 @@ export default {
     },
 
     // 拖拽进度条
+    onPicUrl() {
+      return this.playingMusic.picUrl
+        ? this.playingMusic.picUrl + ""
+        : this.playingMusic.al.picUrl;
+    },
   },
 
   methods: {
@@ -171,7 +192,7 @@ export default {
       this.$axios.get(getLryic(this.playingMusic.id)).then(({ data }) => {
         let lrc = data.lrc.lyric;
         this.lyric = [];
-        console.log(lrc);
+
         let lrcReg = /^\[(\d+):(\d+\.\d+)\]([\S ]+)$/gim;
 
         while (lrcReg.test(lrc)) {
@@ -180,8 +201,6 @@ export default {
             lrc: RegExp.$3,
           });
         }
-
-        console.log(this.currentTime);
       });
     },
     // 高亮歌词
@@ -198,7 +217,7 @@ export default {
         ) {
           // 第i条高亮
           this.currentIndex = i;
-         
+
           this.lyricTwo.push(
             this.lyric[i],
             this.lyric[i + 1] ? this.lyric[i + 1] : "1"
@@ -226,23 +245,62 @@ export default {
         }
       }
     },
+
+    // 喜欢歌曲
+    liveSong() {
+      let live = JSON.parse(localStorage.getItem("live") ?? "[]");
+      if (this.liveShow) {
+        this.liveShow = false;
+        let newSongList = live.filter((c) => c.id !== this.playingMusic.id);
+        localStorage.live = JSON.stringify(newSongList);
+      } else {
+        this.liveShow = true;
+        if (live.length < 1) {
+          localStorage.live = JSON.stringify([this.playingMusic]);
+        }
+
+        let res = live.find((c) => c?.id == this.playingMusic.id);
+        if (!res) {
+          localStorage.live = JSON.stringify([
+            this.playingMusic,
+            ...live,
+          ]);
+        } else {
+          let data = live.filter((c) => c.id !== this.playingMusic.id);
+          localStorage.live = JSON.stringify([this.playingMusic, ...data]);
+        }
+      }
+    },
   },
   created() {
     this.getLyricFun();
+    let song = JSON.parse(localStorage.getItem("live") ?? "[]");
+    let res = song.find((s) => s.id == this.playingMusic.id);
+    if (!res) {
+      this.liveShow = false;
+    } else {
+      this.liveShow = true;
+    }
   },
 
   watch: {
     currentTime() {
-      // this.$refs.lyric.scrollTop = 0;
       this.getCurrentActiveLyric();
     },
-    playingMusic() {
+    playingMusic(newSong) {
       this.getLyricFun();
+      let song = JSON.parse(localStorage.getItem("live") ?? "[]");
+      let res = song.find((s) => s.id == newSong.id);
+      if (!res) {
+        this.liveShow = false;
+      } else {
+        this.liveShow = true;
+      }
     },
   },
-  components:{
-    LyricView
-  }
+  components: {
+    LyricView,
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -255,23 +313,21 @@ export default {
   margin: auto 0;
   background: transparent;
   backdrop-filter: blur(40px);
+  
   .bg-img {
     position: absolute;
     top: 0;
     height: 100%;
-   width: 100%;
-   display: block;
+    width: 100%;
+    display: block;
     filter: blur(50px);
   }
-  .wrapper{
+  .wrapper {
     height: 95%;
     position: relative;
     overflow: hidden;
     overflow-y: auto;
-
-    
   }
-
 }
 .song-detail-View {
   position: fixed;
@@ -279,7 +335,7 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 20;
+  z-index: 25;
   background-color: #fff;
   overflow: auto;
   overflow: hidden;
@@ -430,11 +486,44 @@ export default {
             margin-top: 50px;
             width: 28px;
             height: 28px;
-            background-image: url("../../assets/imgs/未收藏 .png");
-            background-position: center center;
-            background-size: cover;
-            background-repeat: no-repeat;
+
+            .no-live {
+              width: 100%;
+              display: block;
+              animation: coll .5s linear;
+            }
+
+            .live {
+              width: 100%;
+              display: block;
+              animation: move .5s linear;
+            }
+            @keyframes coll {
+              0% {
+                transform: scale(0.8);
+              }
+              50% {
+                transform: scale(1.2);
+              }
+
+              100% {
+                transform: scale(1);
+              }
+            }
+            @keyframes move {
+              0% {
+                transform: scale(0.8);
+              }
+              50% {
+                transform: scale(1.2);
+              }
+
+              100% {
+                transform: scale(1);
+              }
+            }
           }
+
           .live-icon-tow {
             margin-top: 20px;
             width: 28px;

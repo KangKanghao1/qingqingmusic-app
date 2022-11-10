@@ -18,15 +18,15 @@
         <div class="icon">
           <img src="@/assets/imgs/music_ico_collected.png" alt="" />
         </div>
-        <div class="setting-layer">
-          <div>我收藏的电台</div>
+        <div class="setting-layer" @click="toCollectPage()">
+          <div>我喜欢的音乐<span class="count">{{onLiveCount}}</span></div>
           <van-icon name="arrow" color="#ddd" />
         </div>
       </div>
 
     </div>
 
-    <transition name="drawer"><router-view /></transition>
+   <router-view />
     
   </div>
 </template>
@@ -34,8 +34,12 @@
 export default {
   data(){
     return{
-
+      liveCount: 0
     }
+  },
+  created(){
+   this.liveCount = JSON.parse(localStorage.getItem('live')??"[]").length;
+   console.log(this.liveCount);
   },
   methods: {
 
@@ -43,24 +47,20 @@ export default {
 
       this.$router.push(`mymusic/recently-played`)
 
+    },
+    toCollectPage(){
+      this.$router.push(`mymusic/live`)
     }
 
+  },
+  computed: {
+    onLiveCount(){
+      return this.liveCount >= 1 ? `(${this.liveCount})首` :  '';
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
-.drawer-enter,
-.drawer-leave-to {
-  transform: translateX(100%);
-}
-.drawer-enter-active,
-.drawer-leave-active {
-  transition: all .15s linear;
-}
-.drawer-enter-to,
-.drawer-leave {
-  transform: translateX(0);
-}
 .my-music {
   width: 100vw;
   height: 100vh;
@@ -111,6 +111,11 @@ export default {
         padding: 10px 10px 10px 10px;
         border-bottom: 1px solid #ddd;
         letter-spacing: 3px;
+
+        .count {
+          color: #bbb;
+          font-size: 12px;
+        }
         div {
           color: #edeef0;;
           font-size: 14px;

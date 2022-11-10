@@ -112,3 +112,4 @@ export const SEARCH_TABS_CONTENT = ({$axios, id, val}) => {
 
 // 歌手粉丝数量
 export const singerFansCount = id => `/artist/follow/count?id=${id}`
+

@@ -1,11 +1,11 @@
 <template>
-  <div class="paly-control">
+  <div class="paly-control" :class="{display:PlayStyle}">
     <div
       class="song-disc"
       :class="{ discrotate: audioPlayState }"
     @click="gotoDetalil"
-    >
-      <img class="disc-img" :src="playingMusic?.picUrl" alt="" />
+    > 
+      <img class="disc-img" ref="img" :src="onPicUrl" alt="" />
     </div>
     <p class="song-desc" @click="gotoDetalil">
       {{ playingMusic?.name }} <span class="artists"> - {{ artists }}</span>
@@ -24,6 +24,9 @@
 import { mapState, mapMutations } from "vuex";
 
 export default {
+  props: {
+    PlayStyle:Boolean
+  },
   // 计算属性
   computed: {
     // 引入vuex playingMusic 数据
@@ -36,6 +39,11 @@ export default {
       }
       return null;
     },
+    onPicUrl(){
+      
+     return this.playingMusic.picUrl ? this.playingMusic.picUrl + '':this.playingMusic.al.picUrl;
+     
+    }
   },
   methods: {
     ...mapMutations(["showSongList", "audioPlayandstop"]),
@@ -56,15 +64,19 @@ export default {
 .paly-control {
   position: fixed;
   left: 0px;
-  bottom: 49px;
+  bottom: 48px;
   width: 100vw;
   padding: 5px 15px;
   background-color: #222325;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 1;
-
+  z-index: 24;
+  &.display{
+    position: fixed;
+  left: 0px;
+  bottom: 0;
+  }
   .song-disc {
     display: flex;
     justify-content: space-between;

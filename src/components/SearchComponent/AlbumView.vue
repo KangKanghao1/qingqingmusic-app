@@ -167,11 +167,12 @@ export default {
     },
         // 请求数据为undefined
     onShowFailure() {
-      
+        
        let albumArr = this.synthesisData.filter((s) => {
         return s.type == "album";
       });
-      if (!albumArr[0]?.data) {
+
+      if (albumArr[0]?.data.albumCount == "0") {
     
         return this.show;
       } else {
@@ -185,7 +186,7 @@ export default {
         return s.type == "album";
       });
 
-      if (!albumArr[0]?.data) {
+      if (albumArr[0]?.data.albumCount == "0") {
       
         return this.show;
       } else {
@@ -264,6 +265,10 @@ export default {
         }
 
         .singer_n {
+          width: 194%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
           color: rgba(161, 161, 161);
           height: 20px;
           // font-size: 12px;

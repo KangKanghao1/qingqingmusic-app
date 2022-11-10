@@ -8,7 +8,7 @@
       </div>
 
       <div class="single-list">
-        <div class="single-item" v-for="s in onSingleData" :key="s.id">
+        <div @click="toPlayControl(s)" class="single-item" v-for="s in onSingleData" :key="s.id">
           <div class="sing-name">
             <div class="song_n">{{ s.name }}</div>
             <div class="singer_n">{{ singerName(s.ar) }}</div>
@@ -35,7 +35,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+
+import { mapState,mapMutations } from "vuex";
 import { SEARCH_TABS_CONTENT } from "@/Tools/defaultSearch";
 export default {
   props: {
@@ -43,6 +44,7 @@ export default {
       type: String,
       default: "1018",
     },
+    
   },
   data() {
     return {
@@ -72,6 +74,7 @@ export default {
     this.onAllSingleFun();
   },
   methods: {
+    ...mapMutations(["changeoverMusci"]),
     // 延迟加载
     loadingTime() {
       return new Promise((resolve) => {
@@ -81,6 +84,12 @@ export default {
         }, 500);
       });
     },
+    // 跳转播放详情页
+    toPlayControl(s){
+      this.changeoverMusci(s)
+      this.$router.push(`/songdata/${s.id}`);
+    },
+
     // 获取所有专辑数据
     async onAllSingleFun() {
       if (this.tabsTitle !== "1018") {

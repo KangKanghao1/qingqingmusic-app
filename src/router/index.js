@@ -51,8 +51,14 @@ const routes = [
     children: [{
       path: "recently-played",
       name: "recently-played",
-      component: () => import("../views/MyMusic/RecentlyPlayed.vue")
-    }]
+      component: () => import("../views/MyMusic/RecentlyPlayed/RecentlyPlayed.vue")
+    },
+    {
+      path:"live",
+      name:"live",
+      component:() => import("../views/MyMusic/MyLive.vue")
+    }
+  ]
   },
 
   {
