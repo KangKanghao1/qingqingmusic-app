@@ -37,6 +37,7 @@
           <div class="video-box">
             <video
               class="video-content"
+              ref="video"
                :poster="item.cove"
               :id="`player${index}`"
               :src="playId"
@@ -44,6 +45,7 @@
               height="100%"
               autoplay
               controls
+              
             ></video>
           </div>
         </van-pull-refresh>
@@ -287,21 +289,17 @@ export default {
      async  playMV(id) {
       let { data } =  await this.$axios(playMV(id));
       this.playId = data.data.url
-      //  this.$refs.myvideo.src= data.data.url
-      // console.log(this.mvId);
       console.log(data);
       // mv地址id随路由跳转给评论页面
         this.commentID=id
-
-             return
+            return
     },
+ 
        // 跳转到评论列表
      goToComments(id) {
       this.$router.push(`Comments-list?mv=${id}`);
       console.log("我进来了");
       //  console.log( '我拿到评论了',this.mvcomments);
-      
-
     },
      
   }
@@ -368,7 +366,7 @@ export default {
     }
     .text-container {
       position: absolute;
-      width: 250px;
+      width: 279px;
       left: 0;
       bottom: 40px;
       padding: 0.2rem 0.1rem;
