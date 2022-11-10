@@ -87,7 +87,7 @@ background-color: #222325;
           display: block;
           width: 20px;
           height: 20px;
-          background-image: url("../assets/imgs/skin_center_hot_category_icon.png");
+          background-image: url("@/assets/imgs/skin_center_hot_category_icon.png");
           background-position: center center;
           background-size: cover;
           background-repeat: no-repeat;

@@ -85,7 +85,7 @@ export default {
             width: 100%;
             height: 100%;
             background-color: rgba(66, 77, 88, 0.6);
-            background-image: url("../assets/imgs/gdt_ic_play.png");
+            background-image: url("@/assets/imgs/gdt_ic_play.png");
             background-position: center center;
             background-size: 20px;
             background-repeat: no-repeat;
