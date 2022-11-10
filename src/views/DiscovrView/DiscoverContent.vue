@@ -73,20 +73,20 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["getAllSingers"]),
+    ...mapMutations([]),
     ...mapActions(["getNewSong"]),
-    // ...mapMutations(["setSongsList"]),
+
     // nav icon
     async getHomepageItemList() {
       let { data } = await this.$axios(getHomepageItemList);
       this.HomepageItemList = data.data;
-      // console.log(data.data);
+
     },
     // 推荐歌单
     async getPlaylistdata() {
       let { data } = await this.$axios(getPlaylistdata);
       this.RecommendSong = data.result;
-      // console.log(data.result);
+
     },
     // 新音乐
     async getnewsongsapi() {
@@ -106,7 +106,6 @@ export default {
     async gettoplistartistData() {
       this.toplistdata += 10;
       let { data } = await this.$axios(gettoplistartistData);
-      this.getAllSingers(data.list.artists)
       // 每次调用请求都会给  this.toplistartistData 添加10个数据
       for (let i = 0; i < this.toplistdata; i++) {
         //

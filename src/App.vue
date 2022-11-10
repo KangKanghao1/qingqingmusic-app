@@ -3,7 +3,7 @@
     <div class="app">
       <!-- 路由也可以反向传值 -->
       <keep-alive>
-      <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
+        <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
       </keep-alive>
       <PlayControl />
       <van-tabbar
@@ -25,7 +25,7 @@
         position="bottom"
         :overlay-style="{ opacity: 0.5 }"
         @click-overlay="hideSongList"
-        @ended="NextsongMusic"
+        
       >
         <CurrentPalyList
       /></van-popup>
@@ -37,7 +37,6 @@
         @timeupdate="getcurrenpalytTime"
         @ended="NextsongMusic"
       />
-
     </div>
   </transition>
 </template>
@@ -55,7 +54,12 @@ export default {
   },
 
   computed: {
-    ...mapState(["showSongList", "playingMusic", "audioPlayState",'musiclyric']),
+    ...mapState([
+      "showSongList",
+      "playingMusic",
+      "audioPlayState",
+      "musiclyric",
+    ]),
     // 计算属性 获取playingMusic音乐的id来赋值给 getSongUrl里的id路径
     songUrl() {
       return getSongUrl(this.playingMusic.id);
@@ -63,14 +67,19 @@ export default {
   },
   methods: {
     // 引入的vuex的方法数据
-    ...mapMutations(["hideSongList", "Musicduration", "currenpalytTime",'getmusiclyricdata','NextsongMusic']),
+    ...mapMutations([
+      "hideSongList",
+      "Musicduration",
+      "currenpalytTime",
+      "getmusiclyricdata",
+      "NextsongMusic"
+    ]),
     ...mapActions(["getNewSong"]),
     // 获取音乐的总播放时长
     getMusicdurationdata() {
       this.Musicduration(this.$refs.audio.duration);
     },
 
-    
     // 获取当前播放时间
     getcurrenpalytTime() {
       this.currenpalytTime(this.$refs.audio.currentTime);
@@ -79,7 +88,6 @@ export default {
     setAudioCurrentTimevalue(currentTime) {
       this.$refs.audio.currentTime = currentTime;
     },
-
   },
 
   created() {

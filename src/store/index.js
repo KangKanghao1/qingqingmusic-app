@@ -4,18 +4,28 @@ import { NEWSONGSAPI } from '../apis/play'
 
 Vue.use(Vuex)
 
+
 export default new Vuex.Store({
+  //   modules: {
+  //     user
+  // },
   state: {
     keywords: '', // 搜索关键字,
     synthesisData: [], // 搜索模块综合数据
     // 歌曲列表
     songsList: [],
+    // 当前播放歌曲  等于本地缓存中的 changerMusci
+    // JSON.parse(localStorage.changerMusci),
     // 当前播放歌曲  等于本地缓存中的 
     playingMusic: {},
     // 显示隐藏歌曲列表组件 的控件 Popup 弹出层
     showSongList: false,
     // 音乐是否正在播放 默认不播放
     audioPlayState: false,
+    //判断是否登录
+    isLogin: true,
+    // 是否需要显示底部播放组件
+    isFooterMusic: true,
     // 当前播放时间
     currentTime: 0,
     // 播放总时长
@@ -26,8 +36,7 @@ export default new Vuex.Store({
     songMusictitle: [],
     // 音乐歌词
     musiclyric: [],
-    // 全部歌手数据
-    AllSingers: []
+
   },
   getters: {
   },
@@ -39,10 +48,6 @@ export default new Vuex.Store({
 
     onSynthesisData(state, data) {
       state.synthesisData = data
-    },
-    getAllSingers(state,Singers) {
-      state.AllSingers = Singers
-      console.log(state.AllSingers);
     },
 
     // 删除播放队列歌曲
@@ -68,21 +73,25 @@ export default new Vuex.Store({
     currenpalytTime(state, currentTime) {
       state.currentTime = currentTime
     },
+    // 是否登录
+    setisLogin(state, isLogin) {
+      state.isLogin = isLogin
+
+    },
 
     // 切换歌曲
     changeoverMusci(state, music) {
       state.playingMusic = music
 
-      // 检测遍历传进来的music map遍历如果数组中已近有了传进来的歌曲则不添加
-      // // 否则添加返回一个新数组对象
-      for (let i = 0; i < state.songsList.length; i++) {
-        // let ele = state.songsList[i];
-        if (state.songsList.indexOf(music) == -1) {
-          state.songsList = [...state.songsList, music]
-        }
+      // 使用 find 方法来查找state.songsList 里面的歌曲 如果 查找输出等于undifeined
+      //  则代表不是数组里面的歌曲则添加返回一个新数组对象
+    let obj = state.songsList.find(x => x.id ==music.id)
+    // console.log('obj ==>',obj);
+    if(obj == undefined) {
+      state.songsList = [...state.songsList, music]
+    }
 
-      }
-      console.log(state.songsList);
+
       // 存进本地缓存中
       localStorage.changerMusci = JSON.stringify(music)
       // 点击切换歌曲之后自动播放 必须设置定时器异步控制state.audioPlayState的值
@@ -146,8 +155,6 @@ export default new Vuex.Store({
     // 获取歌单标题img等信息
     getsongMusictitle(state, data) {
       state.songMusictitle = data
-      console.log(state.songMusictitle);
-      console.log("123123", state.playingMusic);
     }
 
   },
@@ -180,8 +187,6 @@ export default new Vuex.Store({
       }
 
     },
-
   },
-  modules: {
-  }
+
 })

@@ -6,7 +6,7 @@
     </div>
     <div class="bang">
       <div v-for="t in toplistartistData" :key="t.id">
-        <div class="bang-img-title" @click="gosingerDetailed">
+        <div class="bang-img-title" @click="gosingerDetailed(t.id)">
           <img class="bang-img" v-lazy="t.picUrl" />
 
           <div class="score-data">
@@ -43,8 +43,8 @@ export default {
     gobangsinger() {
       this.$router.push("/moresinger");
     },
-    gosingerDetailed() {
-      this.$router.push("/singer");
+    gosingerDetailed(id) {
+      this.$router.push(`/singer/?singerid=${id}`);
     },
   },
 };

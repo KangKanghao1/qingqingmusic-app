@@ -65,17 +65,18 @@ export const getSongtypeareaList = (type,area,data) => `/artist/list?type=${type
 // 16韩国
 // 0:其他
 
-
-
 // 获取歌曲详情 /song/detail?ids=347230
 
 // 获取相似歌单 调用例子 : /simi/playlist?id=347230 ( 对应 ' 光辉岁月 ' 相似歌单 )
 
-
 // 获取专辑内容 调用例子 : /album?id=32311
 
+// 歌手全部歌曲/artist/songs?id=6452
 
-// 获取歌手单曲id: 歌手id      /artists?id=6452
+export const allgetartistsongs = id => `/artist/songs?id=${id}`
+
+// 获取歌手单曲id: 歌手id      /artists?id=6452 
+export const getsingleSong = id => `/artists?id=${id}`
 
 // 获取歌手 mv 歌手id       /artist/mv?id=6452
 
@@ -84,6 +85,8 @@ export const getSongtypeareaList = (type,area,data) => `/artist/list?type=${type
 // 获取歌手描述歌手 id      /artist/desc?id=6452
 
 // 获取歌手详情   /artist/detail?id=11972054
+export const getsongerdetaileddata = id => `/artist/detail?id=${id}`
+
 
 // 获取相似歌手id: 歌手 id   /simi/artist?id=6452 ( 对应和周杰伦相似歌手 )
 
