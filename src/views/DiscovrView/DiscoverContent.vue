@@ -7,16 +7,14 @@
     <PersonalizedMv :personalizedmv="personalizedmv" />
     <BangSinger :toplistartistData="toplistartistData" />
     <van-list
-    van-clearfixz
+      van-clearfixz
       v-model="loading"
       :finished="finished"
       finished-text="没有更多了"
       @load="onLoad"
-  
       class="van-clearfix"
     >
     </van-list>
-
   </div>
 </template>
 <script>
@@ -37,7 +35,7 @@ import { getpersonalizedmv } from "../../apis/play.js";
 // 歌手
 import { gettoplistartistData } from "../../apis/singer.js";
 // mapMutations
-import { mapActions } from "vuex";
+import { mapActions ,mapMutations} from "vuex";
 
 export default {
   data() {
@@ -50,7 +48,7 @@ export default {
       NewMusic: [],
       // 推荐mv
       personalizedmv: [],
-      // 歌手
+      // 前10个歌手
       toplistartistData: [],
       // 控制每次获取10个歌手
       toplistdata: 0,
@@ -66,16 +64,16 @@ export default {
   },
 
   mounted() {
-    
     this.getHomepageItemList();
     this.getPlaylistdata();
     this.getnewsongsapi();
     this.getpersonalizedmv();
     // 歌手
-    // this.gettoplistartistData();
+    this.gettoplistartistData();
   },
 
   methods: {
+    ...mapMutations(["getAllSingers"]),
     ...mapActions(["getNewSong"]),
     // ...mapMutations(["setSongsList"]),
     // nav icon
@@ -96,7 +94,7 @@ export default {
       this.NewMusic = data.result;
       // 存到本地缓存
       localStorage.songsList = JSON.stringify(this.NewMusic);
-      // this.setSongsList(this.NewMusic);
+      console.log(this.NewMusic);
     },
     // 每日推荐mv
     async getpersonalizedmv() {
@@ -108,7 +106,7 @@ export default {
     async gettoplistartistData() {
       this.toplistdata += 10;
       let { data } = await this.$axios(gettoplistartistData);
-
+      this.getAllSingers(data.list.artists)
       // 每次调用请求都会给  this.toplistartistData 添加10个数据
       for (let i = 0; i < this.toplistdata; i++) {
         //
@@ -116,13 +114,12 @@ export default {
           this.toplistartistData.push(data.list.artists[i]);
         }
       }
-      // console.log(this.toplistartistData);
     },
 
     // 加载
     onLoad() {
       // 歌手数据
-      this.gettoplistartistData();
+      // this.gettoplistartistData();
       // 加载状态结束
       this.loading = false;
       // 数据全部加载完成
@@ -145,7 +142,6 @@ export default {
 
 <style lang="scss" scoped>
 .discover-content {
-
   padding: 55px 0 55px;
 }
 </style>

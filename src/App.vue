@@ -1,8 +1,10 @@
 <template>
-  <transition name="fadeout" appear>
+  <transition name="fadeout">
     <div class="app">
       <!-- 路由也可以反向传值 -->
+      <keep-alive>
       <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
+      </keep-alive>
       <PlayControl />
       <van-tabbar
         class="router-title"
@@ -23,6 +25,7 @@
         position="bottom"
         :overlay-style="{ opacity: 0.5 }"
         @click-overlay="hideSongList"
+        @ended="NextsongMusic"
       >
         <CurrentPalyList
       /></van-popup>
@@ -32,7 +35,9 @@
         ref="audio"
         @canplay="getMusicdurationdata"
         @timeupdate="getcurrenpalytTime"
+        @ended="NextsongMusic"
       />
+
     </div>
   </transition>
 </template>
@@ -58,12 +63,14 @@ export default {
   },
   methods: {
     // 引入的vuex的方法数据
-    ...mapMutations(["hideSongList", "Musicduration", "currenpalytTime",'getmusiclyricdata']),
+    ...mapMutations(["hideSongList", "Musicduration", "currenpalytTime",'getmusiclyricdata','NextsongMusic']),
     ...mapActions(["getNewSong"]),
     // 获取音乐的总播放时长
     getMusicdurationdata() {
       this.Musicduration(this.$refs.audio.duration);
     },
+
+    
     // 获取当前播放时间
     getcurrenpalytTime() {
       this.currenpalytTime(this.$refs.audio.currentTime);
@@ -131,7 +138,7 @@ export default {
     transform: translateY(100%);
   }
   .fadeout-leave-active {
-    transition: all 5s linear;
+    transition: all 5s 2s linear;
   }
   .fadeout-leave {
     transform: translateY(0);

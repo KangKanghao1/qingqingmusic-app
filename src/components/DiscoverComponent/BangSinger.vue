@@ -2,11 +2,11 @@
   <div class="bang-singer">
     <div class="mv-content">
       <h3 class="mv-title">TOP歌手</h3>
-      <span>更多</span>
+      <span @click="gobangsinger">更多</span>
     </div>
     <div class="bang">
       <div v-for="t in toplistartistData" :key="t.id">
-        <div class="bang-img-title">
+        <div class="bang-img-title" @click="gosingerDetailed">
           <img class="bang-img" v-lazy="t.picUrl" />
 
           <div class="score-data">
@@ -39,6 +39,14 @@ export default {
   },
 
   compontent: {},
+  methods: {
+    gobangsinger() {
+      this.$router.push("/moresinger");
+    },
+    gosingerDetailed() {
+      this.$router.push("/singer");
+    },
+  },
 };
 </script>
 
@@ -46,7 +54,7 @@ export default {
 .bang-singer {
   width: 100%;
   padding: 0px 30px;
-background-color: #222325;
+  background-color: #222325;
   .mv-content {
     display: flex;
     justify-content: space-between;
@@ -55,11 +63,10 @@ background-color: #222325;
     font-weight: bold;
     color: #fff;
     font-size: 16px;
-   background-color: #222325;
+    background-color: #222325;
   }
 
   .bang {
-
     .bang-img-title {
       position: relative;
       width: 100%;
@@ -116,7 +123,6 @@ background-color: #222325;
           font-size: 26px;
           font-weight: bold;
           color: #9a8cc8;
-      
         }
 
         .alias {
