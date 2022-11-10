@@ -6,7 +6,7 @@
     <div class="return" @click="onClickLeft">
       <img src="../../assets/imgs/8W.png" alt="">
     </div>
-    <h1>全部评论</h1>
+    <h1 class="title">热门评论</h1>
     <div class="comments-item" v-for=" m in commentslist" :key="m.commentId">
      
       
@@ -71,9 +71,6 @@ export default {
       this.$router.go(-1);
     },
   },
-//   components:{
-//       commentsListView
-//   }
 };
 </script>
 <style lang="scss" scoped>
@@ -83,15 +80,19 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 94vh;
   overflow: auto;
+  z-index: 33;
     .comments-list {
       color: #d6d3d3;
-      padding-bottom: 100px;
+      // padding-bottom: 100px;
        
       .return {
-     
+     width: 100%;
       padding: 15px 8px;
+      // position: fixed;
+      // background-color: #eee;
+
       img {
          width: 20px;
          height: 20px;
@@ -102,6 +103,7 @@ export default {
           font-size:20px;
           font-weight: 600px;
           font-weight:bold;
+          //  position: fixed;
         }
       .comments-item {
         display: flex;

@@ -5,8 +5,6 @@ import store from './store'
 import VueAxiosPlugin from 'vue-axios-plugin'
 import VantConfig from './vant-config'
 
-
-
 Vue.use(VueAxiosPlugin, {
   // 请求拦截处理
   reqHandleFunc: config => ({
@@ -18,8 +16,11 @@ Vue.use(VueAxiosPlugin, {
   resHandleFunc: response => response,
   resErrorFunc: error => Promise.reject(error)
 })
+Vue.prototype.axios = VueAxiosPlugin;
 
 Vue.use(VantConfig)
+
+
 
 Vue.config.productionTip = false
 

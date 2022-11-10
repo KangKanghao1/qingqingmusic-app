@@ -1,33 +1,34 @@
 <template>
-  <div class="app">
-    <keep-alive>
-      <router-view />
-    </keep-alive>
-    <PlayControl />
-    <van-tabbar
-      class="router-title"
-      fixed
-      route
-      active-color="#fff"
-      inactive-color="#fff"
-    >
-      <van-tabbar-item to="/discovr">发现</van-tabbar-item>
-      <van-tabbar-item to="/mymusic">我的音乐</van-tabbar-item>
-      <van-tabbar-item to="/video">视频</van-tabbar-item>
-      <van-tabbar-item to="/user">我的</van-tabbar-item>
-    </van-tabbar>
+  <transition name="fadeout" appear>
+    <div class="app">
+      <router-view v-show="$store.state.isFooterMusic" />
+      <PlayControl />
+      <van-tabbar
+        class="router-title"
+        fixed
+        route
+        active-color="#fff"
+        inactive-color="#fff"
+      >
+        <van-tabbar-item to="/discovr">发现</van-tabbar-item>
+        <van-tabbar-item to="/mymusic">我的音乐</van-tabbar-item>
+        <van-tabbar-item to="/video">视频</van-tabbar-item>
+        <van-tabbar-item to="/user" >我的</van-tabbar-item>
+      </van-tabbar>
 
-    <van-popup
-      :value="showSongList"
-      round
-      position="bottom"
-      :overlay-style="{ opacity: 0.5 }"
-      @click-overlay="hideSongList"
-    >
-      <CurrentPalyList
-    /></van-popup>
-    <audio :src="songUrl" ref="audio"/>
-  </div>
+      <van-popup
+        :value="showSongList"
+        round
+        position="bottom"
+        :overlay-style="{ opacity: 0.5 }"
+        @click-overlay="hideSongList"
+      >
+        <CurrentPalyList
+      /></van-popup>
+      <!-- @canplay="setMusicdurationdata" 获取音乐总时长  -->
+      <audio :src="songUrl" ref="audio" @canplay="setMusicdurationdata" />
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -52,18 +53,24 @@ export default {
   },
   methods: {
     // 引入的vuex的方法数据
-    ...mapMutations(["hideSongList"]),
+    ...mapMutations(["hideSongList", "setMusicduration" ]),
     ...mapActions(["getNewSong"]),
+    // 获取音乐的总播放时长
+    setMusicdurationdata() {
+      this.setMusicduration(this.$refs.audio.duration);
+    },
   },
 
   created() {
+    // 如果本地没有歌曲的话会做网络请求
     this.getNewSong({ axios: this.$axios });
   },
 
-  // // 监听播放
+  // 监听播放
   watch: {
     // 接受一个新值和一个旧值
     audioPlayState(newVal, oldVal) {
+
       if (newVal !== oldVal) {
         if (newVal) {
           // 代表播放歌曲
@@ -74,6 +81,8 @@ export default {
         }
       }
     },
+
+
   },
 };
 </script>
@@ -104,8 +113,17 @@ export default {
   color: #fff !important;
   background-color: #222325 !important;
   .van-button--default {
-     background-color: #aaa !important;
+    background-color: #aaa !important;
+  }
+
+  .fadeout-leave-to {
+    transform: translateY(100%);
+  }
+  .fadeout-leave-active {
+    transition: all 5s linear;
+  }
+  .fadeout-leave {
+    transform: translateY(0);
   }
 }
-
 </style>
