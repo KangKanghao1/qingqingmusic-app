@@ -1,10 +1,10 @@
 <template>
-  <transition name="fadeout" appear>
+  <transition name="fadeout">
     <div class="app">
-      <router-view v-show="$store.state.isFooterMusic" />
       <!-- 路由也可以反向传值 -->
-      <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
-
+      <keep-alive>
+        <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
+      </keep-alive>
       <PlayControl />
       <van-tabbar
         class="router-title"
@@ -16,7 +16,7 @@
         <van-tabbar-item to="/discovr">发现</van-tabbar-item>
         <van-tabbar-item to="/mymusic">我的音乐</van-tabbar-item>
         <van-tabbar-item to="/video">视频</van-tabbar-item>
-        <van-tabbar-item to="/user" >我的</van-tabbar-item>
+        <van-tabbar-item to="/user">我的</van-tabbar-item>
       </van-tabbar>
 
       <van-popup
@@ -25,6 +25,7 @@
         position="bottom"
         :overlay-style="{ opacity: 0.5 }"
         @click-overlay="hideSongList"
+        
       >
         <CurrentPalyList
       /></van-popup>
@@ -34,6 +35,7 @@
         ref="audio"
         @canplay="getMusicdurationdata"
         @timeupdate="getcurrenpalytTime"
+        @ended="NextsongMusic"
       />
     </div>
   </transition>
@@ -52,7 +54,12 @@ export default {
   },
 
   computed: {
-    ...mapState(["showSongList", "playingMusic", "audioPlayState",'musiclyric']),
+    ...mapState([
+      "showSongList",
+      "playingMusic",
+      "audioPlayState",
+      "musiclyric",
+    ]),
     // 计算属性 获取playingMusic音乐的id来赋值给 getSongUrl里的id路径
     songUrl() {
       return getSongUrl(this.playingMusic.id);
@@ -60,12 +67,19 @@ export default {
   },
   methods: {
     // 引入的vuex的方法数据
-    ...mapMutations(["hideSongList","setMusicduration" , "Musicduration", "currenpalytTime",'getmusiclyricdata']),
+    ...mapMutations([
+      "hideSongList",
+      "Musicduration",
+      "currenpalytTime",
+      "getmusiclyricdata",
+      "NextsongMusic"
+    ]),
     ...mapActions(["getNewSong"]),
     // 获取音乐的总播放时长
     getMusicdurationdata() {
       this.Musicduration(this.$refs.audio.duration);
     },
+
     // 获取当前播放时间
     getcurrenpalytTime() {
       this.currenpalytTime(this.$refs.audio.currentTime);
@@ -74,7 +88,6 @@ export default {
     setAudioCurrentTimevalue(currentTime) {
       this.$refs.audio.currentTime = currentTime;
     },
-
   },
 
   created() {
@@ -133,7 +146,7 @@ export default {
     transform: translateY(100%);
   }
   .fadeout-leave-active {
-    transition: all 5s linear;
+    transition: all 5s 2s linear;
   }
   .fadeout-leave {
     transform: translateY(0);

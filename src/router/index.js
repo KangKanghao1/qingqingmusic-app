@@ -41,9 +41,10 @@ const routes = [
     {
       path: "search",
       name: "search",
-      component: ()=> import('@/views/DiscovrView/SearchView/SearchView.vue'),
-    }
-  ]
+      component: () => import('@/views/DiscovrView/SearchView/SearchView.vue'),
+    },
+
+    ]
 
   },
 
@@ -93,7 +94,29 @@ const routes = [
     path: "/songdata/:id",
     name: "songdata",
     component: () => import("../views/SongDetailView/SongDetailView.vue")
+  },
+
+  {
+    path: "/musicrecommend",
+    name: "musicrecommend",
+    component: () => import("@/views/DiscovrView/MusicRecommend/MusicRecommend.vue")
+  },
+  {
+    path: "/moresinger",
+    name: "moresinger",
+    component: () => import("@/views/DiscovrView/MoreSinger/MoreSinger.vue")
+  },
+  {
+    path: "/gedanmusic",
+    name: "gedanmusic",
+    component: () => import("@/views/GedanMusicView/GedanMusicView.vue")
+  },
+  {
+    path: "/singer",
+    name: "singer",
+    component: () => import("@/views/SingerDetailed/SingerDetailed.vue")
   }
+
 
 
 ]

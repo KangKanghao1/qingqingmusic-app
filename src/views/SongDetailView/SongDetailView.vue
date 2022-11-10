@@ -28,7 +28,7 @@
                 :text="artists + ' - ' + playingMusic.name"
               />
               <span class="company"
-                >企业：{{ playingMusic.song.album.company }}</span
+                >企业:</span
               >
             </div>
 
@@ -240,7 +240,7 @@ export default {
       .plus-icon {
         width: 20px;
         height: 20px;
-        background-image: url("../../assets/imgs/jiahao.png");
+        background-image: url("@/assets/imgs/jiahao.png");
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
@@ -296,7 +296,7 @@ export default {
             margin-top: 50px;
             width: 28px;
             height: 28px;
-            background-image: url("../../assets/imgs/未收藏 .png");
+            background-image: url("@/assets/imgs/未收藏 .png");
             background-position: center center;
             background-size: cover;
             background-repeat: no-repeat;
@@ -305,7 +305,7 @@ export default {
             margin-top: 20px;
             width: 28px;
             height: 28px;
-            background-image: url("../../assets/imgs/shengluehao.png");
+            background-image: url("@/assets/imgs/shengluehao.png");
             background-position: center center;
             background-size: cover;
             background-repeat: no-repeat;
@@ -324,7 +324,7 @@ export default {
       .lastone-icon {
         width: 40px;
         height: 40px;
-        background-image: url("../../assets/imgs/leftjiantouicon.png");
+        background-image: url("@/assets/imgs/leftjiantouicon.png");
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
@@ -333,20 +333,20 @@ export default {
       .paly-icon {
         width: 50px;
         height: 50px;
-        background-image: url("../../assets/imgs/music_ico_play_white.png");
+        background-image: url("@/assets/imgs/music_ico_play_white.png");
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
 
         &.pausemusic {
-          background-image: url("../../assets/imgs/music_ico_pause_white.png");
+          background-image: url("@/assets/imgs/music_ico_pause_white.png");
         }
       }
 
       .nex-icon {
         width: 40px;
         height: 40px;
-        background-image: url("../../assets/imgs/exo_icon_next.png");
+        background-image: url("@/assets/imgs/exo_icon_next.png");
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
@@ -362,7 +362,7 @@ export default {
     .random-icon {
       width: 35px;
       height: 35px;
-      background-image: url("../../assets/imgs/ic_player_mode_random1.png");
+      background-image: url("@/assets/imgs/ic_player_mode_random1.png");
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
@@ -377,7 +377,7 @@ export default {
     .list-icon {
       width: 35px;
       height: 35px;
-      background-image: url("../../assets/imgs/ic_player_current_playlist.png");
+      background-image: url("@/assets/imgs/ic_player_current_playlist.png");
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;

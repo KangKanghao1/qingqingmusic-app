@@ -1,17 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
 import { NEWSONGSAPI } from '../apis/play'
-import { getPhoneLigin} from "../apis/login";
-
 
 Vue.use(Vuex)
 
 
 export default new Vuex.Store({
-//   modules: {
-//     user
-// },
+  //   modules: {
+  //     user
+  // },
   state: {
     keywords: '', // 搜索关键字,
     synthesisData: [], // 搜索模块综合数据
@@ -26,18 +23,19 @@ export default new Vuex.Store({
     // 音乐是否正在播放 默认不播放
     audioPlayState: false,
     //判断是否登录
-    isLogin:true,
+    isLogin: true,
     // 是否需要显示底部播放组件
-    isFooterMusic:true,
+    isFooterMusic: true,
     // 当前播放时间
     currentTime: 0,
     // 播放总时长
     duration: 0,
     // 控制上一首下一首music
     randommusic: 0,
+    // 歌单歌曲封面
+    songMusictitle: [],
     // 音乐歌词
-    musiclyric: []
-
+    musiclyric: [],
 
   },
   getters: {
@@ -50,6 +48,11 @@ export default new Vuex.Store({
 
     onSynthesisData(state, data) {
       state.synthesisData = data
+    },
+
+    // 删除播放队列歌曲
+    delsongmusic(state, id) {
+      state.songsList = state.songsList.filter((t) => t.id !== id);
     },
 
     // 歌曲列表
@@ -79,11 +82,16 @@ export default new Vuex.Store({
     // 切换歌曲
     changeoverMusci(state, music) {
       state.playingMusic = music
-      // 检测遍历传进来的music map遍历如果数组中已近有了传进来的歌曲则不添加
-      // 否则添加返回一个新数组对象
-      state.songsList = state.songsList.map(r => {
-        return { ...music, ...r }
-      })
+
+      // 使用 find 方法来查找state.songsList 里面的歌曲 如果 查找输出等于undifeined
+      //  则代表不是数组里面的歌曲则添加返回一个新数组对象
+    let obj = state.songsList.find(x => x.id ==music.id)
+    // console.log('obj ==>',obj);
+    if(obj == undefined) {
+      state.songsList = [...state.songsList, music]
+    }
+
+
       // 存进本地缓存中
       localStorage.changerMusci = JSON.stringify(music)
       // 点击切换歌曲之后自动播放 必须设置定时器异步控制state.audioPlayState的值
@@ -100,6 +108,7 @@ export default new Vuex.Store({
           state.audioPlayState = true
         }, 20);
       }
+      console.log("当前播放", state.playingMusic);
 
     },
 
@@ -125,7 +134,7 @@ export default new Vuex.Store({
 
     },
 
-    // 控制播放暂停 如果控制页面上的推荐歌曲点击动画需要给事件设置事件冒泡
+    // 控制播放暂停 
     audioPlayandstop(state) {
       state.audioPlayState = !state.audioPlayState
     },
@@ -142,8 +151,11 @@ export default new Vuex.Store({
     // 清空歌曲列表
     delallSongList(state) {
       state.songsList = []
+    },
+    // 获取歌单标题img等信息
+    getsongMusictitle(state, data) {
+      state.songMusictitle = data
     }
-
 
   },
   actions: {
@@ -159,9 +171,7 @@ export default new Vuex.Store({
       } else {
         // 如果没有缓存到本地则 网络请求然后存储到本地
         let { data } = await axios(NEWSONGSAPI)
-
         songsList = data.result
-
         // // 默认播放列表 存到本地缓存中   本地只能存储字符串需要转换
         localStorage.songsList = JSON.stringify(songsList)
         // 当前数据持久话的歌曲
@@ -176,25 +186,6 @@ export default new Vuex.Store({
         commit('setPlayingMusic', JSON.parse(localStorage.changerMusci))
       }
 
-
-    },
-   //封装一个 ajax 方法
-
-  //  getLogin (context) {this.$axios({
-      
-  //         method:'get',
-          
-  //         url:`/login/cellphone?phone=${context.phone}&password=${context.password}`,
-          
-  //         // data: context
-          
-  //         })
-          
-  //         },
-    async getLogin(value) {
-      let res = await this.$axios (getPhoneLigin(value));
-      // this.mvList = data.data;
-      console.log('res ==>',res); 
     },
   },
 
