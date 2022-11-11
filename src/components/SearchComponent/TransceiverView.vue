@@ -13,7 +13,11 @@
           :key="s.id"
         >
           <div class="transceiver-img">
-            <img :src="s.picUrl" />
+            <van-image lazy-load :src="s.picUrl" width="50" height="100%">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
           </div>
 
           <div class="sing-name">

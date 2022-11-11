@@ -42,6 +42,13 @@ const routes = [
       path: "search",
       name: "search",
       component: ()=> import('@/views/DiscovrView/SearchView/SearchView.vue'),
+      children:[
+        {
+          path: "album",
+          name: "album",
+          component: ()=> import('@/views/AlbumDetail/AlbumDetail.vue'),
+        }
+      ]
     }
   ]
   },
@@ -59,6 +66,11 @@ const routes = [
       path:"live",
       name:"live",
       component:() => import("../views/MyMusic/MyLive.vue")
+    },
+    {
+      path:"attention",
+      name:"attention",
+      component:() => import("../views/MyMusic/AttentionSinger.vue")
     }
   ]
   },

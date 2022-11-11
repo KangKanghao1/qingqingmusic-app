@@ -24,13 +24,14 @@
                 }}</span
               >
             </div>
-            <div class="close-fill">
-              <i
-                class="close-guanzhu-icon"
-             
-              ></i>
-              关注
+
+            <div class="close-fill" @click="onAttentionSinger(s)">
+              <i v-if="s.attention == 0" class="close-guanzhu-icon"></i>
+              <i v-if="s.attention == 1" class="yiguanzhu"></i>
+              <span v-if="s.attention == 0">关注</span>
+              <span v-if="s.attention == 1">已关注</span>
             </div>
+
           </li>
         </ul>
       </div>
@@ -256,6 +257,7 @@ export default {
 
       //分类歌手数据
       singerdata: [],
+      unAttention: false,
     };
   },
   created() {
@@ -265,9 +267,44 @@ export default {
   methods: {
     // 歌手分类 默认为 type: -1,types: 7,songclass: -1,
     async getSongtypeareadata() {
+
       let { data } = await this.$axios(this.getSongtype);
       this.singerdata = data.artists;
-      console.log("gesu", data.artists);
+      // console.log("gesu", data.artists);
+      let singer = JSON.parse(localStorage.getItem("ATTENTION_SINGER") ?? "[]");
+      for (let i = 0; i < this.singerdata.length; i++) {
+        let res = singer.find((s) => s.id == this.singerdata[i]?.id);
+        // attention 1 关注
+        if (res) {
+          this.singerdata = this.singerdata.map((s) => {
+            if (s.id == this.singerdata[i].id) {
+              return {
+                ...s,
+                attention: 1
+              };
+            }
+            return {
+              ...s
+            };
+          });
+        }
+
+        if (!res) {
+          this.singerdata = this.singerdata.map((s) => {
+            if (s.id == this.singerdata[i].id) {
+              return {
+                ...s,
+                attention: 0
+              };
+            }
+            return {
+              ...s
+            };
+          });
+        }
+        
+      }
+
     },
 
     // popup显示
@@ -289,6 +326,63 @@ export default {
     // 热门|| 姓氏开头
     modifysongclass(data) {
       this.songclass = data.typea;
+    },
+
+    onAttentionSinger(s) {
+
+      let singer = JSON.parse(localStorage.getItem("ATTENTION_SINGER") ?? "[]");
+      let result = s?.attention;
+      if (result == 1) {
+        // this.unAttention = false;
+        this.singerdata = this.singerdata.map(item => {
+
+          if (item.id == s.id) {
+              return {
+                ...item,
+                attention: 0
+              }
+          }
+          return {
+            ...item
+          }
+
+        })
+      
+        let newSingerList = singer.filter((c) => c.id !== s.id);
+        localStorage.ATTENTION_SINGER = JSON.stringify(newSingerList);
+      } else {
+        // this.unAttention = true;
+        this.singerdata = this.singerdata.map(item => {
+
+          if (item.id == s.id) {
+              return {
+                ...item,
+                attention: 1
+              }
+          }
+          return {
+            ...item
+          }
+
+        })
+        console.log(this.singerdata);
+        if (singer.length < 1) {
+          // 更新歌手数据
+          let obj = {...s, attention: 1};
+         
+          localStorage.ATTENTION_SINGER = JSON.stringify([obj]);
+        }
+
+        let res = singer.find((r) => r?.id == s.id);
+        if (!res) {
+          let obj = {...s, attention: 1};
+          localStorage.ATTENTION_SINGER = JSON.stringify([obj, ...singer]);
+        } else {
+          let data = singer.filter((r) => r.id !== s.id);
+          let obj = {...s, attention: 1};
+          localStorage.ATTENTION_SINGER = JSON.stringify([obj, ...data]);
+        }
+      }
     },
   },
 
@@ -352,7 +446,7 @@ export default {
       li {
         display: flex;
         align-items: center;
-        padding: 10px 20px 0;
+        padding: 10px 10px 10px 20px;
         .singer-img {
           width: 50px;
           height: 50px;
@@ -368,28 +462,34 @@ export default {
           }
         }
         .close-fill {
+          width: 40px;
+          text-align: center;
           margin-left: auto;
           font-size: 12px;
-          // font-weight: 600;
-          // padding: 7px;
-          // border-radius: 999px;
-          // background-color: rgb(69, 66, 66);
 
           .close-guanzhu-icon {
+            margin: auto;
             display: block;
             width: 20px;
             height: 20px;
-            margin-left: 2px;
             background-image: url("@/assets/imgs/guanzhu.png");
             background-position: center center;
             background-size: cover;
             background-repeat: no-repeat;
             content: "";
-
-            &.yiguanzhu {
+          }
+          .yiguanzhu {
+            margin: auto;
+            display: block;
+            width: 20px;
+            height: 20px;
+            // margin-left: 2px;
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            content: "";
               background-image: url("@/assets/imgs/yiguanzhu.png");
             }
-          }
         }
       }
     }

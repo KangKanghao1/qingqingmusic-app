@@ -10,7 +10,11 @@
       <div class="singer-item" v-for="s in synthesisSinger" :key="s.id">
         <div class="singer-info">
           <div class="singer-img">
-            <img :src="s.img1v1Url" />
+            <van-image lazy-load :src="s.img1v1Url" width="45" height="45">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
           </div>
 
           <div class="sing-name">
@@ -19,7 +23,12 @@
           </div>
         </div>
 
-        <div class="attention">+ 关注</div>
+        <div class="close-fill" @click="onAttentionSinger(s)">
+              <i v-if="s.attention == 0" class="close-guanzhu-icon"></i>
+              <i v-if="s.attention == 1" class="yiguanzhu"></i>
+              <span style="color:#ddd" v-if="s.attention == 0">关注</span>
+              <span style="color:#ddd" v-if="s.attention == 1">已关注</span>
+            </div>
       </div>
     </div>
   </div>
@@ -125,6 +134,99 @@ export default {
           }
         });
       }
+
+      // 本地数据
+      let singer = JSON.parse(localStorage.getItem("ATTENTION_SINGER") ?? "[]");
+      for (let i = 0; i < this.synthesisSinger.length; i++) {
+        let res = singer.find((s) => s.id == this.synthesisSinger[i]?.id);
+        // attention 1 关注
+        if (res) {
+          this.synthesisSinger = this.synthesisSinger.map((s) => {
+            if (s.id == this.synthesisSinger[i].id) {
+              return {
+                ...s,
+                attention: 1
+              };
+            }
+            return {
+              ...s
+            };
+          });
+        }
+
+        if (!res) {
+          this.synthesisSinger = this.synthesisSinger.map((s) => {
+            if (s.id == this.synthesisSinger[i].id) {
+              return {
+                ...s,
+                attention: 0
+              };
+            }
+            return {
+              ...s
+            };
+          });
+        }
+        
+      }
+    },
+
+     onAttentionSinger(s) {
+
+      let singer = JSON.parse(localStorage.getItem("ATTENTION_SINGER") ?? "[]");
+      let result = s?.attention;
+      if (result == 1) {
+
+        // this.unAttention = false;
+        this.synthesisSinger = this.synthesisSinger.map(item => {
+
+          if (item.id == s.id) {
+              return {
+                ...item,
+                attention: 0
+              }
+          }
+          return {
+            ...item
+          }
+
+        })
+      
+        let newSingerList = singer.filter((c) => c.id !== s.id);
+        localStorage.ATTENTION_SINGER = JSON.stringify(newSingerList);
+      } else {
+        // this.unAttention = true;
+        this.synthesisSinger = this.synthesisSinger.map(item => {
+
+          if (item.id == s.id) {
+              return {
+                ...item,
+                attention: 1
+              }
+          }
+          return {
+            ...item
+          }
+
+        })
+
+        if (singer.length < 1) {
+          // 更新歌手数据
+          let obj = {...s, attention: 1};
+         
+          localStorage.ATTENTION_SINGER = JSON.stringify([obj]);
+        }
+
+        let res = singer.find((r) => r?.id == s.id);
+        if (!res) {
+          let obj = {...s, attention: 1};
+          localStorage.ATTENTION_SINGER = JSON.stringify([obj, ...singer]);
+        } else {
+          let data = singer.filter((r) => r.id !== s.id);
+          let obj = {...s, attention: 1};
+          localStorage.ATTENTION_SINGER = JSON.stringify([obj, ...data]);
+        }
+      }
     },
   },
   watch: {
@@ -225,13 +327,36 @@ export default {
       }
     }
 
-    .attention {
-      border-radius: 999px;
-      color: rgba(242, 60, 66, .85);
-      font-size: 12px;
-      padding: 5px 10px;
-      border: 1px solid rgb(207, 113, 113);
-    }
+    .close-fill {
+          width: 40px;
+          text-align: center;
+          margin-left: auto;
+          font-size: 12px;
+
+          .close-guanzhu-icon {
+            margin: auto;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background-image: url("@/assets/imgs/guanzhu.png");
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            content: "";
+          }
+          .yiguanzhu {
+            margin: auto;
+            display: block;
+            width: 20px;
+            height: 20px;
+            // margin-left: 2px;
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            content: "";
+              background-image: url("@/assets/imgs/yiguanzhu.png");
+            }
+        }
   }
 }
 }

@@ -24,6 +24,17 @@
         </div>
       </div>
 
+        <!-- 关注歌手 -->
+      <div class="attention">
+        <div class="icon">
+          <img src="@/assets/imgs/yiguanzhu.png" alt="" />
+        </div>
+        <div class="setting-layer" @click="toAttentoinPage()">
+          <div>我关注的歌手</div>
+          <van-icon name="arrow" color="#ddd" />
+        </div>
+      </div>
+
     </div>
 
    <router-view />
@@ -39,7 +50,7 @@ export default {
   },
   created(){
    this.liveCount = JSON.parse(localStorage.getItem('live')??"[]").length;
-   console.log(this.liveCount);
+
   },
   methods: {
 
@@ -50,6 +61,10 @@ export default {
     },
     toCollectPage(){
       this.$router.push(`mymusic/live`)
+    },
+
+    toAttentoinPage(){
+      this.$router.push(`mymusic/attention`)
     }
 
   },
@@ -88,7 +103,8 @@ export default {
     background-color: #2b2b2b;
     align-items: center;
     .recent-play,
-    .user-collect {
+    .user-collect,
+    .attention {
       width: 100%;
       display: flex;
       align-items: center;
@@ -109,7 +125,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         padding: 10px 10px 10px 10px;
-        border-bottom: 1px solid #ddd;
+        
         letter-spacing: 3px;
 
         .count {
@@ -122,11 +138,7 @@ export default {
         }
       }
     }
-    .user-collect {
-      .setting-layer {
-        border: none;
-      }
-    }
+    
   }
 }
 </style>

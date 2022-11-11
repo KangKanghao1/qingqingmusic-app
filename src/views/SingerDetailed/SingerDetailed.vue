@@ -140,7 +140,5 @@ export default {
       }
     }
   }
-  .single-song {
-  }
 }
 </style>

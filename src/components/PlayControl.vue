@@ -53,10 +53,6 @@ export default {
       this.$router.push(`/songdata/${this.playingMusic.id}`);
     },
   },
-
-  mounted() {
-    console.log(this.playingMusic);
-  },
 };
 </script>
 

@@ -3,7 +3,16 @@
     <ul class="singer-ul">
       <li v-for="s in singersongdata" :key="s.id">
         <div class="singer-al-name">
-          <img class="singer-al-img" :src="s.al.picUrl" alt="" />
+          <!-- <img class="singer-al-img" :src="s.al.picUrl" alt="" /> -->
+          <van-image
+          lazy-load
+          :src="s.al.picUrl"
+          class="singer-al-img"
+        >
+          <template v-slot:loading>
+            <van-loading type="spinner" size="20" />
+          </template>
+        </van-image>
           <div class="singer-song-name">
             <span>{{ s.name }}</span>
             <p class="singer-name">{{ singerartistdata.name }}</p>

@@ -109,17 +109,17 @@ export default {
   watch: {
     $route(to){
       if (to.name == "discovr") {
-        console.log('a');
+        
         this.PlayStyle = false;
 
       }else if(to.name == "mymusic"){
-        console.log('a');
+        
         this.PlayStyle = false;
       }else if(to.name == "video"){
-        console.log('a');
+       
         this.PlayStyle = false;
       }else if(to.name == "user"){
-        console.log('a');
+      
         this.PlayStyle = false;
       }else{
         this.PlayStyle = true;

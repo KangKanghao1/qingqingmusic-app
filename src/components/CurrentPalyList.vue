@@ -38,7 +38,6 @@
           </div>
           <div class="like-del-download-icon">
             <div class="like-download-icon">
-              <i class="like-icon"></i>
               <i class="download-icon"></i>
             </div>
             <i class="del-icon" @click.stop="delsongmusic(s.id)"></i>
@@ -215,19 +214,6 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
-
-            .like-icon {
-              display: block;
-              width: 20px;
-              height: 20px;
-              background-image: url("../assets/imgs/未收藏 .png");
-              background-position: center center;
-              background-size: cover;
-              background-repeat: no-repeat;
-              content: "";
-              margin-right: 20px;
-            }
-
             .download-icon {
               display: block;
               width: 20px;

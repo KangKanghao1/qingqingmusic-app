@@ -4,6 +4,9 @@ import router from './router'
 import store from './store'
 import VueAxiosPlugin from 'vue-axios-plugin'
 import VantConfig from './vant-config'
+import { Image as VanImage } from 'vant';
+
+Vue.use(VanImage);
 
 Vue.use(VueAxiosPlugin, {
   // 请求拦截处理

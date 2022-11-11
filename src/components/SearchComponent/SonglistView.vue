@@ -16,9 +16,13 @@
           offset="300"
           class="playlist-list"
         >
-        <div class="playlist-item" v-for="s in onSonglistData" :key="s.id">
+        <div class="playlist-item" v-for="s in onSonglistData" :key="s.id" @click="goGedanMusic(s)">
           <div class="playlist-img">
-            <img :src="s.coverImgUrl" />
+            <van-image lazy-load :src="s.coverImgUrl" width="40" height="40">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
           </div>
 
           <div class="sing-name">
@@ -49,7 +53,7 @@
 </template>
 <script>
 import PlayCount from "@/components/SearchComponent/PlayCount.vue";
-import { mapState } from "vuex";
+import { mapState,mapMutations } from "vuex";
 import { SEARCH_TABS_CONTENT } from "@/Tools/defaultSearch";
 export default {
   props: {
@@ -90,6 +94,7 @@ export default {
     this.onAllSonglistFun();
   },
   methods: {
+    ...mapMutations(["getsongMusictitle"]),
     // 延迟加载
     loadingTime(){
       return new Promise((resolve)=>{
@@ -171,6 +176,13 @@ export default {
       });
 
       this.index += 1;
+    },
+    goGedanMusic(data) {
+      
+      this.$router.push(`/gedanmusic/?objid=${JSON.stringify(data)}`);
+      // 把歌单标题等存进vuex
+      this.getsongMusictitle(data);
+
     },
   },
   watch: {

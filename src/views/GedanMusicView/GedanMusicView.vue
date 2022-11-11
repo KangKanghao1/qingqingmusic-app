@@ -29,8 +29,19 @@
           <div class="introduce-title van-multi-ellipsis--l2">
             {{ songMusictitle.name }}
           </div>
-          <div class="collect-icon-text">
-            <span class="collect-icon"></span>
+          <div class="collect-icon-text" @click="onCollectSongList()">
+            <div class="collect-icon">
+              <img
+                v-if="!collectShow"
+                class="no-live"
+                src="@/assets/imgs/未收藏 .png"
+              />
+              <img
+                v-if="collectShow"
+                class="live"
+                src="@/assets/imgs/已收藏.png"
+              />
+            </div>
             <p class="collect-text">收藏</p>
           </div>
         </div>
@@ -42,10 +53,15 @@
         <div class="offset-demo">全部播放</div>
       </van-sticky>
       <div class="gedan-play-list">
-        <div v-for="s in songsdata" :key="s.id">
+        <div v-for="(s, index) in songsdata" :key="s.id">
           <div class="songsdata-content">
-            <i class="songdata-left-icon"></i>
-            <img class="songsdata-img" :src="s.picUrl" alt="" />
+            <span style="color: #aaa">{{ index + 1 }}</span>
+            <!-- <img class="songsdata-img" :src="s.picUrl" alt="" /> -->
+            <van-image lazy-load :src="s.picUrl" class="songsdata-img">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
             <div
               class="songsdata-title"
               :class="{ songscolor: s.id == playingMusic.id }"
@@ -57,10 +73,6 @@
               </p>
             </div>
             <div class="songdata-right-icon">
-              <i
-                class="songdata-right1"
-                @click.stop="changeoverMusci(s)"
-              ></i>
               <i class="songdata-right2"></i>
             </div>
           </div>
@@ -78,11 +90,19 @@ export default {
       geadnMusic: "",
       songsdata: [],
       container: null,
+      collectShow: false,
     };
   },
   created() {
-    this.geadnMusic = this.$route.query.objid;
+    this.geadnMusic = JSON.parse(this.$route.query.objid).id;
     this.getgeadnMusic();
+    let song = JSON.parse(localStorage.getItem("SONGLIST") ?? "[]");
+    let res = song.find((s) => s.id == this.geadnMusic);
+    if (!res) {
+      this.collectShow = false;
+    } else {
+      this.collectShow = true;
+    }
   },
   mounted() {
     this.container = this.$refs.container;
@@ -115,11 +135,37 @@ export default {
     },
 
     gothePreviouspage() {
-      this.$router.go(-1)
-    }
+      this.$router.go(-1);
+    },
+    // 收藏歌单
+    onCollectSongList() {
+      let song = JSON.parse(this.$route.query.objid);
+      let localStorageSong = JSON.parse(localStorage.getItem("SONGLIST") ?? "[]");
+      if (this.collectShow) {
+        this.collectShow = false;
+        let newSongList = localStorageSong.filter(
+          (c) => c.id !== this.geadnMusic
+        );
+        localStorage.SONGLIST = JSON.stringify(newSongList);
+      } else {
+        this.collectShow = true;
+        if (localStorageSong.length < 1) {
+          localStorage.SONGLIST = JSON.stringify([song]);
+        }
+
+        let res = localStorageSong.find((r) => r?.id == song.id);
+        if (!res) {
+          localStorage.SONGLIST = JSON.stringify([
+            song,
+            ...localStorageSong,
+          ]);
+        } else {
+          let data = localStorageSong.filter((r) => r.id !== song.id);
+          localStorage.SONGLIST = JSON.stringify([song, ...data]);
+        }
+      }
+    },
   },
-
-
 };
 </script>
 <style lang="scss" scoped>
@@ -199,15 +245,44 @@ export default {
 
         .collect-icon-text {
           .collect-icon {
-            display: block;
             width: 35px;
             height: 35px;
             margin-right: 5px;
-            background-image: url("@/assets/imgs/未收藏 .png");
-            background-position: center center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            content: "";
+            .no-live {
+              width: 100%;
+              display: block;
+              animation: coll 0.5s linear;
+            }
+
+            .live {
+              width: 100%;
+              display: block;
+              animation: move 0.5s linear;
+            }
+            @keyframes coll {
+              0% {
+                transform: scale(0.8);
+              }
+              50% {
+                transform: scale(1.2);
+              }
+
+              100% {
+                transform: scale(1);
+              }
+            }
+            @keyframes move {
+              0% {
+                transform: scale(0.8);
+              }
+              50% {
+                transform: scale(1.2);
+              }
+
+              100% {
+                transform: scale(1);
+              }
+            }
           }
           .collect-text {
             margin-top: 5px;
@@ -246,19 +321,8 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 10px 20px;
+        padding: 10px 10px 10px 20px;
 
-        .songdata-left-icon {
-          // display: block;
-          margin-right: 10px;
-          width: 20px;
-          height: 20px;
-          background-image: url("@/assets/imgs/jiahao.png");
-          background-position: center center;
-          background-size: cover;
-          background-repeat: no-repeat;
-          content: "";
-        }
         .songsdata-img {
           width: 50px;
           height: 50px;
@@ -297,17 +361,6 @@ export default {
           margin-left: 20px;
           display: flex;
           align-items: center;
-          .songdata-right1 {
-            display: block;
-            width: 25px;
-            height: 25px;
-            margin-right: 10px;
-            background-image: url("@/assets/imgs/未收藏 .png");
-            background-position: center center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            content: "";
-          }
           .songdata-right2 {
             display: block;
             width: 25px;
@@ -317,6 +370,7 @@ export default {
             background-position: center center;
             background-size: cover;
             background-repeat: no-repeat;
+            transform: rotateZ(90deg);
             content: "";
           }
         }

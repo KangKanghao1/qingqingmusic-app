@@ -7,7 +7,12 @@
     <div class="mv-title-contnet">
       <div v-for="r in personalizedmv" :key="r.id">
         <div class="permv">
-          <img class="mv-img" v-lazy="r.picUrl" alt="" />
+          <!-- <img class="mv-img" v-lazy="r.picUrl" alt="" /> -->
+          <van-image lazy-load :src="r.picUrl" class="mv-img">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
           <p class="mv-title">{{ r.artistName }}</p>
         </div>
       </div>
