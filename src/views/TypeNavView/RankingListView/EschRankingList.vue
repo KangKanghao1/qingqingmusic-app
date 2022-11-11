@@ -1,18 +1,7 @@
 <template>
   <div class="box">
-    <nav>
-      <!-- 搜索框 -->
-      <form action="/" class="form" v-show="search">
-        <van-search
-          v-model="value"
-          show-action
-          placeholder="请输入歌单内的歌曲"
-          @search="onSearch"
-          @cancel="onCancel"
-          shape="round"
-        />
-      </form>
 
+    <nav>
       <div class="bgi">
         <img class="nav-img" :src="coverImgUrl" alt="" />
       </div>
@@ -24,7 +13,7 @@
         <van-icon name="search" size="24" />
       </div>
       <div class="more" v-show="show2">
-        <img src="../../assets/imgs/more.png" />
+        <img src="@/assets/imgs/more.png" />
       </div>
     </nav>
 
@@ -34,12 +23,12 @@
       <div class="header-mini-box">
         <div class="frame">
           <div class="frame-icon">
-            <img src="../../assets/imgs/cqc.png" />
+            <img src="@/assets/imgs/cqc.png" />
           </div>
           <div class="amount">{{ playCountLabel(subscribedCount) }}</div>
         </div>
         <span>|</span>
-        <div class="frame">
+        <div class="frame" @click="gotoComments">
           <div class="frame-icon">
             <van-icon name="chat-o" size="21" color="#ffffffc9" />
           </div>
@@ -85,54 +74,85 @@
         <div class="text">播放全部</div>
         <div class="amount">({{ trackCount }})</div>
         <div class="download">
-          <img src="../../assets/imgs/asf.png" alt="" />
+          <img src="@/assets/imgs/asf.png" alt="" />
         </div>
         <div class="list" @click="showPopup">
-          <img src="../../assets/imgs/cnc.png" />
+          <img src="@/assets/imgs/cnc.png" />
         </div>
       </div>
     </van-sticky>
 
     <main>
+        <van-checkbox-group v-model="result" ref="checkboxGroup">
       <div
         class="play-box"
         v-for="(t, i) in tracksname"
-        :key="i"
-        :class="{ selected: show == false }"
+        :key="t.id"
+        @click="selectPlay(i)"
+        :class="{ selected: index == i }"
       >
-        <div v-show="show == false" class="voice-icon">
-          <i></i>
-          <i></i>
-          <i></i>
+        <!-- :class="{ selected: show == false }" -->
+        <!-- class="voice-icon" -->
+        <div :class="{ 'voice-icon': index == i }">
+          <i :class="{palyanime : audioPlayState}"></i>
+          <i :class="{palyanime : audioPlayState}"></i>
+          <i :class="{palyanime : audioPlayState}"></i>
         </div>
         <div v-show="showChoose">
-          <van-checkbox-group v-model="result" ref="checkboxGroup">
+        
             <van-checkbox
               :name="i"
               class="yuan"
               checked-color="#ee0a24"
-               v-model="checked"
+              v-model="checked"
+              :key="i"
+              @change="onchange"
             ></van-checkbox>
-          </van-checkbox-group>
+      
         </div>
         <div v-show="showChoose == false">
-          <div class="ranking" v-show="show">
-            {{ i < 9 ? "0" + (i + 1) : i + 1 }}
+          <div class="ranking" v-show="index != i">
+            {{ 9 > i ? "0" + (i + 1) : i + 1 }}
           </div>
         </div>
-        <div ref="current" class="works-box" @click="selectPlay(i)">
-          <div class="name">{{ t?.name }} <span v-if="t?.tns ">{{ t?.tns[0] ?`(${ t?.tns[0]})` : '' }}</span>  <span v-if="t?.alia">{{(t.alia[0] ?`(${ t?.alia[0]})` : '')}}</span></div>
-          <div class="author">{{ artistsStr(t.ar) }} - {{ t?.al.name }}</div>
+        <div class="works-box" @click="changeoverMusci(t)">
+          <div class="name">
+            {{ t?.name }}
+            <span v-if="t?.tns">{{ t?.tns[0] ? `(${t?.tns[0]})` : "" }}</span>
+            <span v-if="t?.alia">{{ t.alia[0] ? `(${t?.alia[0]})` : "" }}</span>
+          </div>
+          <div class="author">{{ t?.ar}} - {{ t?.al }}</div>
         </div>
 
         <div class="mv" v-show="showChoose == false">
-          <img src="../../assets/imgs/d1c.png" alt="" />
+          <img src="@/assets/imgs/d1c.png" alt="" />
         </div>
-        <div class="more" v-show="showChoose == false">
-          <img src="../../assets/imgs/more.png" />
+        <div class="more" v-show="showChoose == false" @click="ShowMore">
+          <img src="@/assets/imgs/more.png" />
         </div>
       </div>
+          </van-checkbox-group>
     </main>
+
+    <van-popup
+      class="closeable"
+      v-model="show"
+      position="top"
+      :style="{ height: '50px' }"
+      closeable
+    >
+      <!-- 搜索框 -->
+      <form action="/" class="form" v-show="search">
+        <van-search
+          v-model="value"
+          show-action
+          placeholder="请输入歌单内的歌曲"
+          @search="onSearch"
+          @cancel="onCancel"
+          shape="round"
+        />
+      </form>
+    </van-popup>
 
     <van-popup
       v-model="showChoose"
@@ -141,19 +161,19 @@
       :overlay="false"
       class="popup"
     >
-      <div class="bottom-minibox">
+      <div class="bottom-minibox" ref="active">
         <div class="icon"><van-icon name="play" size="25" /></div>
         <div class="text">下一首播放</div>
       </div>
-      <div class="bottom-minibox">
+      <div class="bottom-minibox" >
         <div class="icon"><van-icon name="add-square" size="25" /></div>
         <div class="text">收藏到歌单</div>
       </div>
-      <div class="bottom-minibox">
+      <div class="bottom-minibox" >
         <div class="icon"><van-icon name="down" size="25" /></div>
         <div class="text">下载</div>
       </div>
-      <div class="bottom-minibox">
+      <div class="bottom-minibox" >
         <div class="icon"><van-icon name="delete" size="25" /></div>
         <div class="text">删除下载</div>
       </div>
@@ -166,28 +186,40 @@
       @select="onSelect"
       class="share"
     />
+    <router-view
+      :coverImgUrl="coverImgUrl"
+      :rankingname="rankingname"
+      :standingsid="standingsid"
+    />
+    <PlayControl class="playControl-box"/>
   </div>
 </template>
 <script>
+import PlayControl from '@/components/PlayControl.vue'
 import { getListDetails } from "@/apis/rankinglist.js";
 import { Toast } from "vant";
-
+import {mapMutations,mapState} from 'vuex'
 export default {
+  components:{
+    PlayControl
+  },
   data() {
     return {
+      // 排行榜名字
+      rankingname: "",
       //榜的id
       standingsid: "",
       //获取数据
       ListDetailsdata: [],
       //作品数据
       tracksname: [],
-      tns:[],
+      tns: [],
       //背景图片
       coverImgUrl: "",
       //播放全部数量
       trackCount: "",
       Press: false,
-      show: true,
+      show: false,
       show2: true,
       search: false,
       value: "",
@@ -213,35 +245,74 @@ export default {
       //选择款
       checked: false,
       result: [],
+      index: null,
+      changeoverMuscidata:[]
     };
   },
 
   created() {
     this.standingsid = this.$route.query.i;
-    
   },
   mounted() {
     this.getListDetails();
-
   },
-  computed: {},
+  computed: {
+  // 计算属性 如果是多个名字
+   ...mapState([ "audioPlayState"]),
+    artists() {
+      let arr = this.tracksname;
+       console.log(this.tracksname);
+      if (arr) {
+        return arr.map((a) => a.name).join("/");
+       
+      }
+       console.log(arr);
+      return 121231;
+    
+    },
+    
+  },
   methods: {
+       ...mapMutations([ 'changeoverMusci'  ]),
     //获取多个作者名字
     artistsStr(n) {
-      return n
-        .map((ar) => {
+         console.log(n);
+      return n.map((ar) => {
           return ar.name;
-        })
-        .join("/");
+          
+        }).join("/");
+       
+        
+     
     },
 
     async getListDetails() {
       let { data } = await this.$axios(getListDetails(this.standingsid));
+
       this.ListDetailsdata = data.playlist;
+      // 排行榜名字
+      this.rankingname = this.ListDetailsdata.name;
       //获取作品的名字和作者的名字
-      this.tracksname = this.ListDetailsdata.tracks;
-      //    this.tns=this.tracksname.tns[0]
-      // console.log(" this.tns", this.tns);
+      this.tracksname = data.playlist.tracks.map((d) => {
+        return{
+            id: d.id,
+            name: d.name,
+            picUrl: d.al.picUrl,
+          //    song: {
+          //   artists: [
+          //     {
+          //       name: d.ar.name,
+          //     },
+          //   ],
+          // },
+           ar:d.ar[0].name,
+            tns:d.tns,
+            alia:d.alia,
+            al:d.al.name
+
+        }
+      });
+      console.log( this.tracksname );
       //获取背景图
       this.coverImgUrl = this.ListDetailsdata.coverImgUrl;
       //获取播放全部的数量
@@ -252,7 +323,8 @@ export default {
       this.commentCount = this.ListDetailsdata.commentCount;
       //获取分享数量
       this.shareCount = this.ListDetailsdata.shareCount;
-      console.log("  this.ListDetailsdata", this.ListDetailsdata);
+      // console.log("  this.ListDetailsdata", this.ListDetailsdata);
+    
     },
 
     playCountLabel(Count) {
@@ -268,17 +340,33 @@ export default {
     },
 
     selectPlay(i) {
-      console.log(this.$refs.current[i]);
-      if (this.$refs.current[i]) {
-        this.show = !this.show;
-      }
+      this.index = i;
+      console.log(i);
+    },
+    ShowMore(){
+      console.log('aaa');
     },
     showPopup() {
       this.showChoose = !this.showChoose;
+      this.index = null;
+    },
+    onchange(e) {
+      // console.log(this.checked);
+           console.log(e);
+    },
+     checkAll() {
+      this.$refs.checkboxGroup.toggleAll();
+      if (this.checked==true) {
+         this.$refs.active.classList.add('active')
+      }else{
+         this.$refs.active.classList.remove('active')
+      }
+     
     },
     OpenSearch() {
+      this.show = true;
       this.search = true;
-      this.show2 = false;
+      // this.show2 = false;
     },
     onSearch(val) {
       Toast(val);
@@ -286,7 +374,7 @@ export default {
     onCancel() {
       Toast("取消");
       this.search = false;
-      this.show2 = true;
+      // this.show2 = true;
     },
     onSelect(option) {
       Toast(option.name);
@@ -295,11 +383,11 @@ export default {
       }
       this.showShare = false;
     },
-    checkAll() {
-     console.log( "  this.$refs.checkboxGroup", this.$refs.checkboxGroup);
-    },
    
 
+    gotoComments() {
+      this.$router.push("/esch-rankingList/comments-section");
+    },
     goto() {
       this.$router.go(-1);
     },
@@ -310,39 +398,56 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.van-popup {
+  background-color: #fff;
+  
+}
+.closeable{
+ background-color: #000 !important;
+ .van-search{
+  background-color: #000 !important;
+  .van-search__content{
+     background-color: #686868!important;
+  }
+  
+ } 
+}
+
 .yuan {
   margin-right: 10px;
 }
 .van-field__control {
   color: #fff !important;
 }
+
 .share {
   color: #000;
-  
 }
-.popup{
+.popup {
+  display: flex;
+  align-items: center;
+  background-color: #222325;
 
-    display: flex;
-    align-items: center;
-    background-color: #222325;
-  
+  .bottom-minibox {
+    width: 25%;
+    color: #ffffff6e;
 
-    .bottom-minibox {
-      width: 25%;
-      color: #ffffff6e;
+    text-align: center;
 
-      text-align: center;
-
-      .icon {
-        margin-bottom: 5px;
-      }
-
-      .text {
-        font-size: 12px;
-      }
+    &.active{
+      color: #fff;
     }
-  
+
+    .icon {
+      margin-bottom: 5px;
+    }
+
+    .text {
+      font-size: 12px;
+    }
+  }
 }
+
 .box {
   position: fixed;
   left: 0;
@@ -353,6 +458,12 @@ export default {
   z-index: 12;
   color: #fff;
   overflow: auto;
+
+  .playControl-box{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+  }
 
   nav {
     position: fixed;
@@ -508,28 +619,31 @@ export default {
       align-items: center;
       margin-bottom: 15px;
 
-      &.selected {
-        i {
-          color: red;
-        }
-
-        .name {
-          color: red;
-          font-weight: 600;
-        }
-      }
+    
 
       .voice-icon i {
         &:nth-child(1) {
           animation: besmall 2s linear infinite;
+              animation-play-state:paused;
+           &.palyanime {
+                animation-play-state: running;
+              }
         }
 
         &:nth-child(2) {
           animation: besmall 2s linear 0.65s infinite;
+          animation-play-state:paused;
+           &.palyanime {
+                animation-play-state: running;
+              }
         }
 
         &:nth-child(3) {
           animation: besmall 2s linear 1.2s infinite;
+              animation-play-state:paused;
+           &.palyanime {
+                animation-play-state: running;
+              }
         }
       }
 
@@ -571,8 +685,8 @@ export default {
           font-size: 16px;
           margin-bottom: 4px;
 
-          span{
-             color: #a3a3a3;
+          span {
+            color: #a3a3a3;
           }
         }
 
@@ -589,9 +703,22 @@ export default {
           white-space: nowrap;
         }
       }
+          &.selected {
+        i {
+          color: red;
+        }
+
+        .name {
+          color: red;
+          font-weight: 600;
+          span {
+            color: red;
+          }
+        }
+      }
     }
   }
-
+  
   
 }
 
