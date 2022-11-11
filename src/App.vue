@@ -2,9 +2,7 @@
   <transition name="fadeout">
     <div class="app">
       <!-- 路由也可以反向传值 -->
-      <keep-alive>
         <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
-      </keep-alive>
       <PlayControl />
       <van-tabbar
         class="router-title"

@@ -1,15 +1,15 @@
 <template>
   <div class="singer-song-com">
+    <div class="special-album">{{ singerHotAlbums.length }}张专辑</div>
     <ul class="singer-ul">
-      <li v-for="s in singersongdata" :key="s.id">
+      <li v-for="s in singerHotAlbums" :key="s.id">
         <div class="singer-al-name">
-          <img class="singer-al-img" :src="s.picUrl" alt="" />
+          <img class="singer-al-img" :src="s.blurPicUrl" alt="" />
           <div class="singer-song-name">
-            <span>{{ s.name }}</span>
-            <p class="singer-name">{{ singerartistdata.name }}</p>
+            <span class="singer-title-1hang">{{ s.name }}</span>
+            <p class="singer-name">{{ s.alias[0] }}</p>
           </div>
         </div>
-        <i class="new-icon"></i>
       </li>
     </ul>
   </div>
@@ -17,8 +17,7 @@
 <script>
 export default {
   props: {
-    singersongdata: Array,
-    singerartistdata: Object,
+    singerHotAlbums: Array,
   },
 };
 </script>
@@ -26,6 +25,10 @@ export default {
 <style lang="scss" scoped>
 .singer-song-com {
   overflow: auto;
+
+  .special-album {
+    padding: 10px 20px;
+  }
   .singer-ul {
     li {
       margin-top: 15px;
@@ -45,24 +48,16 @@ export default {
           margin-right: 10px;
         }
         .singer-song-name {
+          width: 60%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           .singer-name {
             margin-top: 5px;
             font-size: 12px;
             color: #999;
           }
         }
-      }
-
-      .new-icon {
-        display: block;
-        width: 20px;
-        height: 20px;
-        margin-right: 5px;
-        background-image: url("@/assets/imgs/shengluehao.png");
-        background-position: center center;
-        background-size: cover;
-        background-repeat: no-repeat;
-        content: "";
       }
     }
   }
