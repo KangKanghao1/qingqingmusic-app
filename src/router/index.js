@@ -29,11 +29,21 @@ const routes = [
     children: [{
       path: "ranking-list",
       name: "ranking-list",
-      component: () => import("../views/TypeNavView/RankingList.vue")
+      component: () => import("../views/TypeNavView/RankingListView/RankingList.vue")
     }, {
       path: "esch-rankingList",
       name: "esch-rankingList",
-      component: () => import("../views/TypeNavView/EschRankingList.vue")
+      component: () => import("../views/TypeNavView/RankingListView/EschRankingList.vue"),
+      children: [{
+        path: "/esch-rankingList/comments-section",
+        name: "/esch-rankingList/comments-section",
+        component: () => import("../views/TypeNavView/RankingListView/CommentsSection.vue")
+      }]
+    },
+    {
+      path: "digital-album",
+      name: "digital-album",
+      component: () => import("../views/TypeNavView/DigitalAlbumView/DigitalAlbum.vue")
     },
     {
       path: "search",

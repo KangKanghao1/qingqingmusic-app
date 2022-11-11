@@ -1,18 +1,6 @@
 <template>
   <div class="box">
     <nav>
-      <!-- 搜索框 -->
-      <form action="/" class="form" v-show="search">
-        <van-search
-          v-model="value"
-          show-action
-          placeholder="请输入歌单内的歌曲"
-          @search="onSearch"
-          @cancel="onCancel"
-          shape="round"
-        />
-      </form>
-
       <div class="bgi">
         <img class="nav-img" :src="coverImgUrl" alt="" />
       </div>
@@ -24,7 +12,7 @@
         <van-icon name="search" size="24" />
       </div>
       <div class="more" v-show="show2">
-        <img src="../../assets/imgs/more.png" />
+        <img src="@/assets/imgs/more.png" />
       </div>
     </nav>
 
@@ -34,12 +22,12 @@
       <div class="header-mini-box">
         <div class="frame">
           <div class="frame-icon">
-            <img src="../../assets/imgs/cqc.png" />
+            <img src="@/assets/imgs/cqc.png" />
           </div>
           <div class="amount">{{ playCountLabel(subscribedCount) }}</div>
         </div>
         <span>|</span>
-        <div class="frame">
+        <div class="frame" @click="gotoComments">
           <div class="frame-icon">
             <van-icon name="chat-o" size="21" color="#ffffffc9" />
           </div>
@@ -85,10 +73,10 @@
         <div class="text">播放全部</div>
         <div class="amount">({{ trackCount }})</div>
         <div class="download">
-          <img src="../../assets/imgs/asf.png" alt="" />
+          <img src="@/assets/imgs/asf.png" alt="" />
         </div>
         <div class="list" @click="showPopup">
-          <img src="../../assets/imgs/cnc.png" />
+          <img src="@/assets/imgs/cnc.png" />
         </div>
       </div>
     </van-sticky>
@@ -98,9 +86,12 @@
         class="play-box"
         v-for="(t, i) in tracksname"
         :key="i"
-        :class="{ selected: show == false }"
+        @click="selectPlay(i)"
+        :class="{ selected: index == i }"
       >
-        <div v-show="show == false" class="voice-icon">
+        <!-- :class="{ selected: show == false }" -->
+        <!-- class="voice-icon" -->
+        <div :class="{ 'voice-icon': index == i }">
           <i></i>
           <i></i>
           <i></i>
@@ -111,28 +102,54 @@
               :name="i"
               class="yuan"
               checked-color="#ee0a24"
-               v-model="checked"
+              v-model="checked"
+              :key="i"
+              @change="onchange"
             ></van-checkbox>
           </van-checkbox-group>
         </div>
         <div v-show="showChoose == false">
-          <div class="ranking" v-show="show">
-            {{ i < 9 ? "0" + (i + 1) : i + 1 }}
+          <div class="ranking" v-show="index != i">
+            {{ 9 > i ? "0" + (i + 1) : i + 1 }}
           </div>
         </div>
-        <div ref="current" class="works-box" @click="selectPlay(i)">
-          <div class="name">{{ t?.name }} <span v-if="t?.tns ">{{ t?.tns[0] ?`(${ t?.tns[0]})` : '' }}</span>  <span v-if="t?.alia">{{(t.alia[0] ?`(${ t?.alia[0]})` : '')}}</span></div>
+        <div class="works-box">
+          <div class="name">
+            {{ t?.name }}
+            <span v-if="t?.tns">{{ t?.tns[0] ? `(${t?.tns[0]})` : "" }}</span>
+            <span v-if="t?.alia">{{ t.alia[0] ? `(${t?.alia[0]})` : "" }}</span>
+          </div>
           <div class="author">{{ artistsStr(t.ar) }} - {{ t?.al.name }}</div>
         </div>
 
         <div class="mv" v-show="showChoose == false">
-          <img src="../../assets/imgs/d1c.png" alt="" />
+          <img src="@/assets/imgs/d1c.png" alt="" />
         </div>
         <div class="more" v-show="showChoose == false">
-          <img src="../../assets/imgs/more.png" />
+          <img src="@/assets/imgs/more.png" />
         </div>
       </div>
     </main>
+
+    <van-popup
+      class="closeable"
+      v-model="show"
+      position="top"
+      :style="{ height: '50px' }"
+      closeable
+    >
+      <!-- 搜索框 -->
+      <form action="/" class="form" v-show="search">
+        <van-search
+          v-model="value"
+          show-action
+          placeholder="请输入歌单内的歌曲"
+          @search="onSearch"
+          @cancel="onCancel"
+          shape="round"
+        />
+      </form>
+    </van-popup>
 
     <van-popup
       v-model="showChoose"
@@ -166,6 +183,11 @@
       @select="onSelect"
       class="share"
     />
+    <router-view
+      :coverImgUrl="coverImgUrl"
+      :rankingname="rankingname"
+      :standingsid="standingsid"
+    />
   </div>
 </template>
 <script>
@@ -175,19 +197,21 @@ import { Toast } from "vant";
 export default {
   data() {
     return {
+      // 排行榜名字
+      rankingname: "",
       //榜的id
       standingsid: "",
       //获取数据
       ListDetailsdata: [],
       //作品数据
       tracksname: [],
-      tns:[],
+      tns: [],
       //背景图片
       coverImgUrl: "",
       //播放全部数量
       trackCount: "",
       Press: false,
-      show: true,
+      show: false,
       show2: true,
       search: false,
       value: "",
@@ -213,16 +237,15 @@ export default {
       //选择款
       checked: false,
       result: [],
+      index: null,
     };
   },
 
   created() {
     this.standingsid = this.$route.query.i;
-    
   },
   mounted() {
     this.getListDetails();
-
   },
   computed: {},
   methods: {
@@ -237,7 +260,11 @@ export default {
 
     async getListDetails() {
       let { data } = await this.$axios(getListDetails(this.standingsid));
+
       this.ListDetailsdata = data.playlist;
+      // 排行榜名字
+      this.rankingname = this.ListDetailsdata.name;
+      console.log(this.name);
       //获取作品的名字和作者的名字
       this.tracksname = this.ListDetailsdata.tracks;
       //    this.tns=this.tracksname.tns[0]
@@ -268,17 +295,20 @@ export default {
     },
 
     selectPlay(i) {
-      console.log(this.$refs.current[i]);
-      if (this.$refs.current[i]) {
-        this.show = !this.show;
-      }
+      this.index = i;
     },
+
     showPopup() {
       this.showChoose = !this.showChoose;
+      this.index = null;
+    },
+    onchange(e) {
+      console.log(e);
     },
     OpenSearch() {
+      this.show = true;
       this.search = true;
-      this.show2 = false;
+      // this.show2 = false;
     },
     onSearch(val) {
       Toast(val);
@@ -286,7 +316,7 @@ export default {
     onCancel() {
       Toast("取消");
       this.search = false;
-      this.show2 = true;
+      // this.show2 = true;
     },
     onSelect(option) {
       Toast(option.name);
@@ -296,10 +326,12 @@ export default {
       this.showShare = false;
     },
     checkAll() {
-     console.log( "  this.$refs.checkboxGroup", this.$refs.checkboxGroup);
+      console.log("  this.$refs.checkboxGroup", this.$refs.checkboxGroup);
     },
-   
 
+    gotoComments() {
+      this.$router.push("/esch-rankingList/comments-section");
+    },
     goto() {
       this.$router.go(-1);
     },
@@ -310,39 +342,55 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.van-popup {
+  background-color: #fff;
+  
+}
+.closeable{
+
+ background-color: #000 !important;
+ .van-search{
+  background-color: #000 !important;
+  .van-search__content{
+     background-color: #686868!important;
+  }
+  
+ }
+ 
+  
+}
+
 .yuan {
   margin-right: 10px;
 }
 .van-field__control {
   color: #fff !important;
 }
+
 .share {
   color: #000;
-  
 }
-.popup{
+.popup {
+  display: flex;
+  align-items: center;
+  background-color: #222325;
 
-    display: flex;
-    align-items: center;
-    background-color: #222325;
-  
+  .bottom-minibox {
+    width: 25%;
+    color: #ffffff6e;
 
-    .bottom-minibox {
-      width: 25%;
-      color: #ffffff6e;
+    text-align: center;
 
-      text-align: center;
-
-      .icon {
-        margin-bottom: 5px;
-      }
-
-      .text {
-        font-size: 12px;
-      }
+    .icon {
+      margin-bottom: 5px;
     }
-  
+
+    .text {
+      font-size: 12px;
+    }
+  }
 }
+
 .box {
   position: fixed;
   left: 0;
@@ -516,6 +564,9 @@ export default {
         .name {
           color: red;
           font-weight: 600;
+          span {
+            color: red;
+          }
         }
       }
 
@@ -571,8 +622,8 @@ export default {
           font-size: 16px;
           margin-bottom: 4px;
 
-          span{
-             color: #a3a3a3;
+          span {
+            color: #a3a3a3;
           }
         }
 
@@ -591,7 +642,7 @@ export default {
       }
     }
   }
-
+  
   
 }
 
