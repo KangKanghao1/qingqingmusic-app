@@ -161,19 +161,19 @@
       :overlay="false"
       class="popup"
     >
-      <div class="bottom-minibox">
+      <div class="bottom-minibox" ref="active">
         <div class="icon"><van-icon name="play" size="25" /></div>
         <div class="text">下一首播放</div>
       </div>
-      <div class="bottom-minibox">
+      <div class="bottom-minibox" >
         <div class="icon"><van-icon name="add-square" size="25" /></div>
         <div class="text">收藏到歌单</div>
       </div>
-      <div class="bottom-minibox">
+      <div class="bottom-minibox" >
         <div class="icon"><van-icon name="down" size="25" /></div>
         <div class="text">下载</div>
       </div>
-      <div class="bottom-minibox">
+      <div class="bottom-minibox" >
         <div class="icon"><van-icon name="delete" size="25" /></div>
         <div class="text">删除下载</div>
       </div>
@@ -312,6 +312,7 @@ export default {
 
         }
       });
+      console.log( this.tracksname );
       //获取背景图
       this.coverImgUrl = this.ListDetailsdata.coverImgUrl;
       //获取播放全部的数量
@@ -350,8 +351,17 @@ export default {
       this.index = null;
     },
     onchange(e) {
-     
+      // console.log(this.checked);
            console.log(e);
+    },
+     checkAll() {
+      this.$refs.checkboxGroup.toggleAll();
+      if (this.checked==true) {
+         this.$refs.active.classList.add('active')
+      }else{
+         this.$refs.active.classList.remove('active')
+      }
+     
     },
     OpenSearch() {
       this.show = true;
@@ -373,9 +383,7 @@ export default {
       }
       this.showShare = false;
     },
-    checkAll() {
-      this.$refs.checkboxGroup.toggleAll();
-    },
+   
 
     gotoComments() {
       this.$router.push("/esch-rankingList/comments-section");
@@ -425,6 +433,10 @@ export default {
     color: #ffffff6e;
 
     text-align: center;
+
+    &.active{
+      color: #fff;
+    }
 
     .icon {
       margin-bottom: 5px;
