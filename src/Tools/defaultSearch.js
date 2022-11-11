@@ -95,11 +95,11 @@ export const ALL_SEARCH_CONTENT =async ({
 }
 
 // 搜索分类获取一项数据
-export const SEARCH_TABS_CONTENT = ({$axios, id, val}) => {
+export const SEARCH_TABS_CONTENT = ({$axios, id, val,limit = 20,offset = 0}) => {
 
   return new Promise((relsove) => {
 
-    $axios.get(`/cloudsearch?type=${id}&keywords=${val}`).then(({data}) => {
+    $axios.get(`/cloudsearch?limit=${limit}&offset=${offset}&type=${id}&keywords=${val}`).then(({data}) => {
 
       relsove(data)
 
@@ -112,3 +112,4 @@ export const SEARCH_TABS_CONTENT = ({$axios, id, val}) => {
 
 // 歌手粉丝数量
 export const singerFansCount = id => `/artist/follow/count?id=${id}`
+

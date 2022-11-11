@@ -31,6 +31,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::-webkit-scrollbar{
+  display: none;
+}
 .personalized-mv {
   // width: 100vw;
   // height: 20vh;

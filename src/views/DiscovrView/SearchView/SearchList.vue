@@ -74,11 +74,26 @@ export default {
         });
         this.$emit("on-loading-show");
         this.songList = newSongArr;
+        console.log(this.songList);
       });
     },
 
     async onSearchDetails(val) {
-      
+      //搜索历史本地存储
+    let history = JSON.parse(localStorage.getItem("SEARCH_HISTORY") ?? "[]");
+
+    if (history.length < 1) {
+      localStorage.SEARCH_HISTORY = JSON.stringify([val]);
+    }
+
+    let res = history.find( v => v == val);
+    if (!res) {
+      localStorage.SEARCH_HISTORY = JSON.stringify([val, ...history]);
+    } else {
+      let data = history.filter(v => v !== val);
+      localStorage.SEARCH_HISTORY = JSON.stringify([val, ...data]);
+    }
+
       this.$emit("onChangeSearchText", val);
       this.$emit("on-loading-show");
 

@@ -64,8 +64,8 @@ export default {
     return {
       searchText: "",
       placeholder: "",
-      componentShow: false, // 详细/搜素列表显示/隐藏
-      SearchListShow: false, // 显示/隐藏
+      componentShow: JSON.parse(localStorage.componentShow),
+      SearchListShow: JSON.parse(localStorage.SearchListShow),
       loadingShow: false,
       inexistenceShow: false, // 搜索加载失败
       show: true,
@@ -80,8 +80,10 @@ export default {
 
     // 组件显示、隐藏
     onSearchListShow() {
-      this.componentShow = true;
-      this.SearchListShow = false;
+      localStorage.componentShow = JSON.stringify(true);
+      this.componentShow = JSON.parse(localStorage.componentShow);
+      localStorage.SearchListShow = JSON.stringify(false);
+      this.SearchListShow = JSON.parse(localStorage.SearchListShow);
     },
 
     // 更改搜索关键字
@@ -98,17 +100,19 @@ export default {
     // 点击清除按钮后触发
     onClear() {
       this.searchText = "";
-      this.SearchListShow = true;
-      // this.inexistenceShow = false;
+      localStorage.SearchListShow = JSON.stringify(true);
+      this.SearchListShow = JSON.parse(localStorage.SearchListShow);
     },
     //确定搜索时触发
     async onSearch(val) {
-      this.SearchListShow = false;
-      this.componentShow = true;
+      localStorage.SearchListShow = JSON.stringify(false);
+      this.SearchListShow = JSON.parse(localStorage.SearchListShow);
+
+      localStorage.componentShow = JSON.stringify(true);
+      this.componentShow = JSON.parse(localStorage.componentShow);
 
       if (val == "") {
         this.searchText = this.placeholder;
-
         this.loadingShow = true;
         this.show = false;
         ALL_SEARCH_CONTENT({ $axios: this.$axios, val: this.searchText }).then(
@@ -118,6 +122,7 @@ export default {
             this.loadingShow = false;
           }
         );
+
       } else {
         this.loadingShow = true;
         this.show = false;
@@ -127,14 +132,34 @@ export default {
           this.loadingShow = false;
         });
       }
+
+    //搜索历史本地存储
+    let history = JSON.parse(localStorage.getItem("SEARCH_HISTORY") ?? "[]");
+    console.log(history);
+    if (history.length < 1) {
+      localStorage.SEARCH_HISTORY = JSON.stringify([this.searchText]);
+    }
+
+    let res = history.find( val => this.searchText == val);
+    if (!res) {
+      localStorage.SEARCH_HISTORY = JSON.stringify([this.searchText, ...history]);
+    } else {
+      let data = history.filter(val => val !== this.searchText);
+      localStorage.SEARCH_HISTORY = JSON.stringify([this.searchText, ...data]);
+    }
+      
     },
     // 输入框内容变化时触发
     onInput(val) {
       if (val == "") {
-        this.SearchListShow = true;
+        localStorage.SearchListShow = JSON.stringify(true);
+        this.SearchListShow = JSON.parse(localStorage.SearchListShow);
       } else {
-        this.SearchListShow = false;
-        this.componentShow = false;
+        localStorage.SearchListShow = JSON.stringify(false);
+        this.SearchListShow = JSON.parse(localStorage.SearchListShow);
+
+        localStorage.componentShow = JSON.stringify(false);
+        this.componentShow = JSON.parse(localStorage.componentShow);
       }
     },
 
@@ -145,7 +170,6 @@ export default {
   },
 
   created() {
-    this.SearchListShow = true;
     this.placeholder = this.$route.query.keywords;
   },
 

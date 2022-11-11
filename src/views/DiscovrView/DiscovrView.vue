@@ -44,19 +44,22 @@ export default {
   },
   // 销毁计时器
   beforeDestroy() {
-    clearInterval(this.timer);
+
+    clearInterval(this.timer)
   },
 
   beforeRouteUpdate(to, from, next) {
-    next();
+    next()
     if (to.path !== "/discovr" || from.path == "/discovr") {
+
       clearInterval(this.timer);
     } else {
-      console.log("aa");
-      clearInterval(this.timer);
-    }
-  },
+      //开启计时器
+      this.randomPlaceholder();
 
+    clearInterval(this.timer);
+  }
+  },
   // 计算属性
   computed: {
     // 引入vuex playingMusic 数据
@@ -82,6 +85,8 @@ export default {
     },
     // 搜索
     searchSong() {
+      localStorage.SearchListShow = JSON.stringify(true);
+      localStorage.componentShow = JSON.stringify(false);
       this.$router.push(`/discovr/search?keywords=${this.placeholder}`);
     },
 
@@ -94,7 +99,7 @@ export default {
         this.placeholder = SEARCH_PLACEHOLDER[this.searchPlaceholderIndex];
       }, 2500);
     },
-  },
+  }
 };
 </script>
 

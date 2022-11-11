@@ -1,5 +1,7 @@
 
-import {Slider, NavBar, Tabbar,PullRefresh, List, TabbarItem, Icon, Search, Swipe, SwipeItem,Toast, Lazyload, Tab, Tabs,Popup,NoticeBar,Dialog ,Sticky,ShareSheet,Checkbox,CheckboxGroup,Loading    } from 'vant'
+
+import {Slider, NavBar, Tabbar,PullRefresh, List, TabbarItem, Icon, Search, Swipe, SwipeItem,Toast, Lazyload, Tab, Tabs,Popup,NoticeBar,Dialog ,Sticky,ShareSheet,Checkbox,CheckboxGroup,Loading,Overlay,Collapse, CollapseItem} from 'vant'
+
 
 
 const vantCompontents = [
@@ -25,9 +27,9 @@ const vantCompontents = [
     CheckboxGroup,
     Loading ,
     Dialog,
-    NoticeBar
-
-
+    Overlay,
+    Collapse,
+    CollapseItem
 ]
 
 export default {

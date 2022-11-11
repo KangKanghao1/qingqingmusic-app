@@ -2,10 +2,15 @@
   <transition name="fadeout">
     <div class="app">
       <!-- 路由也可以反向传值 -->
-      <keep-alive>
+
+      <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
+      <PlayControl :PlayStyle="PlayStyle" />
+
+      <!-- <keep-alive>
         <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
       </keep-alive>
-      <PlayControl />
+      <PlayControl /> -->
+
       <van-tabbar
         class="router-title"
         fixed
@@ -48,6 +53,11 @@ import PlayControl from "@/components/PlayControl.vue";
 import CurrentPalyList from "@/components/CurrentPalyList.vue";
 import { getSongUrl } from "./apis/play";
 export default {
+  data(){
+    return{
+      PlayStyle: false
+    }
+  },
   components: {
     PlayControl,
     CurrentPalyList,
@@ -97,6 +107,24 @@ export default {
 
   // 监听播放
   watch: {
+    $route(to){
+      if (to.name == "discovr") {
+        console.log('a');
+        this.PlayStyle = false;
+
+      }else if(to.name == "mymusic"){
+        console.log('a');
+        this.PlayStyle = false;
+      }else if(to.name == "video"){
+        console.log('a');
+        this.PlayStyle = false;
+      }else if(to.name == "user"){
+        console.log('a');
+        this.PlayStyle = false;
+      }else{
+        this.PlayStyle = true;
+      }
+    },
     // 接受一个新值和一个旧值
     audioPlayState(newVal, oldVal) {
       if (newVal !== oldVal) {
@@ -109,6 +137,28 @@ export default {
         }
       }
     },
+    // 监听歌曲变化,添加最近播放本地存储
+    playingMusic(){
+     let music = JSON.parse(localStorage.getItem('changerMusci')??"{}")
+     let recently = JSON.parse(localStorage.getItem('recentlyPlay')??"[]")
+
+      if (recently.length < 1) {
+        localStorage.recentlyPlay = JSON.stringify([music]);
+      }
+
+       let res = recently.find(r => r?.id == music.id);
+       if (!res) {
+
+         localStorage.recentlyPlay = JSON.stringify([music,...recently]);
+
+       }else{
+
+        let data = recently.filter(r => r.id !== music.id);
+        localStorage.recentlyPlay = JSON.stringify([music, ...data]);
+
+       }
+        
+    }
   },
 };
 </script>

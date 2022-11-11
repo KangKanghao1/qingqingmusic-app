@@ -25,6 +25,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+::-webkit-scrollbar{
+  display: none;
+}
 .homepage-content {
   height: 10vh;
   display: flex;

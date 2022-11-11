@@ -7,18 +7,30 @@
         ><span class="play">播放全部</span>
       </div>
 
-      <div class="single-list">
-        <div class="single-item" v-for="s in onSingleData" :key="s.id">
-          <div class="sing-name">
-            <div class="song_n">{{ s.name }}</div>
-            <div class="singer_n">{{ singerName(s.ar) }}</div>
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+          offset="300"
+          class="single-list"
+        >
+          <div
+            @click="toPlayControl(s)"
+            class="single-item"
+            v-for="s in onSingleData"
+            :key="s.id"
+          >
+            <div class="sing-name">
+              <div class="song_n">{{ s.name }}</div>
+              <div class="singer_n">{{ singerName(s.ar) }}</div>
+            </div>
+            <div class="mv" v-if="s.mv">
+              <img src="@/assets/imgs/home_dq_bof.png" />
+            </div>
+            <van-icon color="#808080" class="ellipsis" name="ellipsis" />
           </div>
-          <div class="mv" v-if="s.mv">
-            <img src="@/assets/imgs/home_dq_bof.png" />
-          </div>
-          <van-icon color="#808080" class="ellipsis" name="ellipsis" />
-        </div>
-      </div>
+        </van-list>
       <div v-show="allSingleShow" class="play-all">
         查看全部{{ singleCount }}首单曲
       </div>
@@ -35,7 +47,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import { SEARCH_TABS_CONTENT } from "@/Tools/defaultSearch";
 export default {
   props: {
@@ -55,6 +67,11 @@ export default {
       loadingShow: false,
       allStyle: false,
       timer: null,
+      loading: false,
+      finished: false,
+      offset: 0, // 偏移数量
+      limit: 20, //限制获取歌曲的数量
+      index: 0, // 记录请求轮次
     };
   },
 
@@ -72,15 +89,21 @@ export default {
     this.onAllSingleFun();
   },
   methods: {
+    ...mapMutations(["changeoverMusci"]),
     // 延迟加载
     loadingTime() {
       return new Promise((resolve) => {
         this.timer = setTimeout(() => {
-   
           resolve("loading...");
         }, 500);
       });
     },
+    // 跳转播放详情页
+    toPlayControl(s) {
+      this.changeoverMusci(s);
+      this.$router.push(`/songdata/${s.id}`);
+    },
+
     // 获取所有专辑数据
     async onAllSingleFun() {
       if (this.tabsTitle !== "1018") {
@@ -98,6 +121,8 @@ export default {
 
         this.loadingShow = false;
       }
+
+      this.index += 1;
     },
     singerName(arr) {
       return arr
@@ -114,14 +139,52 @@ export default {
       if (songListArr[0].data?.songs) {
         this.show = true;
 
-        // this.allSingle = songListArr[0].data.songs;
-
         this.synthesisSingle = songListArr[0].data?.songs.slice(0, 5);
 
         this.singleCount = songListArr[0].data?.songCount;
       } else {
         this.show = false;
       }
+    },
+    //
+    onLoad() {
+      if (this.tabsTitle == "1018") {
+        this.loading = false
+        return 
+      }
+      // 28  10 * 0 = 0 + 10 = 10
+      // 28 10 * 1 = 10 + 10 = 20
+      // 28 10 * 2 = 20 + 10 = 30
+      // 28 - 20 = 8
+      let offset = this.limit * this.index;
+      let limitNum = (this.offset * this.index) + this.limit;
+
+      if (limitNum > this.singleCount) {
+          this.limit = this.singleCount - this.limit * this.index;
+      }
+      // 异步更新数据
+      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+      SEARCH_TABS_CONTENT({
+        $axios: this.$axios,
+        id: this.tabsTitle,
+        val: this.keywords,
+        limit: this.limit,
+        offset
+      }).then((data) => {
+  
+        let res = data?.result?.songs;
+        if(res){
+          this.allSingle = [...this.allSingle, ...res];
+        } 
+        
+        this.loading = false;
+
+        if (!res || res?.length < 1) {
+          this.finished = true;
+        }
+      });
+
+      this.index += 1;
     },
   },
   watch: {
@@ -143,7 +206,6 @@ export default {
     ...mapState(["synthesisData", "keywords"]),
 
     onSingleData() {
-      
       if (this.tabsTitle == "1018") {
         return this.synthesisSingle;
       } else {
@@ -153,15 +215,12 @@ export default {
 
     // 请求数据为undefined
     onShowFailure() {
-      
-       let singleArr = this.synthesisData.filter((s) => {
+      let singleArr = this.synthesisData.filter((s) => {
         return s.type == "single";
       });
       if (!singleArr[0]?.data) {
-        
         return this.show;
       } else {
-        
         return !this.loadingShow;
       }
     },
@@ -172,10 +231,8 @@ export default {
       });
 
       if (!singleArr[0]?.data) {
-     
         return this.show;
       } else {
-      
         return this.loadingShow;
       }
     },
