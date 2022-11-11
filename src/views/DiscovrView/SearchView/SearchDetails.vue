@@ -1,44 +1,16 @@
 <template>
   <div class="details">
-    <van-tabs
-      v-model="active"
-      @click="onClick"
-      offset-top="45px"
-      sticky
-      background="#2c2c2c"
-      lazy-render
-      ref="tabs"
-      swipeable
-      color="#fb736f"
-      @before-change="change"
-      title-inactive-color="#d6d6d6"
-      title-active-color="#e7e7e7"
-    >
-      <van-tab :title="navTab[0].title" :name="navTab[0].id"
-        ><SynthesisView :tabsTitle="active"
-      /></van-tab>
-      <van-tab :title="navTab[1].title" :name="navTab[1].id"
-        ><SingleView :tabsTitle="active"
-      /></van-tab>
-      <van-tab :title="navTab[2].title" :name="navTab[2].id"
-        ><AlbumView :tabsTitle="active"
-      /></van-tab>
-      <van-tab :title="navTab[3].title" :name="navTab[3].id"
-        ><SingerView :tabsTitle="active"
-      /></van-tab>
-      <van-tab :title="navTab[4].title" :name="navTab[4].id"
-        ><SonglistView :tabsTitle="active"
-      /></van-tab>
-      <van-tab :title="navTab[5].title" :name="navTab[5].id"
-        ><MvView :tabsTitle="active"
-      /></van-tab>
-      <van-tab :title="navTab[6].title" :name="navTab[6].id"
-        ><TransceiverView :tabsTitle="active"
-      /></van-tab>
-      <van-tab :title="navTab[7].title" :name="navTab[7].id"
-        ><VideoView :tabsTitle="active"
-      /></van-tab>
-    </van-tabs>
+  <van-tabs v-model="active" @click="onClick" offset-top="45px" sticky background="#2c2c2c" lazy-render ref="tabs" swipeable color="#fb736f" @before-change="change" title-inactive-color="#d6d6d6" title-active-color="#e7e7e7">
+   <van-tab :title="navTab[0].title" :name="navTab[0].id"><SynthesisView :tabsTitle="active" /></van-tab>
+   <van-tab :title="navTab[1].title" :name="navTab[1].id"><SingleView  :tabsTitle="active" /></van-tab>
+   <van-tab :title="navTab[2].title" :name="navTab[2].id"><AlbumView :tabsTitle="active"/></van-tab>
+   <van-tab :title="navTab[3].title" :name="navTab[3].id"><SingerView :tabsTitle="active"/></van-tab>
+   <van-tab :title="navTab[4].title" :name="navTab[4].id"><SonglistView :tabsTitle="active"/></van-tab>
+   <van-tab :title="navTab[5].title" :name="navTab[5].id"><MvView :tabsTitle="active"/></van-tab>
+   <van-tab :title="navTab[6].title" :name="navTab[6].id"><TransceiverView :tabsTitle="active"/></van-tab>
+   <van-tab :title="navTab[7].title" :name="navTab[7].id"><VideoView :tabsTitle="active"/></van-tab>
+</van-tabs>
+
   </div>
 </template>
 
@@ -74,8 +46,8 @@ export default {
   },
 
   watch: {
-    synthesisData(newVal) {
-      console.log("1", newVal);
+
+    synthesisData() {
       this.$refs.tabs.resize();
     },
   },

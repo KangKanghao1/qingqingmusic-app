@@ -1,5 +1,48 @@
 
 <template>
+
+<div  class="mv-module">
+    <div class=" mv-title">MV</div>        
+        <div class="video-list"  v-for="m in mvList" :key="m.id" >
+          <!-- <div> 视频 {{m.id}}</div> -->
+          <!-- v-for="m in mvList" :key="m.id" -->
+
+           <div class="toggle-play"   @click="playMV(m.id)"></div>
+
+            <!-- 视频 -->
+            
+              <div class="video-container" >        
+                    <video 
+                        :poster="m.cover"
+                        :src="m.url"
+                        width="300px" height="160px"
+                        controls 
+                        >
+            
+                    </video>
+              </div>  
+
+              <!-- 视频文本区     -->
+              <div class="mv-text">
+                <div class="song-name">{{m.name}}
+                </div>
+                <div class="author ">
+                   <h3>{{m.artistName}}</h3>
+
+                   <div class="like-comments">  
+                    <div class="like">
+                    <img src="../../assets/imgs/me_ico_chuanshao.png" alt="">
+                    <span>{{m.playCount}}</span>
+                   
+                  </div>
+                  <div class="comments" @click="goToComments">
+                    <img src="../../assets/imgs/me_ico_comment.png" alt="">
+                  </div>
+                   </div>
+                 
+                </div>
+              </div>
+
   <div class="main">
     <van-swipe
       class="my-swipe"
@@ -45,6 +88,7 @@
               height="100%"
               autoplay
               controls
+
               
             ></video>
           </div>
@@ -52,6 +96,9 @@
       </van-swipe-item>
     </van-swipe>
   </div>
+
+        </div>
+</div>
 </template>
 <script>
 import { Toast } from "vant";

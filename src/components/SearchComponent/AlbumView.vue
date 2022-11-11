@@ -6,7 +6,14 @@
         <span class="title">{{ title }}</span>
       </div>
 
-      <div class="album-list">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+          offset="300"
+          class="album-list"
+        >
         <div class="album-item" v-for="s in onAlbumData" :key="s.id">
           <div class="album-img">
             <img :src="s.blurPicUrl" alt="" />
@@ -20,7 +27,7 @@
             </div>
           </div>
         </div>
-      </div>
+        </van-list>
 
       <div v-show="allAlbumShow" class="play-all">
         查看全部{{ albumCount }}个专辑
@@ -58,7 +65,12 @@ export default {
       allAlbumShow: false,
       loadingShow: false,
       allStyle: false,
-      timer: null
+      timer: null,
+      loading: false,
+      finished: false,
+      offset: 0, // 偏移数量
+      limit: 20, //限制获取歌曲的数量
+      index: 0, // 记录请求轮次
     };
   },
   created() {
@@ -107,6 +119,7 @@ export default {
 
       this.loadingShow = false;
     }
+    this.index += 1;
 
     },
     singerName(arr) {
@@ -142,6 +155,40 @@ export default {
 
       return `${year}.${month}.${date}`;
     },
+     onLoad() {
+      if (this.tabsTitle == "1018") {
+        this.loading = false
+        return 
+      }
+      let offset = this.limit * this.index;
+      let limitNum = (this.offset * this.index) + this.limit;
+
+      if (limitNum > this.albumCount) {
+          this.limit = this.albumCount - this.limit * this.index;
+      }
+      SEARCH_TABS_CONTENT({
+        $axios: this.$axios,
+        id: this.tabsTitle,
+        val: this.keywords,
+        limit: this.limit,
+        offset
+      }).then((data) => {
+        
+        let res = data?.result?.albums;
+       
+        if(res){
+          this.allAlbum = [...this.allAlbum, ...res];
+        } 
+        
+        this.loading = false;
+
+        if (!res || res.length < 1) {
+          this.finished = true;
+        }
+      });
+
+      this.index += 1;
+    },
   },
   watch: {
     synthesisData() {
@@ -167,11 +214,12 @@ export default {
     },
         // 请求数据为undefined
     onShowFailure() {
-      
+        
        let albumArr = this.synthesisData.filter((s) => {
         return s.type == "album";
       });
-      if (!albumArr[0]?.data) {
+
+      if (albumArr[0]?.data.albumCount == "0") {
     
         return this.show;
       } else {
@@ -185,7 +233,7 @@ export default {
         return s.type == "album";
       });
 
-      if (!albumArr[0]?.data) {
+      if (albumArr[0]?.data.albumCount == "0") {
       
         return this.show;
       } else {
@@ -264,6 +312,10 @@ export default {
         }
 
         .singer_n {
+          width: 194%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
           color: rgba(161, 161, 161);
           height: 20px;
           // font-size: 12px;
