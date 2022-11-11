@@ -20,12 +20,23 @@ export const getpersonalizedmv = '/personalized/mv'
 
 // mv 地址
 // 说明 : 调用此接口 , 传入 mv id,可获取 mv 播放地址
-
 // 必选参数 : id: mv id
-
 // 可选参数 : r: 分辨率,默认 1080,可从 /mv/detail 接口获取分辨率列表
-
 // /mv/url?id=5436712 /mv/url?id=10896407&r=1080
+
+// 获取歌手mv
+// /artist/mv?id=6452
+
+// 获取歌手专辑
+// /artist/album?id=6452&limit=5
+
+
+// 专辑动态信息
+// 说明 : 调用此接口 , 传入专辑 id, 可获得专辑动态信息,如是否收藏,收藏数,评论数,分享数
+
+// 必选参数 : id: 专辑 id
+
+// 调用例子 : /album/detail/dynamic?id=32311
 
 
 // 获取 mv 数据

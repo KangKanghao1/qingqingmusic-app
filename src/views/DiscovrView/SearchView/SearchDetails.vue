@@ -11,12 +11,10 @@
    <van-tab :title="navTab[7].title" :name="navTab[7].id"><VideoView :tabsTitle="active"/></van-tab>
 </van-tabs>
 
-   
   </div>
 </template>
 
 <script>
-
 import { SEARCH_TAB } from "@/Tools/defaultSearch";
 import SynthesisView from "@/components/SearchComponent/SynthesisView.vue";
 import SingleView from "@/components/SearchComponent/SingleView.vue";
@@ -26,38 +24,32 @@ import SonglistView from "@/components/SearchComponent/SonglistView.vue";
 import MvView from "@/components/SearchComponent/MvView.vue";
 import TransceiverView from "@/components/SearchComponent/TransceiverView.vue";
 import VideoView from "@/components/SearchComponent/VideoView.vue";
-import { mapState } from "vuex"
+import { mapState } from "vuex";
 export default {
-
   data() {
-    
     return {
       tab: 0,
       active: "1018",
       activeTab: 1018,
       navTab: SEARCH_TAB,
-      
     };
   },
 
   computed: {
-    ...mapState(['synthesisData'])
+    ...mapState(["synthesisData"]),
   },
   methods: {
-    change(){
-
-    },
+    change() {},
     onClick(title) {
       this.active = title;
     },
   },
 
   watch: {
-    synthesisData() {
 
+    synthesisData() {
       this.$refs.tabs.resize();
-    }
-    
+    },
   },
 
   components: {
@@ -68,25 +60,23 @@ export default {
     SonglistView,
     MvView,
     TransceiverView,
-    VideoView
+    VideoView,
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .details {
-
   height: 100%;
   background-color: #131313;
   z-index: 21;
   overflow: auto;
-   
+
   .van-tabs__wrap {
-  border: none !important;
-}
+    border: none !important;
+  }
   .van-tabs__nav--card {
     border: none !important;
   }
-
 }
 </style>

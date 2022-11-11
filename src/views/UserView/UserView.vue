@@ -1,16 +1,20 @@
 <template>
-  <div class="user-box">
+  <div class="user-box" v-if="userdata.profile">
     <div class="nav-bar">
       <span class="title">个人中心</span>
-      <span class="icon"><img src="@/assets/imgs/common_iocn_tishi.png" alt=""></span>
+      <span class="icon">
+        <!-- <img :src='userdata.profile.avatarUrl' > -->
+        </span>
       
     </div>
 
     <div class="user">
       <div class="user-info">
         <div class="portrait">
-          <div class="head-portrait" @click="userPage"></div>
-          <div class="user-name">元</div>
+          <div class="head-portrait" @click="userPage">
+            <img :src='userdata.profile.avatarUrl '>
+          </div>
+          <div class="user-name"  v-if="userdata.profile">{{userdata.profile.nickname ? userdata.profile.nickname : ''}}</div>
         </div>
         <div class="sign"><img src="@/assets/imgs/me_ico_qiandao.png" alt=""><span>签到</span></div>
       </div>
@@ -70,7 +74,7 @@
       <div class="contact-us">
        <div class="icon"><img src="@/assets/imgs/me_ico_contact.png" alt=""></div>
         <div class="setting-layer">
-            <div>联系我们</div>
+            <div>联系我们  <span>{{infoId}}</span></div>
             <van-icon name="arrow" color="#ddd" />
         </div>
       </div>
@@ -87,7 +91,24 @@
 
 </template>
 <script>
+import { getinfoUser} from "../../apis/login";
 export default {
+  data () {
+    return {
+      infoId:'',
+      userdata:{}
+    }
+  },
+    created() {
+    this.infoId = this.$route.params.id;
+    console.log('传过来的个人id',this.infoId);
+    this.getinfoUser(1542495412)
+    // this.getinfoUser(this.infoId)
+    
+  },
+  mounted() {
+    //  this.getinfoUser(1542495412)
+  },
   methods: {
     onClickLeft() {},
     onClickRight() {},
@@ -96,7 +117,16 @@ export default {
 
       this.$router.push('/user/user-page');
 
-    }
+    },
+      async getinfoUser(id) {
+      let {data} =  await this.$axios(getinfoUser(id));
+      if (data) {
+           this.userdata = data
+            console.log( '请求过来的个人数据',  this.userdata);
+      }
+      // this.userdata = data
+      // console.log( '请求过来的个人数据',  this.userdata);
+    },
   },
 };
 </script>
@@ -156,6 +186,10 @@ export default {
           border-radius: 999px;
           background-color: rgba(0, 0, 0, 0.4);
           margin-right: 15px;
+          img {
+            width: 100%;
+            display: block;
+          }
         }
 
         .user-name {

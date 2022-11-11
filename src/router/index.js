@@ -5,6 +5,9 @@ import MyMusic from '@/views/MyMusic/MyMusic.vue'
 import VideoClipView from '@/views/VideoClipView/VideoClipView.vue'
 import UserView from '@/views/UserView/UserView.vue'
 import UserPage from "@/views/UserView/UserPage.vue"
+import LoginView from "@/views/UserView/LoginView.vue"
+import store from "@/store/index"
+
 // import CommentsView from "@/views/VideoClipView/CommentsView.vue"
 
 Vue.use(VueRouter)
@@ -38,7 +41,6 @@ const routes = [
     {
       path: "search",
       name: "search",
-
       component: ()=> import('@/views/DiscovrView/SearchView/SearchView.vue'),
     }
   ]
@@ -66,11 +68,25 @@ const routes = [
     name: 'video',
     component: VideoClipView,
   },
+  {
+    path: '/login',
+    name: 'login',
+    //  component: ()=> import('@/views/UserView/LoginView.vue'),
+    component: LoginView,
+
+  },
 
   {
     path: '/user',
     name: 'user',
     component: UserView,
+    beforeEnter:(to,from,next) => {
+      if (store.state.isLogin) {
+        next()
+      }else {
+        next('/login')
+      }
+    },
     children: [{
       path: "user-page",
       name: "user-page",
@@ -87,7 +103,29 @@ const routes = [
     path: "/songdata/:id",
     name: "songdata",
     component: () => import("../views/SongDetailView/SongDetailView.vue")
+  },
+
+  {
+    path: "/musicrecommend",
+    name: "musicrecommend",
+    component: () => import("@/views/DiscovrView/MusicRecommend/MusicRecommend.vue")
+  },
+  {
+    path: "/moresinger",
+    name: "moresinger",
+    component: () => import("@/views/DiscovrView/MoreSinger/MoreSinger.vue")
+  },
+  {
+    path: "/gedanmusic",
+    name: "gedanmusic",
+    component: () => import("@/views/GedanMusicView/GedanMusicView.vue")
+  },
+  {
+    path: "/singer",
+    name: "singer",
+    component: () => import("@/views/SingerDetailed/SingerDetailed.vue")
   }
+
 
 
 ]
@@ -97,5 +135,13 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+// router.beforeEach((to) => {
+//   console.log(to);
+//   // if(to.path == "/login") {
+//   //   store.state.isFooterMusic = false
+//   // }else {
+//   //   store.state.isFooterMusic = true
+//   // }
+// })
 
 export default router

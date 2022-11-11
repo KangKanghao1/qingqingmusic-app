@@ -171,7 +171,7 @@ export default {
         limit: this.limit,
         offset
       }).then((data) => {
-        console.log(data);
+  
         let res = data?.result?.songs;
         if(res){
           this.allSingle = [...this.allSingle, ...res];

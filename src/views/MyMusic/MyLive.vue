@@ -10,7 +10,7 @@
     <div class="content">
       <div class="live-icon">
         <div class="img">
-          <img :src="liveList[0].picUrl" />
+          <img :src="liveList[0]?.picUrl" />
           <van-icon class="like-img" color="#f5f5f5" name="like" size="45" />
         </div>
         

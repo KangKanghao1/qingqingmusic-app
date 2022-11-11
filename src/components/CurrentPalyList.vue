@@ -11,7 +11,7 @@
       </div>
     </div>
     <ul class="play-list-song">
-      <li class="songslist-content" v-for="(s, i) in songsList" :key="s.id">
+      <li class="songslist-content" v-for="(s, i) in songsList" :key="i">
         <div class="songsList">
           <div class="song-list-top">
             <img
@@ -33,7 +33,7 @@
               class="artists"
               :class="{ selectedas: s.id == playingMusic.id }"
             >
-              {{ s.song.artists[0].name }}
+              {{ s.song?.artists[0]?.name }}
             </div>
           </div>
           <div class="like-del-download-icon">
@@ -41,7 +41,7 @@
               <i class="like-icon"></i>
               <i class="download-icon"></i>
             </div>
-            <i class="del-icon"></i>
+            <i class="del-icon" @click.stop="delsongmusic(s.id)"></i>
           </div>
         </div>
       </li>
@@ -59,7 +59,7 @@ export default {
 
   },
   methods: {
-    ...mapMutations(["changeoverMusci", "delallSongList"]),
+    ...mapMutations(["changeoverMusci", "delallSongList","delsongmusic"]),
     // 弹出确定要清空播放队列
     delplaySongList() {
       Dialog.confirm({
@@ -115,7 +115,7 @@ export default {
         display: block;
         width: 28px;
         height: 28px;
-        background-image: url("../assets/imgs/24gl-folderPlus.png");
+        background-image: url("@/assets/imgs/24gl-folderPlus.png");
         background-position: center center;
         background-size: cover;
         background-repeat: no-repeat;
@@ -127,7 +127,7 @@ export default {
         display: block;
         width: 28px;
         height: 28px;
-        background-image: url("../assets/imgs/chuck_ic_delete_white_24dp.png");
+        background-image: url("@/assets/imgs/chuck_ic_delete_white_24dp.png");
         background-position: center center;
         background-size: cover;
         background-repeat: no-repeat;
