@@ -37,10 +37,6 @@
                   {{ l?.lrc }}
                 </p>
               </div>
-
-              <span class="company"
-                >企业:</span
-              >
             </div>
 
             <div class="right-icon">

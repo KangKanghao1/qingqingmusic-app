@@ -1,24 +1,30 @@
 <template>
-  <div class="discover-view">
-    <div class="search-tab">
-      <van-search
-        class="search-input"
-        shape="round"
-        background="#fff"
-        :placeholder="placeholder"
-        @click="searchSong"
-      />
-      <div class="music-img">
-        <img class="home-img" :src="playingMusic?.picUrl" @click="gotoDetalil" />
+  <transition name="delay">
+    <div class="discover-view">
+      <div class="search-tab">
+        <van-search
+          class="search-input"
+          shape="round"
+          background="#fff"
+          :placeholder="placeholder"
+          @click="searchSong"
+        />
+        <div class="music-img">
+          <img
+            class="home-img"
+            :src="playingMusic?.picUrl"
+            @click="gotoDetalil"
+          />
+        </div>
       </div>
+
+      <discover-content :bannerimgdata="bannerimgdata" />
+
+      <transition name="drawer">
+        <router-view />
+      </transition>
     </div>
-
-    <discover-content :bannerimgdata="bannerimgdata" />
-
-    <transition name="drawer">
-      <router-view />
-    </transition>
-  </div>
+  </transition>
 </template>
 <script>
 import { mapState } from "vuex";
@@ -44,21 +50,19 @@ export default {
   },
   // 销毁计时器
   beforeDestroy() {
-
-    clearInterval(this.timer)
+    clearInterval(this.timer);
   },
 
   beforeRouteUpdate(to, from, next) {
-    next()
+    next();
     if (to.path !== "/discovr" || from.path == "/discovr") {
-
       clearInterval(this.timer);
     } else {
       //开启计时器
       this.randomPlaceholder();
 
-    clearInterval(this.timer);
-  }
+      clearInterval(this.timer);
+    }
   },
   // 计算属性
   computed: {
@@ -99,7 +103,7 @@ export default {
         this.placeholder = SEARCH_PLACEHOLDER[this.searchPlaceholderIndex];
       }, 2500);
     },
-  }
+  },
 };
 </script>
 
@@ -141,6 +145,16 @@ export default {
       }
     }
   }
+}
+  // 延迟路由离开动画
+.delay-leave {
+  opacity: 1;
+}
+.delay-leave-active {
+ transition: all .4s linear;
+}
+.delay-leave-to {
+  opacity: 0.9;
 }
 
 // 路由动画

@@ -51,9 +51,9 @@ const routes = [
     {
       path: "search",
       name: "search",
-      component: ()=> import('@/views/DiscovrView/SearchView/SearchView.vue'),
+      component: () => import('@/views/DiscovrView/SearchView/SearchView.vue'),
     }
-  ]
+    ]
   },
 
   {
@@ -66,11 +66,11 @@ const routes = [
       component: () => import("../views/MyMusic/RecentlyPlayed/RecentlyPlayed.vue")
     },
     {
-      path:"live",
-      name:"live",
-      component:() => import("../views/MyMusic/MyLive.vue")
+      path: "live",
+      name: "live",
+      component: () => import("../views/MyMusic/MyLive.vue")
     }
-  ]
+    ]
   },
 
   {
@@ -90,10 +90,10 @@ const routes = [
     path: '/user',
     name: 'user',
     component: UserView,
-    beforeEnter:(to,from,next) => {
+    beforeEnter: (to, from, next) => {
       if (store.state.isLogin) {
         next()
-      }else {
+      } else {
         next('/login')
       }
     },
@@ -133,8 +133,8 @@ const routes = [
   {
     path: "/singer",
     name: "singer",
-    component: () => import("@/views/SingerDetailed/SingerDetailed.vue")
-  }
+    component: () => import("@/views/SingerDetailed/SingerDetailed.vue"),
+  },
 
 
 
