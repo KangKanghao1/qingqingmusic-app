@@ -10,30 +10,50 @@
     </nav>
 
     <header>
+      <div class="info">
+        <div class="singer-img">
+          <img class="img" :src="album.picUrl" alt="" />
+        </div>
+        <div class="detail">
+          <div class="song-name">{{ album.name }}</div>
+          <div class="singer">
+            <span>歌手</span>: {{ artistsStr(album.artists)
+            }}<van-icon name="arrow" size="12px" />
+          </div>
+          <div class="time">
+            发行时间: {{ onPublishTime(album.publishTime) }}
+            
+          </div>
+          <div class="title"><span>{{ album.description }}</span><van-icon name="arrow" size="12px" /></div>
+        </div>
+      </div>
       <div class="header-mini-box">
         <div class="frame">
           <div class="frame-icon">
             <img src="../../assets/imgs/cqc.png" />
           </div>
-          <div class="amount">{{ playCountLabel(subscribedCount) }}</div>
+          <div class="amount">{{ playCountLabel(album.info?.likedCount) }}</div>
         </div>
         <span>|</span>
         <div class="frame">
           <div class="frame-icon">
             <van-icon name="chat-o" size="21" color="#ffffffc9" />
           </div>
-          <div class="amount">{{ playCountLabel(commentCount) }}</div>
+          <div class="amount">{{ playCountLabel(album.info?.commentCount) }}</div>
         </div>
         <span>|</span>
         <div class="frame" @click="showShare = true">
           <div class="frame-icon">
             <van-icon name="share-o" size="21" color="#ffffffc9" />
           </div>
-          <div class="amount">{{ playCountLabel(shareCount) }}</div>
+          <div class="amount">
+            {{ playCountLabel(album.info?.shareCount) }}
+         
+          </div>
         </div>
       </div>
     </header>
-    <van-sticky :offset-top="38">
+    <!-- <van-sticky :offset-top="38">
       <div class="play-all-box" v-show="showChoose">
         <van-checkbox
           v-model="checked"
@@ -57,12 +77,12 @@
           <img src="../../assets/imgs/cnc.png" />
         </div>
       </div>
-    </van-sticky>
+    </van-sticky> -->
 
     <main>
       <div
         class="play-box"
-        v-for="(t, i) in tracksname"
+        v-for="(t, i) in songList"
         :key="i"
         :class="{ selected: show == false }"
       >
@@ -92,7 +112,7 @@
             <span v-if="t?.tns">{{ t?.tns[0] ? `(${t?.tns[0]})` : "" }}</span>
             <span v-if="t?.alia">{{ t.alia[0] ? `(${t?.alia[0]})` : "" }}</span>
           </div>
-          <div class="author">{{ artistsStr(t.ar) }} - {{ t?.al.name }}</div>
+          <div class="author">{{ artistsStr(t.ar) }}</div>
         </div>
 
         <div class="mv" v-show="showChoose == false">
@@ -129,13 +149,13 @@
       </div>
     </van-popup>
 
-    <van-share-sheet
+    <!-- <van-share-sheet
       v-model="showShare"
       title="立即分享给好友"
       :options="options"
       @select="onSelect"
       class="share"
-    />
+    /> -->
   </div>
 </template>
 <script>
@@ -152,8 +172,6 @@ export default {
       //作品数据
       tracksname: [],
       tns: [],
-      //背景图片
-      coverImgUrl: "",
       //播放全部数量
       trackCount: "",
       Press: false,
@@ -173,18 +191,12 @@ export default {
         ],
         [{ name: "复制链接", icon: "link" }],
       ],
-      //收藏数量
-      subscribedCount: [],
-      //评论数量
-      commentCount: [],
-      //分享数量
-      shareCount: [],
       //显示选择内容
       showChoose: false,
       //选择款
       checked: false,
       result: [],
-      songList: []
+      songList: [],
     };
   },
 
@@ -196,10 +208,21 @@ export default {
   },
   computed: {},
   methods: {
+    onPublishTime(d) {
+      let y = new Date(d);
+
+      let year = y.getFullYear();
+
+      let month = y.getMonth() + 1;
+
+      let date = y.getDate();
+
+      return `${year}.${month}.${date}`;
+    },
     //获取多个作者名字
     artistsStr(n) {
-      return n
-        .map((ar) => {
+      console.log(n);
+      return n?.map((ar) => {
           return ar.name;
         })
         .join("/");
@@ -207,29 +230,20 @@ export default {
 
     async getListDetails() {
       let id = this.$route.query.id;
-      let {data} = await this.$axios(getAlbumDetails(id));
+      let { data } = await this.$axios(getAlbumDetails(id));
       this.album = data.album;
       this.songList = data.songs;
-      console.log(this.album,this.songList);
-      // this.ListDetailsdata = data.playlist;
-      // //获取作品的名字和作者的名字
-      // this.tracksname = this.ListDetailsdata.tracks;
-      // //    this.tns=this.tracksname.tns[0]
-      // // console.log(" this.tns", this.tns);
-      // //获取背景图
-      // this.coverImgUrl = this.ListDetailsdata.coverImgUrl;
+      console.log(this.album, this.songList);
+
       // //获取播放全部的数量
       // this.trackCount = this.ListDetailsdata.trackCount;
-      // //获取收藏数量
-      // this.subscribedCount = this.ListDetailsdata.subscribedCount;
-      // //获取评论数量
-      // this.commentCount = this.ListDetailsdata.commentCount;
-      // //获取分享数量
-      // this.shareCount = this.ListDetailsdata.shareCount;
-      // console.log("  this.ListDetailsdata", this.ListDetailsdata);
+      
     },
 
     playCountLabel(Count) {
+      if(Count == 0 || !Count){
+        return ''
+      }
       let res = Count;
 
       if (Count >= 10000 && Count < 100000) {
@@ -238,6 +252,7 @@ export default {
       } else if (Count >= 100000) {
         res = Math.floor(res / 10000) + "万";
       }
+      
       return res;
     },
 
@@ -319,7 +334,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #222325;
-  z-index: 24;
+  z-index: 99;
   color: #fff;
   overflow: auto;
 
@@ -334,6 +349,7 @@ export default {
     align-items: center;
     z-index: 2;
     overflow: hidden;
+    background-image: linear-gradient(30deg, #565151 0%, #4a4a4a 100%);
 
     .form {
       z-index: 14;
@@ -383,9 +399,80 @@ export default {
 
   header {
     position: relative;
+    padding-top: 10px;
     margin-bottom: 35px;
     width: 100%;
-    height: 160px;
+    // height: 160px;
+    background-image: linear-gradient(30deg, #3d3939 0%, #4a4a4a 100%);
+
+    .info {
+      width: 100%;
+      margin-top: 40px;
+      padding: 20px 20px 40px 20px;
+      display: flex;
+
+      .singer-img {
+        width: 130px;
+        height: 130px;
+        position: relative;
+        &::before {
+          display: inline-block;
+          content: "";
+          overflow: hidden;
+          position: absolute;
+          top: -64px;
+          left: 53px;
+          width: 33px;
+          height: 92px;
+          z-index: 44;
+          background-image: url("@/assets/imgs/e0g.png");
+          background-position: center center;
+          background-repeat: no-repeat;
+          transform: rotateZ(-90deg);
+        }
+        .img {
+          border-radius: 8px;
+          overflow: hidden;
+          width: 100%;
+          display: block;
+        }
+      }
+      .detail {
+        padding: 10px;
+        margin-left: 20px;
+        .song-name {
+          color: #fff;
+          font-size: 14px;
+          letter-spacing: 2px;
+        }
+
+        .singer {
+          margin-bottom: 30px;
+          line-height: 40px;
+          font-size: 13px;
+          color: #bbb;
+          span {
+            font-size: 12px;
+          }
+        }
+        .time {
+          color: #bbb;
+          font-size: 12px;
+        }
+        .title {
+          margin-top: 10px;
+           color: #bbb;
+          span {
+           display: inline-block;
+            font-size: 12px;
+            width: 150px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+    }
 
     img {
       width: 100%;
