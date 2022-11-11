@@ -81,9 +81,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::-webkit-scrollbar{
+  display: none;
+}
 .current-palylist {
   width: 100vw;
-  margin: 0 auto 15px;
+  // margin: 0 auto 15px;
   border-radius: 15px;
   padding: 15px;
   color: #fff;

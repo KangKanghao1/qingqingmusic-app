@@ -8,7 +8,14 @@
         <span class="title">{{ title }}</span>
       </div>
 
-      <div class="playlist-list">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+          offset="300"
+          class="playlist-list"
+        >
         <div class="playlist-item" v-for="s in onSonglistData" :key="s.id">
           <div class="playlist-img">
             <img :src="s.coverImgUrl" />
@@ -25,8 +32,7 @@
             </div>
           </div>
         </div>
-      </div>
-
+        </van-list>
       <div v-show="allSonglistShow" class="play-all">
         查看全部{{ playlistCount }}个歌单
       </div>
@@ -63,7 +69,12 @@ export default {
       allSonglistShow: false,
       loadingShow: false,
       allStyle: false,
-      timer: null
+      timer: null,
+      loading: false,
+      finished: false,
+      offset: 0, // 偏移数量
+      limit: 20, //限制获取歌曲的数量
+      index: 0, // 记录请求轮次
     };
   },
   created() {
@@ -111,7 +122,7 @@ export default {
 
       this.loadingShow = false;
     }
-
+      this.index += 1;
     },
     onSynthesisData() {
       let songListArr = this.synthesisData.filter((s) => {
@@ -127,6 +138,39 @@ export default {
       } else {
         this.show = false;
       }
+    },
+        onLoad() {
+      if (this.tabsTitle == "1018") {
+        this.loading = false
+        return 
+      }
+      let offset = this.limit * this.index;
+      let limitNum = (this.offset * this.index) + this.limit;
+
+      if (limitNum > this.playlistCount) {
+          this.limit = this.playlistCount - this.limit * this.index;
+      }
+      SEARCH_TABS_CONTENT({
+        $axios: this.$axios,
+        id: this.tabsTitle,
+        val: this.keywords,
+        limit: this.limit,
+        offset
+      }).then((data) => {
+        
+        let res = data?.result?.playlists;
+        if(res){
+          this.allSonglist = [...this.allSonglist, ...res];
+        } 
+        
+        this.loading = false;
+
+        if (!res || res.length < 1) {
+          this.finished = true;
+        }
+      });
+
+      this.index += 1;
     },
   },
   watch: {

@@ -90,7 +90,7 @@ export default {
 .recently-play {
   position: fixed;
   top: 0px;
-  bottom: 100px;
+  bottom: 49px;
   width: 100%;
   background-color: #151515;
   ::v-deep .van-hairline--bottom::after {
