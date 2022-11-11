@@ -178,6 +178,7 @@ export default {
     height: 65px;
 
     .singer-info {
+      width: 80%;
       height: 100%;
       display: flex;
       justify-content: space-between;
@@ -204,6 +205,7 @@ export default {
         margin-left: 10px;
 
         .sing_n {
+          width: 80%;
           font-size: 13px;
           color: #ebebeb;
           margin-bottom: 5px;

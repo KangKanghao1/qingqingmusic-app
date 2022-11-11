@@ -1,83 +1,92 @@
 <template>
-  <div class="gedan-music">
-    <div class="gedan-icon">
-      <div class="quit-icon-title">
-        <i class="quit-icon" @click="gothePreviouspage"></i>
-        <span>歌单</span>
+  <transition name="anime" appear>
+    <div class="gedan-music">
+      <div class="gedan-icon">
+        <div class="quit-icon-title">
+          <i class="quit-icon" @click="gothePreviouspage"></i>
+          <span>歌单</span>
+        </div>
+        <i></i>
       </div>
-      <i></i>
-    </div>
-    <div class="gedan-bg-box">
-      <img
-        class="gedan-bg"
-        :src="
-          songMusictitle.picUrl
-            ? songMusictitle.picUrl
-            : songMusictitle.coverImgUrl
-        "
-      />
-      <div class="gedan-introduce">
+      <div class="gedan-bg-box">
         <img
-          class="gedan-introduce-bg"
+          class="gedan-bg"
           :src="
             songMusictitle.picUrl
               ? songMusictitle.picUrl
               : songMusictitle.coverImgUrl
           "
         />
-        <div class="introduce-content">
-          <div class="introduce-title van-multi-ellipsis--l2">
-            {{ songMusictitle.name }}
-          </div>
-          <div class="collect-icon-text">
-            <span class="collect-icon"></span>
-            <p class="collect-text">收藏</p>
+        <div class="gedan-introduce">
+          <img
+            class="gedan-introduce-bg"
+            :src="
+              songMusictitle.picUrl
+                ? songMusictitle.picUrl
+                : songMusictitle.coverImgUrl
+            "
+          />
+          <div class="introduce-content">
+            <div class="introduce-title van-multi-ellipsis--l2">
+              {{ songMusictitle.name }}
+            </div>
+            <div class="collect-icon-text">
+              <span class="collect-icon"></span>
+              <p class="collect-text">收藏</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="gedan-information">
-      <van-sticky :offset-top="50">
-        <div class="offset-demo">全部播放</div>
-      </van-sticky>
-      <div class="gedan-play-list">
-        <div v-for="s in songsdata" :key="s.id">
-          <div class="songsdata-content">
-            <i class="songdata-left-icon"></i>
-            <img class="songsdata-img" :src="s.picUrl" alt="" />
-            <div
-              class="songsdata-title"
-              :class="{ songscolor: s.id == playingMusic.id }"
-              @click.stop="changeoverMusci(s)"
-            >
-              <p class="song-name">{{ s.name }}</p>
-              <p class="alin-name" :class="{ alin: s.id == playingMusic.id }">
-                {{ s.alg.name }}
-              </p>
-            </div>
-            <div class="songdata-right-icon">
-              <i
-                class="songdata-right1"
+      <div class="gedan-information">
+        <van-sticky :offset-top="50">
+          <div class="offset-demo">全部播放</div>
+        </van-sticky>
+        <div class="gedan-play-list">
+          <van-loading
+            v-show="showloading"
+            class="spinnerloading"
+            type="spinner"
+            color="red"
+          />
+          <div v-for="s in songsdata" :key="s.id">
+            <div class="songsdata-content">
+              <i class="songdata-left-icon"></i>
+              <img class="songsdata-img" :src="s.picUrl" alt="" />
+              <div
+                class="songsdata-title"
+                :class="{ songscolor: s.id == playingMusic.id }"
                 @click.stop="changeoverMusci(s)"
-              ></i>
-              <i class="songdata-right2"></i>
+              >
+                <p class="song-name">{{ s.name }}</p>
+                <p class="alin-name" :class="{ alin: s.id == playingMusic.id }">
+                  {{ s.alg.name }}
+                </p>
+              </div>
+              <div class="songdata-right-icon">
+                <i class="songdata-right1" @click.stop="changeoverMusci(s)"></i>
+                <i class="songdata-right2"></i>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <PlayControl class="PlayControl-bottm" />
     </div>
-  </div>
+  </transition>
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
 import { getSongListdetailed } from "@/apis/index.js";
+import PlayControl from "@/components/PlayControl.vue";
 export default {
   data() {
     return {
       geadnMusic: "",
       songsdata: [],
       container: null,
+      // show loading显示
+      showloading: true,
     };
   },
   created() {
@@ -112,14 +121,17 @@ export default {
           },
         };
       });
+      this.showloading = !this.showloading;
     },
 
     gothePreviouspage() {
-      this.$router.go(-1)
-    }
+      this.$router.go(-1);
+    },
   },
 
-
+  components: {
+    PlayControl,
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -127,12 +139,17 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
+  padding: 0 0 50px;
   width: 100vw;
   height: 100%;
   background-color: #242121;
-  z-index: -1;
+  z-index: 25;
   color: #fff;
   overflow: auto;
+
+  .PlayControl-bottm {
+    bottom: 0;
+  }
 
   .gedan-icon {
     position: fixed;
@@ -230,7 +247,6 @@ export default {
     .offset-demo {
       border-top-left-radius: 15px;
       border-top-right-radius: 15px;
-      border-bottom: 1px solid #ddd;
       height: 50px;
       line-height: 50px;
       padding: 0 20px;
@@ -238,7 +254,6 @@ export default {
     }
     .gedan-play-list {
       width: 100vw;
-      padding-bottom: 100px;
       overflow: auto;
       background-color: rgb(6, 6, 6);
 
@@ -249,7 +264,6 @@ export default {
         padding: 10px 20px;
 
         .songdata-left-icon {
-          // display: block;
           margin-right: 10px;
           width: 20px;
           height: 20px;
@@ -257,7 +271,6 @@ export default {
           background-position: center center;
           background-size: cover;
           background-repeat: no-repeat;
-          content: "";
         }
         .songsdata-img {
           width: 50px;
@@ -323,5 +336,22 @@ export default {
       }
     }
   }
+}
+.spinnerloading {
+  width: 100vw !important;
+  margin: 50px 45% !important;
+}
+// 进入退出动画
+.anime-enter,
+.anime-leave-to {
+  transform: translateX(100%);
+}
+.anime-enter-active,
+.anime-leave-active {
+  transition: all 0.25s linear;
+}
+.anime-enter-to,
+.anime-leave {
+  transform: translateX(0);
 }
 </style>

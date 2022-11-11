@@ -1,7 +1,7 @@
 <template>
   <div class="transceiver-box" :class="{ 'all-transceiver':allStyle}">
     <div class="un-transceiver" v-show="!show">{{ title }}暂无搜索结果</div>
-    <div class="transceiver" v-show="!loadingShow">
+    <div class="transceiver" v-show="onShowFailure">
       <div class="transceiver-nav">
         <span class="title">{{ title }}</span>
       </div>
@@ -39,7 +39,7 @@
         type="spinner"
         size="26px"
         color="red"
-        v-show="loadingShow"
+        v-show="onShowSucceed"
         >加载中...</van-loading
       >
   </div>
@@ -122,15 +122,15 @@ export default {
         return s.type == "transceiver";
       });
       this.title = transceivertArr[0].title;
-      if (transceivertArr[0].data.djRadios) {
+      if (transceivertArr[0].data?.djRadios) {
         this.show = true;
         // this.allTransceiver = transceivertArr[0].data.djRadios;
         
-        this.synthesisTransceiver = transceivertArr[0].data.djRadios.slice(
+        this.synthesisTransceiver = transceivertArr[0].data?.djRadios.slice(
           0,
           3
         );
-        this.transceiverCount = transceivertArr[0].data.djRadiosCount;
+        this.transceiverCount = transceivertArr[0].data?.djRadiosCount;
       } else {
         this.show = false;
       }
@@ -164,7 +164,8 @@ export default {
         let transceivertArr = this.synthesisData.filter((s) => {
         return s.type == "transceiver";
       });
-      if (!transceivertArr[0]?.data) {
+
+      if (!transceivertArr[0]?.data?.djRadios) {
         
         return this.show;
       } else {
@@ -177,8 +178,8 @@ export default {
        let transceivertArr = this.synthesisData.filter((s) => {
         return s.type == "transceiver";
       });
-
-      if (!transceivertArr[0]?.data) {
+      
+      if (!transceivertArr[0]?.data?.djRadios) {
      
         return this.show;
       } else {

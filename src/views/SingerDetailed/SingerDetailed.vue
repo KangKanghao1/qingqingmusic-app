@@ -1,50 +1,58 @@
 <template>
-  <div class="singer-detailed">
-    <div class="singer-nav">
-      <i class="quit-ginger" @click="goqiutsinger"></i>
-    </div>
-    <div class="singer-name-img">
-      <img class="singer-img" :src="singerartistdata.picUrl" alt="" />
-      <div class="singer-mask">
-        <div class="mask-singer-name">{{ singerartistdata.name }}</div>
+  <transition name="anime" appear>
+    <div class="singer-detailed">
+      <div class="singer-nav">
+        <i class="quit-ginger" @click="goqiutsinger"></i>
       </div>
-    </div>
+      <div class="singer-name-img">
+        <img class="singer-img" :src="singerartistdata.picUrl" alt="" />
+        <div class="singer-mask">
+          <div class="mask-singer-name">{{ singerartistdata.name }}</div>
+        </div>
+      </div>
 
-    <van-tabs
-      sticky
-      color="#fff"
-      background="black"
-      title-inactive-color="#fff"
-      title-active-color="red"
-      offset-top="50px"
-    >
-      <van-tab class="single-song" title="单曲">
-        <van-sticky class="offset-title" :offset-top="90">
-          <div>
-            <div class="offset-content">
-              <i class="offset1-icon"></i>
-              <p>顺序播放</p>
+      <van-tabs
+        sticky
+        color="#fff"
+        background="black"
+        title-inactive-color="#fff"
+        title-active-color="red"
+        offset-top="50px"
+      >
+        <van-tab class="single-song" title="单曲">
+          <van-sticky class="offset-title" :offset-top="90">
+            <div>
+              <div class="offset-content">
+                <i class="offset1-icon"></i>
+                <p>顺序播放</p>
+              </div>
+              <div class="offset-song-icon"></div>
             </div>
-
-            <div class="offset-song-icon"></div>
-          </div>
-        </van-sticky>
-        <SingerSong
-          :singersongdata="singersongdata"
-          :singerartistdata="singerartistdata"
-        />
-      </van-tab>
-      <van-tab title="专辑" class="single-song">
-        <SingerHotAlbums :singerHotAlbums="singerHotAlbums" />
-      </van-tab>
-      <van-tab title="视频" class="single-song">
-        <SingerMV :singertMv="singertMv" />
-      </van-tab>
-      <van-tab title="详情" class="single-song">
-        <SingerDetailed :singerdesc="singerdesc" />
-      </van-tab>
-    </van-tabs>
-  </div>
+          </van-sticky>
+          <van-loading
+            v-show="showloading"
+            class="spinnerloading"
+            type="spinner"
+            color="red"
+          />
+          <SingerSong
+            :singersongdata="singersongdata"
+            :singerartistdata="singerartistdata"
+          />
+        </van-tab>
+        <van-tab title="专辑" class="single-song">
+          <SingerHotAlbums :singerHotAlbums="singerHotAlbums" />
+        </van-tab>
+        <van-tab title="视频" class="single-song">
+          <SingerMV :singertMv="singertMv" />
+        </van-tab>
+        <van-tab title="详情" class="single-song">
+          <SingerDetailed :singerdesc="singerdesc" />
+        </van-tab>
+      </van-tabs>
+      <PlayControl class="PlayControl-bottm" />
+    </div>
+  </transition>
 </template>
 <script>
 import {
@@ -57,6 +65,7 @@ import SingerSong from "@/components/SingersongComponents/SingerSong.vue";
 import SingerHotAlbums from "@/components/SingerHotAlbumsComponent/SingerHotAlbums.vue";
 import SingerMV from "@/components/SingerMVComponent/SingerMV.vue";
 import SingerDetailed from "@/components/SingerDetailedComponed/SingerDetailed.vue";
+import PlayControl from "@/components/PlayControl.vue";
 export default {
   data() {
     return {
@@ -66,6 +75,8 @@ export default {
       singerartistdata: {},
       // 歌手单曲
       singersongdata: [],
+      // show loading显示
+      showloading: true,
       // 专辑数据
       singerHotAlbums: [],
       // 歌手mv
@@ -80,6 +91,7 @@ export default {
     SingerHotAlbums,
     SingerMV,
     SingerDetailed,
+    PlayControl,
   },
 
   created() {
@@ -99,6 +111,7 @@ export default {
     goqiutsinger() {
       this.$router.go(-1);
     },
+
     // 获取歌手数据
     async getsingleSongdata() {
       let { data } = await this.$axios(getsingleSong(this.singerid));
@@ -120,6 +133,7 @@ export default {
         };
       });
       console.log("单曲 ==>", this.singersongdata);
+      this.showloading = !this.showloading;
     },
     // 专辑
     async getArtistAlbumdata() {
@@ -149,8 +163,13 @@ export default {
   height: 100vh;
   color: #fff;
   background-color: #222325;
-  padding-bottom: 100px;
+  padding-bottom: 50px;
   overflow: auto;
+  z-index: 25;
+
+  .PlayControl-bottm {
+    bottom: 0;
+  }
 
   .singer-nav {
     position: fixed;
@@ -236,5 +255,22 @@ export default {
       }
     }
   }
+  .spinnerloading {
+    width: 100vw !important;
+    margin: 50px 45% !important;
+  }
+}
+// 进入退出动画
+.anime-enter,
+.anime-leave-to {
+  transform: translateX(100%);
+}
+.anime-enter-active,
+.anime-leave-active {
+  transition: all 0.25s linear;
+}
+.anime-enter-to,
+.anime-leave {
+  transform: translateX(0);
 }
 </style>

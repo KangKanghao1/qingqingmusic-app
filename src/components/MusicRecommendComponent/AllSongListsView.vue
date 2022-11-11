@@ -45,7 +45,7 @@ export default {
 .all-song-lists-view {
   width: 100vw;
   height: 100vh;
-  padding: 55px 20px 100px;
+  padding: 55px 20px 50px;
   background-color: #242121;
   color: #fff;
   overflow: auto;

@@ -33,7 +33,7 @@
 <script>
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
-// import './base.scss';
+
 import { getRankingListdata } from "@/apis/rankinglist";
 export default {
   //     name: 'swiper-example-free-mode',

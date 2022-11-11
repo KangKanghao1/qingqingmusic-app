@@ -6,7 +6,14 @@
         <span class="title">{{ title }}</span>
       </div>
 
-      <div class="mv-list">
+      <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+          offset="300"
+          class="mv-list"
+        >
         <div class="mv-item" v-for="s in onMvData" :key="s.id">
           <div class="mv-img">
             <img :src="s.cover" alt="" />
@@ -21,8 +28,8 @@
               >
             </div>
           </div>
-        </div>
       </div>
+      </van-list>
       <div v-show="allMvShow" class="play-all">查看全部{{ mvCount }}个MV</div>
     </div>
      <van-loading
@@ -59,7 +66,12 @@ export default {
       allMvShow: false,
       loadingShow: false,
       allStyle: false,
-      timer: null
+      timer: null,
+      loading: false,
+      finished: false,
+      offset: 0, // 偏移数量
+      limit: 20, //限制获取歌曲的数量
+      index: 0, // 记录请求轮次
     };
   },
   created() {
@@ -81,7 +93,6 @@ export default {
       return new Promise((resolve)=>{
 
          this.timer = setTimeout(()=>{
-          console.log('等待...');
           resolve('loading...')
         },500)
 
@@ -108,6 +119,7 @@ export default {
 
       this.loadingShow = false;
     }
+    this.index += 1;
 
     },
     onSynthesisData() {
@@ -123,6 +135,39 @@ export default {
       } else {
         this.show = false;
       }
+    },
+    onLoad() {
+      if (this.tabsTitle == "1018") {
+        this.loading = false
+        return 
+      }
+      let offset = this.limit * this.index;
+      let limitNum = (this.offset * this.index) + this.limit;
+
+      if (limitNum > this.mvCount) {
+          this.limit = this.mvCount - this.limit * this.index;
+      }
+      SEARCH_TABS_CONTENT({
+        $axios: this.$axios,
+        id: this.tabsTitle,
+        val: this.keywords,
+        limit: this.limit,
+        offset
+      }).then((data) => {
+        
+        let res = data?.result?.mvs;
+        if(res){
+          this.allMv = [...this.allMv, ...res];
+        } 
+        
+        this.loading = false;
+
+        if (!res || res.length < 1) {
+          this.finished = true;
+        }
+      });
+
+      this.index += 1;
     },
   },
   watch: {
@@ -244,7 +289,7 @@ export default {
         background-position: center center;
         background-size: cover;
         background-repeat: no-repeat;
-        z-index: 999;
+        z-index: 22;
       }
       img {
         width: 100px;

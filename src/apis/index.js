@@ -69,7 +69,8 @@ export const getSongtypeareaList = (type,area,data) => `/artist/list?type=${type
 
 // 获取相似歌单 调用例子 : /simi/playlist?id=347230 ( 对应 ' 光辉岁月 ' 相似歌单 )
 
-// 获取专辑内容 调用例子 : /album?id=32311
+// 获取专辑内容 调用例子 : /album?id=32311 
+export const getalbumcontent = id => `/album?id=${id} `
 
 // 歌手全部歌曲/artist/songs?id=6452
 

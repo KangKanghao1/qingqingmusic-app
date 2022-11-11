@@ -1,84 +1,87 @@
 <template>
-  <div class="more-singer-view">
-    <div class="singer-nav">
-      <i class="singer-quit-icon" @click="goquitsonger"></i>
-      <div>歌手分类</div>
-    </div>
-
-    <div class="singer-class">
-      <div class="all-songer">
-        <span>全部歌手</span>
-        <div is-link @click="showPopup">筛选</div>
-      </div>
-      <div class="songer-title-text">热门歌手</div>
-
-      <div class="songer-class-list">
-        <ul class="songer-img-title">
-          <li v-for="s in singerdata" :key="s.id">
-            <img class="singer-img" v-lazy="s.picUrl" alt="" />
-            <div class="singer-name">
-              <p class="s-name">{{ s.name }}</p>
-              <span class="s-fanscount"
-                >粉丝：{{
-                  s.fansCount > 10000 ? s.fansCount / 1000 + "万" : s.fansCount
-                }}</span
-              >
-            </div>
-            <div class="close-fill">
-              <i
-                class="close-guanzhu-icon"
-             
-              ></i>
-              关注
-            </div>
-          </li>
-        </ul>
+  <transition name="anime" appear>
+    <div class="more-singer-view">
+      <div class="singer-nav">
+        <i class="singer-quit-icon" @click="goquitsonger"></i>
+        <div>歌手分类</div>
       </div>
 
-      <van-popup class="singerclass-popup" v-model="show" position="top">
-        <div class="pop-title">歌手分类</div>
-        <div class="songerclass-title">
-          <div class="allcalss list">
-            <div v-for="(a, i) in artisttype" :key="i">
-              <div
-                class="select-title"
-                :class="{ selectcolor: a.type == type }"
-                @click="modifytype(a)"
-              >
-                {{ a.title }}
-              </div>
-            </div>
-          </div>
-          <div class="region-calss list">
-            <div v-for="(b, i) in artistarea" :key="i">
-              <div
-                class="artist-title"
-                :class="{ selectcolor: b.types == types }"
-                @click="modifytypes(b)"
-              >
-                {{ b.title }}
-              </div>
-            </div>
-          </div>
-          <div class="surname-calss list">
-            <div v-for="(c, i) in songsurname" :key="i">
-              <div
-                class="songsur-title"
-                :class="{ selectcolor: c.typea == songclass }"
-                @click="modifysongclass(c)"
-              >
-                {{ c.title }}
-              </div>
-            </div>
-          </div>
+      <div class="singer-class">
+        <div class="all-songer">
+          <span>全部歌手</span>
+          <div is-link @click="showPopup">筛选</div>
         </div>
-      </van-popup>
+        <div class="songer-title-text">热门歌手</div>
+
+        <div class="songer-class-list">
+          <ul class="songer-img-title">
+            <li v-for="s in singerdata" :key="s.id">
+              <img class="singer-img" v-lazy="s.picUrl" alt="" />
+              <div class="singer-name">
+                <p class="s-name">{{ s.name }}</p>
+                <span class="s-fanscount"
+                  >粉丝：{{
+                    s.fansCount > 10000
+                      ? s.fansCount / 1000 + "万"
+                      : s.fansCount
+                  }}</span
+                >
+              </div>
+              <div class="close-fill">
+                <i class="close-guanzhu-icon"></i>
+                关注
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <van-popup class="singerclass-popup" v-model="show" position="top">
+          <div class="pop-title">歌手分类</div>
+          <div class="songerclass-title">
+            <div class="allcalss list">
+              <div v-for="(a, i) in artisttype" :key="i">
+                <div
+                  class="select-title"
+                  :class="{ selectcolor: a.type == type }"
+                  @click="modifytype(a)"
+                >
+                  {{ a.title }}
+                </div>
+              </div>
+            </div>
+            <div class="region-calss list">
+              <div v-for="(b, i) in artistarea" :key="i">
+                <div
+                  class="artist-title"
+                  :class="{ selectcolor: b.types == types }"
+                  @click="modifytypes(b)"
+                >
+                  {{ b.title }}
+                </div>
+              </div>
+            </div>
+            <div class="surname-calss list">
+              <div v-for="(c, i) in songsurname" :key="i">
+                <div
+                  class="songsur-title"
+                  :class="{ selectcolor: c.typea == songclass }"
+                  @click="modifysongclass(c)"
+                >
+                  {{ c.title }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </van-popup>
+        <PlayControl class="PlayControl-bottm" />
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
 import { getSongtypeareaList } from "@/apis/index";
+import PlayControl from "@/components/PlayControl.vue";
 import { mapState } from "vuex";
 
 export default {
@@ -291,6 +294,9 @@ export default {
       this.songclass = data.typea;
     },
   },
+  components: {
+    PlayControl,
+  },
 
   computed: {
     ...mapState(["AllSingers"]),
@@ -318,7 +324,11 @@ export default {
   color: #fff;
   background-color: #242121;
   overflow: auto;
-  z-index: 3;
+  z-index: 25;
+
+  .PlayControl-bottm {
+    bottom: 0;
+  }
 
   .singer-nav {
     position: fixed;
@@ -423,14 +433,16 @@ export default {
         .select-title {
           // color: aqua;
           &.selectcolor {
-            color: aqua;
+            font-weight: bold;
+            color: rgb(229, 10, 10);
           }
         }
       }
       .region-calss {
         .artist-title {
           &.selectcolor {
-            color: aqua;
+            font-weight: bold;
+            color: rgb(229, 10, 10);
           }
         }
       }
@@ -440,11 +452,25 @@ export default {
         .songsur-title {
           padding: 0 10px;
           &.selectcolor {
-            color: aqua;
+            font-weight: bold;
+            color: rgb(229, 10, 10);
           }
         }
       }
     }
   }
+}
+// 进入退出动画
+.anime-enter,
+.anime-leave-to {
+  transform: translateX(100%);
+}
+.anime-enter-active,
+.anime-leave-active {
+  transition: all 0.25s linear;
+}
+.anime-enter-to,
+.anime-leave {
+  transform: translateX(0);
 }
 </style>

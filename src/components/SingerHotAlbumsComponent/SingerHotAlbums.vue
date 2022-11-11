@@ -2,7 +2,7 @@
   <div class="singer-song-com">
     <div class="special-album">{{ singerHotAlbums.length }}张专辑</div>
     <ul class="singer-ul">
-      <li v-for="s in singerHotAlbums" :key="s.id">
+      <li v-for="s in singerHotAlbums" :key="s.id" >
         <div class="singer-al-name">
           <img class="singer-al-img" :src="s.blurPicUrl" alt="" />
           <div class="singer-song-name">
@@ -18,6 +18,9 @@
 export default {
   props: {
     singerHotAlbums: Array,
+  },
+  methods: {
+ 
   },
 };
 </script>
@@ -49,9 +52,9 @@ export default {
         }
         .singer-song-name {
           width: 60%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           .singer-name {
             margin-top: 5px;
             font-size: 12px;
