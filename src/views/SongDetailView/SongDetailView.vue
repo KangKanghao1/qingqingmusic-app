@@ -11,7 +11,6 @@
           </div>
           <i class="plus-icon"></i>
         </div>
-
         <div class="music-content">
           <div
             class="music-content-img"
@@ -29,7 +28,7 @@
                 :text="artists + ' - ' + playingMusic.name"
               />
               <span class="company"
-                >企业：{{ playingMusic.song.album.company }}</span
+                >企业:</span
               >
             </div>
 
@@ -42,14 +41,14 @@
         <div class="footer-paly-list">
           <div class="slider-content-ipt">
             <van-slider
-              v-model="value"
-              button-size="10"
+              v-model="progressValue"
+              button-size="14"
               bar-height="4px"
               class="slider"
-              active-color="rgb(72, 163, 253)"
+              active-color="linear-gradient(to right, #eec9a3 0%, #ef629f 100%)"
             />
             <div class="duration">
-              <p class="initial-duration">00:00</p>
+              <p class="initial-duration">{{ currentTimedata }}</p>
               <p class="end-duration">{{ palyTime }}</p>
             </div>
           </div>
@@ -66,24 +65,31 @@
           <div class="footer-random-icon">
             <i class="random-icon"></i>
             <p class="footer-text">当前歌曲</p>
-            <i class="list-icon"></i>
+            <i class="list-icon" @click="showSongList"></i>
           </div>
         </div>
       </div>
+
+
     </div>
   </transition>
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
+
 export default {
   data() {
-    return {
-      value: 0,
-    };
+    return {};
   },
 
   computed: {
-    ...mapState(["playingMusic", "duration", "audioPlayState"]),
+    ...mapState([
+      "songsList",
+      "playingMusic",
+      "audioPlayState",
+      "duration",
+      "currentTime",
+    ]),
     // 计算属性 如果是多个名字
     artists() {
       let arr = this.playingMusic?.song?.artists;
@@ -92,6 +98,7 @@ export default {
       }
       return null;
     },
+
     // 播放总时长
     palyTime() {
       let m = Math.floor(this.duration / 60);
@@ -100,14 +107,43 @@ export default {
       s = s >= 10 ? s : "0" + s;
       return m + ":" + s;
     },
+    // 当前播放时长
+    currentTimedata() {
+      let m = Math.floor(this.currentTime / 60);
+      let s = Math.floor(this.currentTime % 60);
+      m = m >= 10 ? m : "0" + m;
+      s = s >= 10 ? s : "0" + s;
+      return m + ":" + s;
+    },
+
+    // 计算属性修改 需要用到 get 和 set 方法，根据当前的duiation 和currentTime 计算当前进度条的值
+    progressValue: {
+      // 自动进度条
+      get() {
+        return (this.currentTime / this.duration) * 100;
+      },
+      // 拖拽进度条 需要 接收一个 由app 在路由传过来的方法
+      set(value) {
+        let currentTime = (value / 100) * this.duration;
+        // 反向传值接收的方法
+        this.$emit("setAudioCurrentTimevalue", currentTime);
+      },
+    },
+
+    // 拖拽进度条
+  },
+
+  created() {
+
   },
 
   methods: {
-    ...mapMutations(["audioPlayandstop", "NextsongMusic"]),
+    ...mapMutations(["audioPlayandstop", "NextsongMusic","showSongList"]),
     // 路由跳转到上一个页面
     quitgodiscover() {
       this.$router.go(-1);
     },
+
   },
 };
 </script>
@@ -148,7 +184,6 @@ export default {
 
   .song-detail {
     .slider-content-ipt {
-
       .duration {
         margin-top: 10px;
         font-size: 12px;
@@ -205,7 +240,7 @@ export default {
       .plus-icon {
         width: 20px;
         height: 20px;
-        background-image: url("../../assets/imgs/jiahao.png");
+        background-image: url("@/assets/imgs/jiahao.png");
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
@@ -261,7 +296,7 @@ export default {
             margin-top: 50px;
             width: 28px;
             height: 28px;
-            background-image: url("../../assets/imgs/未收藏 .png");
+            background-image: url("@/assets/imgs/未收藏 .png");
             background-position: center center;
             background-size: cover;
             background-repeat: no-repeat;
@@ -270,7 +305,7 @@ export default {
             margin-top: 20px;
             width: 28px;
             height: 28px;
-            background-image: url("../../assets/imgs/shengluehao.png");
+            background-image: url("@/assets/imgs/shengluehao.png");
             background-position: center center;
             background-size: cover;
             background-repeat: no-repeat;
@@ -289,7 +324,7 @@ export default {
       .lastone-icon {
         width: 40px;
         height: 40px;
-        background-image: url("../../assets/imgs/leftjiantouicon.png");
+        background-image: url("@/assets/imgs/leftjiantouicon.png");
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
@@ -298,20 +333,20 @@ export default {
       .paly-icon {
         width: 50px;
         height: 50px;
-        background-image: url("../../assets/imgs/music_ico_play_white.png");
+        background-image: url("@/assets/imgs/music_ico_play_white.png");
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
 
         &.pausemusic {
-          background-image: url("../../assets/imgs/music_ico_pause_white.png");
+          background-image: url("@/assets/imgs/music_ico_pause_white.png");
         }
       }
 
       .nex-icon {
         width: 40px;
         height: 40px;
-        background-image: url("../../assets/imgs/exo_icon_next.png");
+        background-image: url("@/assets/imgs/exo_icon_next.png");
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
@@ -327,7 +362,7 @@ export default {
     .random-icon {
       width: 35px;
       height: 35px;
-      background-image: url("../../assets/imgs/ic_player_mode_random1.png");
+      background-image: url("@/assets/imgs/ic_player_mode_random1.png");
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
@@ -342,7 +377,7 @@ export default {
     .list-icon {
       width: 35px;
       height: 35px;
-      background-image: url("../../assets/imgs/ic_player_current_playlist.png");
+      background-image: url("@/assets/imgs/ic_player_current_playlist.png");
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;

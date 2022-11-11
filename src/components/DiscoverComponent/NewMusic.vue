@@ -37,6 +37,7 @@ export default {
   },
   methods: {
     ...mapMutations(["changeoverMusci", "audioPlayandstop"]),
+
   },
 };
 </script>
@@ -85,7 +86,7 @@ export default {
             width: 100%;
             height: 100%;
             background-color: rgba(66, 77, 88, 0.6);
-            background-image: url("../assets/imgs/gdt_ic_play.png");
+            background-image: url("@/assets/imgs/gdt_ic_play.png");
             background-position: center center;
             background-size: 20px;
             background-repeat: no-repeat;
@@ -140,7 +141,7 @@ export default {
               background-color: #fff;
               margin-left: 2px;
               border-radius: 15px;
-              animation: maskanime 1.5s linear infinite;
+              animation: maskanime 1.5s 1s linear infinite;
               animation-play-state: paused;
               content: "";
               &.palyanime {
@@ -154,7 +155,7 @@ export default {
               background-color: #fff;
               margin-left: 2px;
               border-radius: 15px;
-              animation: maskanime 1.5s 1s linear infinite;
+              animation: maskanime 1.5s 1.5s linear infinite;
               animation-play-state: paused;
               content: "";
               &.palyanime {
@@ -178,14 +179,14 @@ export default {
 
 @keyframes maskanime {
   0% {
-    transform: scaleY(1.5);
+    transform: scaleY(1);
   }
 
   66% {
-    transform: scaleY(0.8);
+    transform: scaleY(1.5);
   }
   100% {
-    transform: scaleY(1.5);
+    transform: scaleY(1);
   }
 }
 </style>

@@ -2,11 +2,11 @@
   <div class="recommend-song">
     <div class="recommend-title">
       <h3>推荐歌单</h3>
-      <span>歌单广场</span>
+      <span @click="gomusicrecommend">歌单广场</span>
     </div>
     <div class="song-content">
       <div class="song-list" v-for="r in RecommendSong" :key="r.id">
-        <div class="song-img-title">
+        <div class="song-img-title" @click="goGedanMusic(r)">
           <img class="song-img" v-lazy="r.picUrl" />
           <p class="van-multi-ellipsis--l2 song-text">{{ r.name }}</p>
         </div>
@@ -15,9 +15,25 @@
   </div>
 </template>
 <script>
+import { mapMutations } from "vuex";
 export default {
   props: {
     RecommendSong: Array,
+  },
+
+  methods: {
+    ...mapMutations(["getsongMusictitle"]),
+    // 跳转到歌单页面
+    gomusicrecommend() {
+      this.$router.push(`/musicrecommend`);
+    },
+    // 跳转到歌单歌曲页面
+    goGedanMusic(data) {
+      this.$router.push(`/gedanmusic/?objid=${data.id}`);
+      // 把歌单标题等存进vuex
+      this.getsongMusictitle(data);
+      console.log(123);
+    },
   },
 };
 </script>
@@ -35,11 +51,10 @@ export default {
     display: flex;
     justify-content: space-between;
     color: #fff;
-
   }
 
   .song-content {
-   background-color: #222325;
+    background-color: #222325;
     width: 100%;
     padding: 10px 15px;
     display: flex;
@@ -61,7 +76,7 @@ export default {
       .song-text {
         font-size: 12px;
         line-height: 15px;
-        text-align:center;
+        text-align: center;
       }
     }
   }

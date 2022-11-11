@@ -1,5 +1,5 @@
 
-import {Slider, NavBar, Tabbar, List, TabbarItem, Icon, Search, Swipe, SwipeItem, Lazyload, Tab, Tabs,Popup,NoticeBar,Dialog ,Sticky,ShareSheet,Checkbox,CheckboxGroup,Loading    } from 'vant'
+import {Slider, NavBar, Tabbar,PullRefresh, List, TabbarItem, Icon, Search, Swipe, SwipeItem,Toast, Lazyload, Tab, Tabs,Popup,NoticeBar,Dialog ,Sticky,ShareSheet,Checkbox,CheckboxGroup,Loading    } from 'vant'
 
 
 const vantCompontents = [
@@ -8,6 +8,8 @@ const vantCompontents = [
     Tabbar,
     TabbarItem,
     Icon,
+    Toast ,
+    PullRefresh,
     Search,
     Swipe,
     SwipeItem,

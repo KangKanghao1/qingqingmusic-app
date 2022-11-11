@@ -1,7 +1,10 @@
 <template>
-  <transition name="fadeout" appear>
+  <transition name="fadeout">
     <div class="app">
-      <router-view />
+      <!-- 路由也可以反向传值 -->
+      <keep-alive>
+        <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
+      </keep-alive>
       <PlayControl />
       <van-tabbar
         class="router-title"
@@ -22,11 +25,18 @@
         position="bottom"
         :overlay-style="{ opacity: 0.5 }"
         @click-overlay="hideSongList"
+        
       >
         <CurrentPalyList
       /></van-popup>
       <!-- @canplay="setMusicdurationdata" 获取音乐总时长  -->
-      <audio :src="songUrl" ref="audio" @canplay="setMusicdurationdata" />
+      <audio
+        :src="songUrl"
+        ref="audio"
+        @canplay="getMusicdurationdata"
+        @timeupdate="getcurrenpalytTime"
+        @ended="NextsongMusic"
+      />
     </div>
   </transition>
 </template>
@@ -34,7 +44,6 @@
 <script>
 // 引入vuex mapActions
 import { mapActions, mapMutations, mapState } from "vuex";
-
 import PlayControl from "@/components/PlayControl.vue";
 import CurrentPalyList from "@/components/CurrentPalyList.vue";
 import { getSongUrl } from "./apis/play";
@@ -45,7 +54,12 @@ export default {
   },
 
   computed: {
-    ...mapState(["showSongList", "playingMusic", "audioPlayState"]),
+    ...mapState([
+      "showSongList",
+      "playingMusic",
+      "audioPlayState",
+      "musiclyric",
+    ]),
     // 计算属性 获取playingMusic音乐的id来赋值给 getSongUrl里的id路径
     songUrl() {
       return getSongUrl(this.playingMusic.id);
@@ -53,11 +67,26 @@ export default {
   },
   methods: {
     // 引入的vuex的方法数据
-    ...mapMutations(["hideSongList", "setMusicduration"]),
+    ...mapMutations([
+      "hideSongList",
+      "Musicduration",
+      "currenpalytTime",
+      "getmusiclyricdata",
+      "NextsongMusic"
+    ]),
     ...mapActions(["getNewSong"]),
     // 获取音乐的总播放时长
-    setMusicdurationdata() {
-      this.setMusicduration(this.$refs.audio.duration);
+    getMusicdurationdata() {
+      this.Musicduration(this.$refs.audio.duration);
+    },
+
+    // 获取当前播放时间
+    getcurrenpalytTime() {
+      this.currenpalytTime(this.$refs.audio.currentTime);
+    },
+    // 控制播放进度条
+    setAudioCurrentTimevalue(currentTime) {
+      this.$refs.audio.currentTime = currentTime;
     },
   },
 
@@ -70,7 +99,6 @@ export default {
   watch: {
     // 接受一个新值和一个旧值
     audioPlayState(newVal, oldVal) {
-
       if (newVal !== oldVal) {
         if (newVal) {
           // 代表播放歌曲
@@ -81,8 +109,6 @@ export default {
         }
       }
     },
-
-
   },
 };
 </script>
@@ -120,7 +146,7 @@ export default {
     transform: translateY(100%);
   }
   .fadeout-leave-active {
-    transition: all 5s linear;
+    transition: all 5s 2s linear;
   }
   .fadeout-leave {
     transform: translateY(0);

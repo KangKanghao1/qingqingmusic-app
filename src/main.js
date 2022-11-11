@@ -16,8 +16,11 @@ Vue.use(VueAxiosPlugin, {
   resHandleFunc: response => response,
   resErrorFunc: error => Promise.reject(error)
 })
+Vue.prototype.axios = VueAxiosPlugin;
 
 Vue.use(VantConfig)
+
+
 
 Vue.config.productionTip = false
 
