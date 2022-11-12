@@ -8,6 +8,7 @@ import UserPage from "@/views/UserView/UserPage.vue"
 import LoginView from "@/views/UserView/LoginView.vue"
 import store from "@/store/index"
 
+
 // import CommentsView from "@/views/VideoClipView/CommentsView.vue"
 
 Vue.use(VueRouter)
@@ -32,11 +33,25 @@ const routes = [
     children: [{
       path: "ranking-list",
       name: "ranking-list",
-      component: () => import("../views/TypeNavView/RankingList.vue")
-    }, {
+      component: () => import("../views/TypeNavView/RankingListView/RankingList.vue")
+    },
+
+    {
       path: "esch-rankingList",
       name: "esch-rankingList",
-      component: () => import("../views/TypeNavView/EschRankingList.vue")
+      component: () => import("../views/TypeNavView/RankingListView/EschRankingList.vue"),
+      children: [{
+        path: "/esch-rankingList/comments-section",
+        name: "/esch-rankingList/comments-section",
+        component: () => import("../views/TypeNavView/RankingListView/CommentsSection.vue")
+      }]
+
+
+    },
+    {
+      path: "digital-album",
+      name: "digital-album",
+      component: () => import("../views/TypeNavView/DigitalAlbumView/DigitalAlbum.vue")
     },
     {
       path: "search",
@@ -126,6 +141,16 @@ const routes = [
     component: () => import("@/views/SingerDetailed/SingerDetailed.vue"),
   },
 
+  {
+    path: "/dailysongs",
+    name: "dailysongs",
+    component: () => import("@/views/DiscovrView/DailySongsView/DailySongsView.vue")
+  },
+  {
+    path: "/singermv",
+    name: "singermv",
+    component: () => import("@/views/SingerMV/SingerMvView.vue")
+  },
 
 
 ]

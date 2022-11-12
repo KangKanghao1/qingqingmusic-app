@@ -2,7 +2,7 @@
   <div class="new-music">
     <div class="music-title-icon">
       <h3 class="music-title">推荐歌曲</h3>
-      <span>更多</span>
+      <span @click="gotoDilySong">更多</span>
     </div>
     <div class="music-list">
       <div v-for="n in NewMusic" :key="n.id">
@@ -36,7 +36,12 @@ export default {
     ...mapState(["playingMusic", "audioPlayState"]),
   },
   methods: {
+    
     ...mapMutations(["changeoverMusci", "audioPlayandstop"]),
+    
+    gotoDilySong() {
+      this.$router.push("/dailysongs")
+    }
 
   },
 };

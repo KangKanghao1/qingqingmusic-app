@@ -16,16 +16,18 @@
         <div class="songer-class-list">
           <ul class="songer-img-title">
             <li v-for="s in singerdata" :key="s.id">
-              <img class="singer-img" v-lazy="s.picUrl" alt="" />
-              <div class="singer-name">
-                <p class="s-name">{{ s.name }}</p>
-                <span class="s-fanscount"
-                  >粉丝：{{
-                    s.fansCount > 10000
-                      ? s.fansCount / 1000 + "万"
-                      : s.fansCount
-                  }}</span
-                >
+              <div class="singer-img-name" @click="gosingerDetailed(s.id)">
+                <img class="singer-img" v-lazy="s.picUrl" alt="" />
+                <div class="singer-name">
+                  <p class="s-name">{{ s.name }}</p>
+                  <span class="s-fanscount"
+                    >粉丝：{{
+                      s.fansCount > 10000
+                        ? s.fansCount / 1000 + "万"
+                        : s.fansCount
+                    }}</span
+                  >
+                </div>
               </div>
               <div class="close-fill">
                 <i class="close-guanzhu-icon"></i>
@@ -272,6 +274,9 @@ export default {
       this.singerdata = data.artists;
       console.log("gesu", data.artists);
     },
+  gosingerDetailed(id) {
+      this.$router.push(`/singer/?singerid=${id}`);
+    },
 
     // popup显示
     showPopup() {
@@ -363,18 +368,23 @@ export default {
         display: flex;
         align-items: center;
         padding: 10px 20px 0;
-        .singer-img {
-          width: 50px;
-          height: 50px;
-          margin-right: 10px;
-          border-radius: 999px;
-          display: block;
-        }
+        .singer-img-name {
+          width: 70%;
+          display: flex;
+          align-items: center;
+          .singer-img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 999px;
+            display: block;
+          }
 
-        .singer-name {
-          .s-fanscount {
-            font-size: 12px;
-            color: rgb(193, 193, 193);
+          .singer-name {
+            .s-fanscount {
+              font-size: 12px;
+              color: rgb(193, 193, 193);
+            }
           }
         }
         .close-fill {

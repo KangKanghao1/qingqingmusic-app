@@ -71,7 +71,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 20;
+  z-index: 2;
   &.display{
     position: fixed;
   left: 0px;

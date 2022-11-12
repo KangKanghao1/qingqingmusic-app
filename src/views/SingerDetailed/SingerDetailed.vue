@@ -3,6 +3,7 @@
     <div class="singer-detailed">
       <div class="singer-nav">
         <i class="quit-ginger" @click="goqiutsinger"></i>
+        <span>{{ singerartistdata.name }}</span>
       </div>
       <div class="singer-name-img">
         <img class="singer-img" :src="singerartistdata.picUrl" alt="" />
@@ -132,7 +133,7 @@ export default {
           },
         };
       });
-      console.log("单曲 ==>", this.singersongdata);
+
       this.showloading = !this.showloading;
     },
     // 专辑
@@ -179,6 +180,9 @@ export default {
     height: 50px;
     padding: 20px;
     z-index: 3;
+    background-color: #000;
+    display: flex;
+    align-items: center;
     .quit-ginger {
       display: block;
       width: 20px;
