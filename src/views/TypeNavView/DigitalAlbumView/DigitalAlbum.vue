@@ -159,12 +159,12 @@ export default {
     async getNewDiscShelves() {
       let { data } = await this.$axios(getNewDiscShelves);
       this.products = data.products;
+
     },
     async getDigitalAlbumdata() {
       let { data } = await this.$axios(
         getDigitalAlbumdata(this.getType)
       );
-      console.log(this.getType);
       this.DigitalAlbumdata = data.products;
     },
      async getDigitalAlbumdata2() {

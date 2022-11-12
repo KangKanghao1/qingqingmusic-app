@@ -14,9 +14,13 @@
           offset="300"
           class="album-list"
         >
-        <div class="album-item" v-for="s in onAlbumData" :key="s.id">
+        <div class="album-item" v-for="s in onAlbumData" :key="s.id" @click="toAlbumDetail(s.id)">
           <div class="album-img">
-            <img :src="s.blurPicUrl" alt="" />
+            <van-image lazy-load :src="s.blurPicUrl" width="40" height="40">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
           </div>
 
           <div class="sing-name">
@@ -92,7 +96,6 @@ export default {
       return new Promise((resolve)=>{
 
          this.timer = setTimeout(()=>{
-          console.log('等待...');
           resolve('loading...')
         },500)
 
@@ -189,6 +192,10 @@ export default {
 
       this.index += 1;
     },
+    // 去专辑详情页
+    toAlbumDetail(id){
+      this.$router.push(`/discovr/search/album?id=${id}`);
+    }
   },
   watch: {
     synthesisData() {
@@ -207,9 +214,12 @@ export default {
     ...mapState(["synthesisData", "keywords"]),
     onAlbumData() {
       if (this.tabsTitle == "1018") {
+  
         return this.synthesisAlbum;
       } else {
+
         return this.allAlbum;
+        
       }
     },
         // 请求数据为undefined

@@ -9,7 +9,7 @@
         </div>
 
         <div class="single-list">
-          <div class="single-item" v-for="r in recentlyPlay" :key="r.id">
+          <div class="single-item" v-for="r in recentlyPlay" :key="r.id" @click="toPlayControl(r)">
             <div class="sing-name">
               <div class="song_n">{{ r.name }}</div>
               <div class="singer_n">{{ "singerName(r.ar)" }}</div>
@@ -25,6 +25,7 @@
   </div>
 </template>
 <script>
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -36,26 +37,31 @@ export default {
     this.onRecentlyPlay();
   },
   methods: {
+    ...mapMutations(["changeoverMusci"]),
     // 获取本地存储数据
     onRecentlyPlay() {
       let playList = JSON.parse(localStorage.getItem("recentlyPlay") ?? "[]");
 
       if (playList.length >= 1) {
         this.recentlyPlay = playList;
-        console.log(this.recentlyPlay);
         this.show = true;
       } else {
         this.show = false;
       }
+    },
+    // 跳转播放详情页
+    toPlayControl(s) {
+      this.changeoverMusci(s);
+      this.$router.push(`/songdata/${s.id}`);
     },
   },
 };
 </script>
 <style lang="scss" scoped>
 .song {
-  height: 100%;
+  height: 80vh;
   width: 100%;
-  overflow-x: auto;
+  overflow-y: auto;
   .unplay-song {
     color: #bbb;
     font-size: 12px;

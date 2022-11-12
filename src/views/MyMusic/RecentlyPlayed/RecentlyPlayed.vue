@@ -3,10 +3,10 @@
     <van-nav-bar left-text="最近播放" left-arrow @click-left="onClickLeft">
     </van-nav-bar>
 
-      <van-tabs v-model="active" offset-top="45px" sticky background="#383737" lazy-render ref="tabs" swipeable color="#fb736f" title-inactive-color="#d6d6d6" title-active-color="#e7e7e7">
-   <van-tab title="歌曲"><SongleView /></van-tab>
+      <van-tabs v-model="active" offset-top="45px" sticky background="#383737" lazy-render ref="tabs" swipeable color="#e4393c" title-inactive-color="#d6d6d6" title-active-color="#e7e7e7">
+   <van-tab :title="`歌曲(${playListCount})`"><SongleView /></van-tab>
    <van-tab title="视频"><RecentlyVideo /></van-tab>
-   <van-tab title="歌单"><SongList /></van-tab>
+   <van-tab :title="`歌单(${songListCount})`"><SongList /></van-tab>
    <van-tab title="专辑"><RecentlyAlbum /></van-tab>
    <van-tab title="电台"><RecentlyTransceiver /></van-tab>
    
@@ -27,6 +27,8 @@ export default {
       show: false,
       recentlyPlay: [],
       active: 0,
+      playListCount: 0, // 单曲
+      songListCount: 0 // 歌单
     }
   },
   created(){
@@ -35,19 +37,14 @@ export default {
   methods: {
     // 获取本地存储数据
     onRecentlyPlay(){
-
+      
+      // 单曲
      let playList = JSON.parse(localStorage.getItem('recentlyPlay')??"[]");
-    
-     if (playList.length >= 1) {
-       this.recentlyPlay = playList;
-       console.log(this.recentlyPlay);
-       this.show = true;
-
-     }else{
-
-       this.show = false;
-
-     }
+     // 歌单
+     let songList = JSON.parse(localStorage.getItem('SONGLIST')??"[]");
+     
+      this.playListCount = playList.length
+      this.songListCount = songList.length
     },
     onClickLeft() {
       this.$router.go(-1);

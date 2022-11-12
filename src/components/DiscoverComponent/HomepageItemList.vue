@@ -22,13 +22,15 @@ export default {
         this.$router.push(`/discovr/ranking-list?id=${id}`);
       } else if (id == 13000) {
         this.$router.push(`/discovr/digital-album?id=${id}`);
+      } else if (id == -2 || -1) {
+        this.$router.push("/dailysongs");
       }
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   display: none;
 }
 .homepage-content {

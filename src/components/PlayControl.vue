@@ -41,7 +41,7 @@ export default {
     },
     onPicUrl(){
       
-     return this.playingMusic.picUrl ? this.playingMusic.picUrl:this.playingMusic.al.picUrl;
+     return this.playingMusic?.picUrl ? this.playingMusic.picUrl:this.playingMusic.al.picUrl;
      
     }
   },
@@ -52,10 +52,6 @@ export default {
     gotoDetalil() {
       this.$router.push(`/songdata/${this.playingMusic.id}`);
     },
-  },
-
-  mounted() {
-    console.log(this.playingMusic);
   },
 };
 </script>
@@ -71,7 +67,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 11;
+  z-index: 20;
+
   &.display{
     position: fixed;
   left: 0px;

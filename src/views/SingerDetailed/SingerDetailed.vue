@@ -1,85 +1,157 @@
 <template>
-  <div class="singer-detailed">
-    <div class="singer-nav">
-      <i class="quit-ginger"></i>
-    </div>
-    <div class="singer-name-img">
-      <img :src="singerartistdata.picUrl" alt="" />
-      <div class="singer-mask">
-        <div class="mask-singer-name">{{ singerartistdata.name }}</div>
+  <transition name="anime" appear>
+    <div class="singer-detailed">
+      <div class="singer-nav">
+        <i class="quit-ginger" @click="goqiutsinger"></i>
+        <span>{{ singerartistdata.name }}</span>
       </div>
-    </div>
+      <div class="singer-name-img">
+        <img class="singer-img" :src="singerartistdata.picUrl" alt="" />
+        <div class="singer-mask">
+          <div class="mask-singer-name">{{ singerartistdata.name }}</div>
+        </div>
+      </div>
 
-    <van-tabs
-      sticky
-      color="#fff"
-      background="black"
-      title-inactive-color="#fff"
-      title-active-color="red"
-      offset-top="50px"
-    >
-      <van-tab class="single-song" title="单曲">
-        <van-sticky :offset-top="100">
-          <div>顺序播放</div>
-        </van-sticky>
-        <SingerSong
-          :singersongdata="singersongdata"
-          :singerartistdata="singerartistdata"
-        />
-      </van-tab>
-      <van-tab title="专辑">
-        <van-sticky :offset-top="100">
-          <div>吸顶距离</div>
-        </van-sticky>
-        <div>456</div>
-      </van-tab>
-      <van-tab title="视频">
-        <van-sticky :offset-top="100">
-          <div>吸顶距离</div>
-        </van-sticky>
-        内容 3</van-tab
+      <van-tabs
+        sticky
+        color="#fff"
+        background="black"
+        title-inactive-color="#fff"
+        title-active-color="red"
+        offset-top="50px"
       >
-      <van-tab title="详情">
-        <van-sticky :offset-top="100"> <div>吸顶距离</div> </van-sticky>内容
-        4</van-tab
-      >
-    </van-tabs>
-  </div>
+        <van-tab class="single-song" title="单曲">
+          <van-sticky class="offset-title" :offset-top="90">
+            <div>
+              <div class="offset-content">
+                <i class="offset1-icon"></i>
+                <p>顺序播放</p>
+              </div>
+              <div class="offset-song-icon"></div>
+            </div>
+          </van-sticky>
+          <van-loading
+            v-show="showloading"
+            class="spinnerloading"
+            type="spinner"
+            color="red"
+          />
+          <SingerSong
+            :singersongdata="singersongdata"
+            :singerartistdata="singerartistdata"
+          />
+        </van-tab>
+        <van-tab title="专辑" class="single-song">
+          <SingerHotAlbums :singerHotAlbums="singerHotAlbums" />
+        </van-tab>
+        <van-tab title="视频" class="single-song">
+          <SingerMV :singertMv="singertMv" />
+        </van-tab>
+        <van-tab title="详情" class="single-song">
+          <SingerDetailed :singerdesc="singerdesc" />
+        </van-tab>
+      </van-tabs>
+      <PlayControl class="PlayControl-bottm" />
+    </div>
+  </transition>
 </template>
 <script>
-import { getsingleSong } from "@/apis/index";
+import {
+  getsingleSong,
+  getArtistAlbum,
+  getartistmvdata,
+  getsingerdesc,
+} from "@/apis/index";
 import SingerSong from "@/components/SingersongComponents/SingerSong.vue";
+import SingerHotAlbums from "@/components/SingerHotAlbumsComponent/SingerHotAlbums.vue";
+import SingerMV from "@/components/SingerMVComponent/SingerMV.vue";
+import SingerDetailed from "@/components/SingerDetailedComponed/SingerDetailed.vue";
+import PlayControl from "@/components/PlayControl.vue";
 export default {
   data() {
     return {
       // 歌手id
       singerid: "",
-      //   歌手详情
+      // 歌手详情
       singerartistdata: {},
-      //   歌手单曲
+      // 歌手单曲
       singersongdata: [],
+      // show loading显示
+      showloading: true,
+      // 专辑数据
+      singerHotAlbums: [],
+      // 歌手mv
+      singertMv: [],
+      // 详情
+      singerdesc: {},
     };
   },
 
   components: {
     SingerSong,
+    SingerHotAlbums,
+    SingerMV,
+    SingerDetailed,
+    PlayControl,
   },
 
   created() {
     this.singerid = this.$route.query.singerid;
     this.getsingleSongdata();
+    // 专辑
+    this.getArtistAlbumdata();
+
+    // mv
+    this.getsingerartistmvdata();
+
+    // 描述
+    this.getsingerdescdata();
   },
 
   methods: {
+    goqiutsinger() {
+      this.$router.go(-1);
+    },
+
     // 获取歌手数据
     async getsingleSongdata() {
       let { data } = await this.$axios(getsingleSong(this.singerid));
       this.singerartistdata = data.artist;
-      this.singersongdata = data.hotSongs;
-      console.log("123", this.singersongdata);
-      console.log(this.singerartistdata);
+      // 单曲
+      this.singersongdata = data.hotSongs.map((d) => {
+        return {
+          id: d.id,
+          name: d.name,
+          picUrl: d.al.picUrl,
+          alg: d.al,
+          song: {
+            artists: [
+              {
+                name: this.singerartistdata.name,
+              },
+            ],
+          },
+        };
+      });
+
+      this.showloading = !this.showloading;
+    },
+    // 专辑
+    async getArtistAlbumdata() {
+      let { data } = await this.$axios(getArtistAlbum(this.singerid));
+      this.singerHotAlbums = data.hotAlbums;
+    },
+    // mv
+    async getsingerartistmvdata() {
+      let { data } = await this.$axios(getartistmvdata(this.singerid));
+      this.singertMv = data.mvs;
     },
 
+    async getsingerdescdata() {
+      let data = await this.$axios(getsingerdesc(this.singerid));
+      this.singerdesc = data.data;
+      // console.log("描述 ==>", data.data);
+    },
   },
 };
 </script>
@@ -92,8 +164,13 @@ export default {
   height: 100vh;
   color: #fff;
   background-color: #222325;
-  padding-bottom: 100px;
+  padding-bottom: 50px;
   overflow: auto;
+  z-index: 25;
+
+  .PlayControl-bottm {
+    bottom: 0;
+  }
 
   .singer-nav {
     position: fixed;
@@ -103,6 +180,9 @@ export default {
     height: 50px;
     padding: 20px;
     z-index: 3;
+    background-color: #000;
+    display: flex;
+    align-items: center;
     .quit-ginger {
       display: block;
       width: 20px;
@@ -118,9 +198,11 @@ export default {
 
   .singer-name-img {
     width: 100%;
+    height: 320px;
     position: relative;
-    img {
+    .singer-img {
       width: 100%;
+      height: 100%;
       display: block;
     }
     .singer-mask {
@@ -140,7 +222,60 @@ export default {
       }
     }
   }
+
   .single-song {
+    .offset-title {
+      div {
+        padding: 0 25px 0px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        height: 30px;
+        line-height: 30px;
+        background-color: #000;
+
+        .offset-content {
+          .offset1-icon {
+            display: block;
+            width: 28px;
+            height: 28px;
+            background-image: url("@/assets/imgs/ic_player_mode_all1.png");
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            content: "";
+          }
+        }
+        .offset-song-icon {
+          display: block;
+          width: 20px;
+          height: 20px;
+          background-image: url("@/assets/imgs/jiarugedan.png");
+          background-position: center center;
+          background-size: 20px;
+          background-repeat: no-repeat;
+          content: "";
+        }
+      }
+    }
   }
+  .spinnerloading {
+    width: 100vw !important;
+    margin: 50px 45% !important;
+  }
+}
+// 进入退出动画
+.anime-enter,
+.anime-leave-to {
+  transform: translateX(100%);
+}
+.anime-enter-active,
+.anime-leave-active {
+  transition: all 0.25s linear;
+}
+.anime-enter-to,
+.anime-leave {
+  transform: translateX(0);
 }
 </style>

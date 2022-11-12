@@ -1,49 +1,39 @@
 <template>
-  <transition name="fadeout">
-    <div class="app">
-      <!-- 路由也可以反向传值 -->
-
+  <div class="app">
+    <!-- 路由也可以反向传值 -->
       <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
-      <PlayControl :PlayStyle="PlayStyle" />
+    <PlayControl :PlayStyle="PlayStyle"/>
+    <van-tabbar
+      class="router-title"
+      fixed
+      route
+      active-color="#fff"
+      inactive-color="#fff"
+    >
+      <van-tabbar-item to="/discovr">发现</van-tabbar-item>
+      <van-tabbar-item to="/mymusic">我的音乐</van-tabbar-item>
+      <van-tabbar-item to="/video">视频</van-tabbar-item>
+      <van-tabbar-item to="/user">我的</van-tabbar-item>
+    </van-tabbar>
 
-      <!-- <keep-alive>
-        <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
-      </keep-alive>
-      <PlayControl /> -->
-
-      <van-tabbar
-        class="router-title"
-        fixed
-        route
-        active-color="#fff"
-        inactive-color="#fff"
-      >
-        <van-tabbar-item to="/discovr">发现</van-tabbar-item>
-        <van-tabbar-item to="/mymusic">我的音乐</van-tabbar-item>
-        <van-tabbar-item to="/video">视频</van-tabbar-item>
-        <van-tabbar-item to="/user">我的</van-tabbar-item>
-      </van-tabbar>
-
-      <van-popup
-        :value="showSongList"
-        round
-        position="bottom"
-        :overlay-style="{ opacity: 0.5 }"
-        @click-overlay="hideSongList"
-        
-      >
-        <CurrentPalyList
-      /></van-popup>
-      <!-- @canplay="setMusicdurationdata" 获取音乐总时长  -->
-      <audio
-        :src="songUrl"
-        ref="audio"
-        @canplay="getMusicdurationdata"
-        @timeupdate="getcurrenpalytTime"
-        @ended="NextsongMusic"
-      />
-    </div>
-  </transition>
+    <van-popup
+      :value="showSongList"
+      round
+      position="bottom"
+      :overlay-style="{ opacity: 0.5 }"
+      @click-overlay="hideSongList"
+    >
+      <CurrentPalyList
+    /></van-popup>
+    <!-- @canplay="setMusicdurationdata" 获取音乐总时长  -->
+    <audio
+      :src="songUrl"
+      ref="audio"
+      @canplay="getMusicdurationdata"
+      @timeupdate="getcurrenpalytTime"
+      @ended="NextsongMusic"
+    />
+  </div>
 </template>
 
 <script>
@@ -53,10 +43,10 @@ import PlayControl from "@/components/PlayControl.vue";
 import CurrentPalyList from "@/components/CurrentPalyList.vue";
 import { getSongUrl } from "./apis/play";
 export default {
-  data(){
-    return{
-      PlayStyle: false
-    }
+  data() {
+    return {
+      PlayStyle: false,
+    };
   },
   components: {
     PlayControl,
@@ -82,7 +72,7 @@ export default {
       "Musicduration",
       "currenpalytTime",
       "getmusiclyricdata",
-      "NextsongMusic"
+      "NextsongMusic",
     ]),
     ...mapActions(["getNewSong"]),
     // 获取音乐的总播放时长
@@ -107,21 +97,21 @@ export default {
 
   // 监听播放
   watch: {
-    $route(to){
+    $route(to) {
       if (to.name == "discovr") {
-        console.log('a');
+
         this.PlayStyle = false;
 
       }else if(to.name == "mymusic"){
-        console.log('a');
+        
         this.PlayStyle = false;
       }else if(to.name == "video"){
-        console.log('a');
+       
         this.PlayStyle = false;
       }else if(to.name == "user"){
-        console.log('a');
+      
         this.PlayStyle = false;
-      }else{
+      } else {
         this.PlayStyle = true;
       }
     },
@@ -138,27 +128,22 @@ export default {
       }
     },
     // 监听歌曲变化,添加最近播放本地存储
-    playingMusic(){
-     let music = JSON.parse(localStorage.getItem('changerMusci')??"{}")
-     let recently = JSON.parse(localStorage.getItem('recentlyPlay')??"[]")
+    playingMusic() {
+      let music = JSON.parse(localStorage.getItem("changerMusci") ?? "{}");
+      let recently = JSON.parse(localStorage.getItem("recentlyPlay") ?? "[]");
 
       if (recently.length < 1) {
         localStorage.recentlyPlay = JSON.stringify([music]);
       }
 
-       let res = recently.find(r => r?.id == music.id);
-       if (!res) {
-
-         localStorage.recentlyPlay = JSON.stringify([music,...recently]);
-
-       }else{
-
-        let data = recently.filter(r => r.id !== music.id);
+      let res = recently.find((r) => r?.id == music.id);
+      if (!res) {
+        localStorage.recentlyPlay = JSON.stringify([music, ...recently]);
+      } else {
+        let data = recently.filter((r) => r.id !== music.id);
         localStorage.recentlyPlay = JSON.stringify([music, ...data]);
-
-       }
-        
-    }
+      }
+    },
   },
 };
 </script>
@@ -167,15 +152,15 @@ export default {
 .app {
   .router-title {
     overflow: hidden;
-    background-color: #222325 !important;
+    background-color: #222325;
     font-weight: bold;
   }
   .van-tabbar-item--active {
-    background-color: #222325 !important;
+    background-color: #222325;
   }
 
   .van-tabbar-item {
-    font-size: 16px !important;
+    font-size: 16px;
   }
 
   .van-popup {
@@ -186,10 +171,10 @@ export default {
 }
 
 .van-dialog {
-  color: #fff !important;
-  background-color: #222325 !important;
+  color: #fff ;
+  background-color: #222325 ;
   .van-button--default {
-    background-color: #aaa !important;
+    background-color: #aaa ;
   }
 
   .fadeout-leave-to {
