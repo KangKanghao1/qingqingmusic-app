@@ -16,7 +16,11 @@
         >
         <div class="mv-item" v-for="s in onMvData" :key="s.id">
           <div class="mv-img">
-            <img :src="s.cover" alt="" />
+            <van-image lazy-load :src="s.cover" class="img" width="100px">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
           </div>
 
           <div class="sing-name">

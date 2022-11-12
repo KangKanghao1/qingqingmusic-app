@@ -10,7 +10,7 @@
       <div class="new-arrival-header">
         <div class="text">最新上架 <van-icon name="arrow" /></div>
       </div>
-      
+
       <div class="new-arrival-content">
         <div class="new-arrival-minibox" v-for="p in products" :key="p.albumId" @click="getid(p.albumId)">
           <div class="new-arrival-img">
@@ -164,7 +164,7 @@ export default {
       let { data } = await this.$axios(
         getDigitalAlbumdata(this.getType)
       );
-      console.log(this.getType);
+
       this.DigitalAlbumdata = data.products;
     },
      async getDigitalAlbumdata2() {

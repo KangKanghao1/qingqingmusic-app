@@ -69,7 +69,6 @@ export default {
       this.liveCount = playList.length;
       if (playList.length >= 1) {
         this.liveList = playList;
-        console.log(this.liveList);
         this.show = true;
       } else {
         this.show = false;

@@ -10,7 +10,7 @@ const vantCompontents = [
     Tabbar,
     TabbarItem,
     Icon,
-    Toast ,
+    Toast,
     PullRefresh,
     Search,
     Swipe,
@@ -25,12 +25,13 @@ const vantCompontents = [
     ShareSheet,
     Checkbox,
     CheckboxGroup,
-    Loading ,
+    Loading,
     Dialog,
     Overlay,
     Collapse,
     CollapseItem,
     Button 
+
 ]
 
 export default {

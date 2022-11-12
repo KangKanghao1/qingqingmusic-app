@@ -7,8 +7,12 @@
     <div class="bang">
       <div v-for="t in toplistartistData" :key="t.id">
         <div class="bang-img-title" @click="gosingerDetailed(t.id)">
-          <img class="bang-img" v-lazy="t.picUrl" />
-
+          <!-- <img class="bang-img" v-lazy="t.picUrl" /> -->
+            <van-image lazy-load :src="t.picUrl" width="100%">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
           <div class="score-data">
             <i class="score-iocn"></i>
             <span class="score">{{

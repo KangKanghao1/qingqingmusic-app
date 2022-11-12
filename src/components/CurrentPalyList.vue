@@ -7,47 +7,51 @@
       </div>
       <div class="songsList-icon">
         <i class="file-icon"></i>收藏
-        <i class="empty-icon" @click="delplaySongList" ></i>
+        <i class="empty-icon" @click="delplaySongList"></i>
       </div>
     </div>
     <ul class="play-list-song">
       <li class="songslist-content" v-for="(s, i) in songsList" :key="i">
-        <div class="songsList">
-          <div class="song-list-top">
-            <img
-              class="li-iconimg"
-              :class="{ listiconimg: s.id == playingMusic.id }"
-              :src="s.picUrl"
-              alt=""
-            />
-            <span v-show="s.id !== playingMusic.id">{{ i + 1 }}</span>
-          </div>
-          <div class="songslist-name" @click="changeoverMusci(s)">
-            <p
-              class="music-name"
-              :class="{ selected: s.id == playingMusic.id }"
-            >
-              {{ s.name }}
-            </p>
-            <div
-              class="artists"
-              :class="{ selectedas: s.id == playingMusic.id }"
-            >
-              {{ s.song?.artists[0]?.name }}
+        <transition name="songlist-anime">
+          <div class="songsList">
+            <div class="song-list-top">
+              <img
+                class="li-iconimg"
+                :class="{ listiconimg: s.id == playingMusic.id }"
+                :src="s.picUrl"
+                alt=""
+              />
+              <span v-show="s.id !== playingMusic.id">{{ i + 1 }}</span>
             </div>
-          </div>
-          <div class="like-del-download-icon">
-            <div class="like-download-icon">
-              <i class="like-icon"></i>
-              <i class="download-icon"></i>
+            <div class="songslist-name" @click="changeoverMusci(s)">
+              <p
+                class="music-name"
+                :class="{ selected: s.id == playingMusic.id }"
+              >
+                {{ s.name }}
+              </p>
+              <div
+                class="artists"
+                :class="{ selectedas: s.id == playingMusic.id }"
+              >
+                {{ s.song?.artists[0]?.name }}
+              </div>
             </div>
-            <i class="del-icon" @click.stop="delsongmusic(s.id)"></i>
-          </div>
-        </div>
+            <div class="like-del-download-icon">
+              <div class="like-download-icon">
+                <i class="like-icon"></i>
+                <i class="download-icon" ></i>
+              </div>
+              <i class="del-icon" @click.stop="delsongmusic(s.id)"></i>
+            </div>
+          </div> 
+        </transition>
       </li>
-      <div class="muscilist-show" v-show="songsList.length == 0">列表中还没有歌曲哦！</div>
+
+      <div class="muscilist-show" v-show="songsList.length == 0">
+        列表中还没有歌曲哦！
+      </div>
     </ul>
-    
   </div>
 </template>
 <script>
@@ -56,16 +60,15 @@ import { Dialog } from "vant";
 export default {
   computed: {
     ...mapState(["songsList", "playingMusic", "audioPlayState"]),
-
   },
   methods: {
-    ...mapMutations(["changeoverMusci", "delallSongList","delsongmusic"]),
+    ...mapMutations(["changeoverMusci", "delallSongList", "delsongmusic"]),
     // 弹出确定要清空播放队列
     delplaySongList() {
       Dialog.confirm({
         title: "清空队列",
         message: "确定要清空播放队列吗?",
-      confirmButtonColor:'red'
+        confirmButtonColor: "red",
       })
         .then(() => {
           // on confirm
@@ -81,7 +84,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   display: none;
 }
 .current-palylist {
@@ -215,19 +218,6 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
-
-            .like-icon {
-              display: block;
-              width: 20px;
-              height: 20px;
-              background-image: url("../assets/imgs/未收藏 .png");
-              background-position: center center;
-              background-size: cover;
-              background-repeat: no-repeat;
-              content: "";
-              margin-right: 20px;
-            }
-
             .download-icon {
               display: block;
               width: 20px;
@@ -257,4 +247,13 @@ export default {
   }
 }
 
+.songlist-anime-enter {
+  display: block;
+}
+.songlist-anime-active {
+  transition: all 1s linear;
+}
+.songlist-anime-to {
+  display: none;
+}
 </style>

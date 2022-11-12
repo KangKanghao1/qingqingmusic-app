@@ -10,18 +10,19 @@
         class="minibox"
         v-for="l in RankingListdata"
         :key="l.id"
-        @click="getId(l.id)"
         :style="{ backgroundImage: `url(${l.coverImgUrl})` }"
       >
-        <div class="minibox-tou">
-          <div class="name">{{ l.name }}</div>
-          <div class="updateFrequency">{{ l.updateFrequency }}</div>
-        </div>
+        <div @click="getId(l.id)">
+          <div class="minibox-tou">
+            <div class="name">{{ l.name }}</div>
+            <div class="updateFrequency">{{ l.updateFrequency }}</div>
+          </div>
 
-        <div class="minibox-content">
-          <div class="tracks">
-            <div class="first" v-for="(t, i) in l?.tracks" :key="i">
-              {{ i + 1 }} {{ t?.first }}
+          <div class="minibox-content">
+            <div class="tracks">
+              <div class="first" v-for="(t, i) in l?.tracks" :key="i">
+                {{ i + 1 }} {{ t?.first }}
+              </div>
             </div>
           </div>
         </div>
@@ -63,7 +64,7 @@ export default {
     },
 
     getId(id) {
-      this.$router.push(`/discovr/esch-rankingList?w=${id}`);
+      this.$router.push(`/discovr/esch-rankingList?i=${id}`);
     },
   },
 
@@ -76,19 +77,18 @@ export default {
 
 <style lang="scss" scoped>
 .music-ranking {
-    margin-top: 10px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    line-height: 30px;
-    color: #f3f3f3;
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    margin-bottom: 15px;
-
-  }
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 30px;
+  color: #f3f3f3;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  margin-bottom: 15px;
+}
 .officiallist-box {
   height: 132px;
 

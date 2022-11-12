@@ -7,7 +7,12 @@
     <div class="song-content">
       <div class="song-list" v-for="r in RecommendSong" :key="r.id">
         <div class="song-img-title" @click="goGedanMusic(r)">
-          <img class="song-img" v-lazy="r.picUrl" />
+          <!-- <img class="song-img" v-lazy="r.picUrl" /> -->
+          <van-image lazy-load :src="r.picUrl" class="song-img">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
           <p class="van-multi-ellipsis--l2 song-text">{{ r.name }}</p>
         </div>
       </div>
@@ -29,10 +34,11 @@ export default {
     },
     // 跳转到歌单歌曲页面
     goGedanMusic(data) {
-      this.$router.push(`/gedanmusic/?objid=${data.id}`);
+      
+      this.$router.push(`/gedanmusic/?objid=${JSON.stringify(data)}`);
       // 把歌单标题等存进vuex
       this.getsongMusictitle(data);
-      console.log(123);
+
     },
   },
 };

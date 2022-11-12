@@ -14,10 +14,6 @@ export default new Vuex.Store({
     synthesisData: [], // 搜索模块综合数据
     // 歌曲列表
     songsList: [],
-
-    // 当前播放歌曲  等于本地缓存中的 changerMusci
-    // JSON.parse(localStorage.changerMusci),
-
     // 当前播放歌曲  等于本地缓存中的 
     playingMusic: {},
     // 显示隐藏歌曲列表组件 的控件 Popup 弹出层
@@ -33,7 +29,6 @@ export default new Vuex.Store({
     // 播放总时长
     duration: 0,
     // 控制上一首下一首music
-
     randommusic: 0,
     // 歌单歌曲封面
     songMusictitle: [],
@@ -84,16 +79,7 @@ export default new Vuex.Store({
 
     // 切换歌曲
     changeoverMusci(state, music) {
-      console.log(music);
       state.playingMusic = music
-
-
-      // 检测遍历传进来的music map遍历如果数组中已近有了传进来的歌曲则不添加
-      // 否则添加返回一个新数组对象
-      state.songsList = state.songsList.map(r => {
-        return { ...music, ...r }
-      })
-
       // 使用 find 方法来查找state.songsList 里面的歌曲 如果 查找输出等于undifeined
       //  则代表不是数组里面的歌曲则添加返回一个新数组对象
     let obj = state.songsList.find(x => x.id ==music.id)
@@ -104,6 +90,7 @@ export default new Vuex.Store({
 
       // 存进本地缓存中
       localStorage.changerMusci = JSON.stringify(music)
+      localStorage.songsList = JSON.stringify(state.songsList)
       // 点击切换歌曲之后自动播放 必须设置定时器异步控制state.audioPlayState的值
       // 因为在 app 设置的 watch 监听了 属性 上一个值需要为不同值才可以播放
       if (state.audioPlayState == false) {
@@ -146,15 +133,7 @@ export default new Vuex.Store({
 
     },
 
-
-    // LastoneMusic(state) {
-    //   state.playingMusic = state.songsList[state.randommusic]
-    // },
-
-    // 控制播放暂停 如果控制页面上的推荐歌曲点击动画需要给事件设置事件冒泡
-
     // 控制播放暂停 
-
     audioPlayandstop(state) {
       state.audioPlayState = !state.audioPlayState
     },
@@ -194,7 +173,7 @@ export default new Vuex.Store({
         songsList = data.result
         // // 默认播放列表 存到本地缓存中   本地只能存储字符串需要转换
         localStorage.songsList = JSON.stringify(songsList)
-        console.log(123);
+   
         // 当前数据持久话的歌曲
         localStorage.changerMusci = JSON.stringify(songsList[0])
 
@@ -205,7 +184,6 @@ export default new Vuex.Store({
       if (state.playingMusic == {}) {
         commit('setPlayingMusic', JSON.parse(localStorage.changerMusci??"{}"))
       } else {
-
         commit('setPlayingMusic', JSON.parse(localStorage.changerMusci??"{}"))
       }
 
