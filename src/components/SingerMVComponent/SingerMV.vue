@@ -15,6 +15,7 @@
   </div>
 </template>
 <script>
+// import 
 export default {
   props: {
     singertMv: Array,

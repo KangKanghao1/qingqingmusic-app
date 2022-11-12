@@ -22,10 +22,7 @@
             <div class="introduce-title van-multi-ellipsis--l2">
               推荐歌曲
             </div>
-            <div class="collect-icon-text">
-              <span class="collect-icon"></span>
-              <p class="collect-text">收藏</p>
-            </div>
+   
           </div>
         </div>
       </div>
@@ -154,7 +151,7 @@ export default {
     width: 100vw;
     .gedan-bg {
       width: 100%;
-      filter: blur(30px);
+      // filter: blur(30px);
       display: block;
     }
 
@@ -177,7 +174,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         .introduce-title {
-          width: 80%;
+          width: 100%;
           font-size: 20px;
           text-align: center;
         }
