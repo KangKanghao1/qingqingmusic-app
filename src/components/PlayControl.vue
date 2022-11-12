@@ -67,12 +67,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-<<<<<<< HEAD
-  z-index: 2;
-=======
   z-index: 20;
 
->>>>>>> 066c55ff42e8ae7e94e43f3b9577e3095fb06500
   &.display{
     position: fixed;
   left: 0px;

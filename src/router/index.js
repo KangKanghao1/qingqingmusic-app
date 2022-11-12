@@ -14,147 +14,152 @@ import store from "@/store/index"
 Vue.use(VueRouter)
 
 const routes = [{
-    // 自定义重定义跳转到主页
-    path: '',
-    redirect: '/discovr',
+  // 自定义重定义跳转到主页
+  path: '',
+  redirect: '/discovr',
 
+},
+{
+  path: '/',
+  redirect: '/discovr',
+
+},
+{
+  path: '/discovr',
+  name: 'discovr',
+  component: DiscovrView,
+
+  children: [{
+    path: "ranking-list",
+    name: "ranking-list",
+    component: () => import("../views/TypeNavView/RankingListView/RankingList.vue")
   },
-  {
-    path: '/',
-    redirect: '/discovr',
 
-  },
   {
-    path: '/discovr',
-    name: 'discovr',
-    component: DiscovrView,
-
+    path: "esch-rankingList",
+    name: "esch-rankingList",
+    component: () => import("../views/TypeNavView/RankingListView/EschRankingList.vue"),
     children: [{
-      path: "ranking-list",
-      name: "ranking-list",
-      component: () => import("../views/TypeNavView/RankingListView/RankingList.vue")
-    },
-
-    {
-      path: "esch-rankingList",
-      name: "esch-rankingList",
-      component: () => import("../views/TypeNavView/RankingListView/EschRankingList.vue"),
-      children: [{
-        path: "/esch-rankingList/comments-section",
-        name: "/esch-rankingList/comments-section",
-        component: () => import("../views/TypeNavView/RankingListView/CommentsSection.vue")
-      }]
-
-
-    },
-    {
-      path: "digital-album",
-      name: "digital-album",
-      component: () => import("../views/TypeNavView/DigitalAlbumView/DigitalAlbum.vue")
-    },
-    {
-      path: "search",
-      name: "search",
-      component: () => import('@/views/DiscovrView/SearchView/SearchView.vue'),
-    }
-    ]
-  },
-
-  {
-    path: '/mymusic',
-    name: 'mymusic',
-    component: MyMusic,
-    children: [{
-        path: "recently-played",
-        name: "recently-played",
-        component: () => import("../views/MyMusic/RecentlyPlayed/RecentlyPlayed.vue")
-      },
-      {
-        path: "live",
-        name: "live",
-        component: () => import("../views/MyMusic/MyLive.vue")
-      },
-      {
-        path: "attention",
-        name: "attention",
-        component: () => import("../views/MyMusic/AttentionSinger.vue")
-      }
-    ]
-  },
-
-  {
-    path: '/video',
-    name: 'video',
-    component: VideoClipView,
-  },
-  {
-    path: '/login',
-    name: 'login',
-    //  component: ()=> import('@/views/UserView/LoginView.vue'),
-    component: LoginView,
-
-  },
-
-  {
-    path: '/user',
-    name: 'user',
-    component: UserView,
-    beforeEnter: (to, from, next) => {
-      if (store.state.isLogin) {
-        next()
-      } else {
-        next('/login')
-      }
-    },
-    children: [{
-      path: "user-page",
-      name: "user-page",
-      component: UserPage
+      path: "/esch-rankingList/comments-section",
+      name: "/esch-rankingList/comments-section",
+      component: () => import("../views/TypeNavView/RankingListView/CommentsSection.vue")
     }]
-  },
-  {
-    path: "/Comments-list",
-    name: "comments-list",
-    component: () => import("../views/VideoClipView/CommentsView")
-  },
 
-  {
-    path: "/songdata/:id",
-    name: "songdata",
-    component: () => import("../views/SongDetailView/SongDetailView.vue")
-  },
 
-  {
-    path: "/musicrecommend",
-    name: "musicrecommend",
-    component: () => import("@/views/DiscovrView/MusicRecommend/MusicRecommend.vue")
   },
   {
-    path: "/moresinger",
-    name: "moresinger",
-    component: () => import("@/views/DiscovrView/MoreSinger/MoreSinger.vue")
+    path: "digital-album",
+    name: "digital-album",
+    component: () => import("../views/TypeNavView/DigitalAlbumView/DigitalAlbum.vue")
   },
   {
-    path: "/gedanmusic",
-    name: "gedanmusic",
-    component: () => import("@/views/GedanMusicView/GedanMusicView.vue")
-  },
-  {
-    path: "/singer",
-    name: "singer",
-    component: () => import("@/views/SingerDetailed/SingerDetailed.vue"),
-  },
+    path: "search",
+    name: "search",
+    component: () => import('@/views/DiscovrView/SearchView/SearchView.vue'),
+    children: [{
+      path: "album",
+      name: "album",
+      component: () => import('@/views/AlbumDetail/AlbumDetail.vue'),
+    }]
+  }
+  ]
+},
 
-  {
-    path: "/dailysongs",
-    name: "dailysongs",
-    component: () => import("@/views/DiscovrView/DailySongsView/DailySongsView.vue")
+{
+  path: '/mymusic',
+  name: 'mymusic',
+  component: MyMusic,
+  children: [{
+    path: "recently-played",
+    name: "recently-played",
+    component: () => import("../views/MyMusic/RecentlyPlayed/RecentlyPlayed.vue")
   },
   {
-    path: "/singermv",
-    name: "singermv",
-    component: () => import("@/views/SingerMV/SingerMvView.vue")
+    path: "live",
+    name: "live",
+    component: () => import("../views/MyMusic/MyLive.vue")
   },
+  {
+    path: "attention",
+    name: "attention",
+    component: () => import("../views/MyMusic/AttentionSinger.vue")
+  }
+  ]
+},
+
+{
+  path: '/video',
+  name: 'video',
+  component: VideoClipView,
+},
+{
+  path: '/login',
+  name: 'login',
+  //  component: ()=> import('@/views/UserView/LoginView.vue'),
+  component: LoginView,
+
+},
+
+{
+  path: '/user',
+  name: 'user',
+  component: UserView,
+  beforeEnter: (to, from, next) => {
+    if (store.state.isLogin) {
+      next()
+    } else {
+      next('/login')
+    }
+  },
+  children: [{
+    path: "user-page",
+    name: "user-page",
+    component: UserPage
+  }]
+},
+{
+  path: "/Comments-list",
+  name: "comments-list",
+  component: () => import("../views/VideoClipView/CommentsView")
+},
+
+{
+  path: "/songdata/:id",
+  name: "songdata",
+  component: () => import("../views/SongDetailView/SongDetailView.vue")
+},
+
+{
+  path: "/musicrecommend",
+  name: "musicrecommend",
+  component: () => import("@/views/DiscovrView/MusicRecommend/MusicRecommend.vue")
+},
+{
+  path: "/moresinger",
+  name: "moresinger",
+  component: () => import("@/views/DiscovrView/MoreSinger/MoreSinger.vue")
+},
+{
+  path: "/gedanmusic",
+  name: "gedanmusic",
+  component: () => import("@/views/GedanMusicView/GedanMusicView.vue")
+},
+{
+  path: "/singer",
+  name: "singer",
+  component: () => import("@/views/SingerDetailed/SingerDetailed.vue"),
+},
+
+{
+  path: "/dailysongs",
+  name: "dailysongs",
+  component: () => import("@/views/DiscovrView/DailySongsView/DailySongsView.vue")
+},
+{
+  path: "/singermv",
+  name: "singermv",
+  component: () => import("@/views/SingerMV/SingerMvView.vue")
+},
 
 
 ]

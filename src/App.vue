@@ -3,7 +3,7 @@
     <!-- 路由也可以反向传值 -->
       <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
  
-    <PlayControl />
+    <PlayControl :PlayStyle="PlayStyle"/>
     <van-tabbar
       class="router-title"
       fixed

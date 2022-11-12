@@ -3,7 +3,7 @@
     <div class="special-album">{{ singerHotAlbums.length }}张专辑</div>
     <ul class="singer-ul">
       <li v-for="s in singerHotAlbums" :key="s.id" >
-        <div class="singer-al-name">
+        <div class="singer-al-name" @click="toAlbumDetail(s.id)">
           <img class="singer-al-img" :src="s.blurPicUrl" alt="" />
           <div class="singer-song-name">
             <span class="singer-title-1hang">{{ s.name }}</span>
@@ -20,7 +20,10 @@ export default {
     singerHotAlbums: Array,
   },
   methods: {
- 
+    // 去专辑详情页
+    toAlbumDetail(id){
+      this.$router.push(`/discovr/search/album?id=${id}`);
+    }
   },
 };
 </script>
