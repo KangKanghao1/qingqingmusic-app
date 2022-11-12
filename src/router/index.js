@@ -45,31 +45,18 @@ const routes = [{
         component: () => import("../views/TypeNavView/RankingListView/CommentsSection.vue")
       }]
     },
-    {
-      path: "digital-album",
-      name: "digital-album",
-      component: () => import("../views/TypeNavView/DigitalAlbumView/DigitalAlbum.vue"),
-      children: [{
-        path: "/digital-album/albumpiece",
-        name: "albumpiece",
-        component: () => import("../views/TypeNavView/DigitalAlbumView/AlbumPiece.vue")
-      }]
-    },
-    {
-      path: "search",
-      name: "search",
-      component: ()=> import('@/views/DiscovrView/SearchView/SearchView.vue'),
-    }
-  ]
-  },
-
 
 
   
   {
     path: "digital-album",
     name: "digital-album",
-    component: () => import("../views/TypeNavView/DigitalAlbumView/DigitalAlbum.vue")
+    component: () => import("../views/TypeNavView/DigitalAlbumView/DigitalAlbum.vue"),
+    children: [{
+      path: "/digital-album/albumpiece",
+      name: "albumpiece",
+      component: () => import("../views/TypeNavView/DigitalAlbumView/AlbumPiece.vue")
+    }]
   },
   {
     path: "search",
@@ -178,9 +165,9 @@ const routes = [{
   name: "singermv",
   component: () => import("@/views/SingerMV/SingerMvView.vue")
 },
+  ]
 
-
-]
+}]
 
 const router = new VueRouter({
   mode: 'history',
