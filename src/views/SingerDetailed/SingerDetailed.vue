@@ -222,6 +222,7 @@ export default {
       }
     }
   }
+
   .single-song {
     .offset-title {
       div {

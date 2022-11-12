@@ -13,8 +13,7 @@ import store from "@/store/index"
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     // 自定义重定义跳转到主页
     path: '',
     redirect: '/discovr',
@@ -66,15 +65,20 @@ const routes = [
     name: 'mymusic',
     component: MyMusic,
     children: [{
-      path: "recently-played",
-      name: "recently-played",
-      component: () => import("../views/MyMusic/RecentlyPlayed/RecentlyPlayed.vue")
-    },
-    {
-      path: "live",
-      name: "live",
-      component: () => import("../views/MyMusic/MyLive.vue")
-    }
+        path: "recently-played",
+        name: "recently-played",
+        component: () => import("../views/MyMusic/RecentlyPlayed/RecentlyPlayed.vue")
+      },
+      {
+        path: "live",
+        name: "live",
+        component: () => import("../views/MyMusic/MyLive.vue")
+      },
+      {
+        path: "attention",
+        name: "attention",
+        component: () => import("../views/MyMusic/AttentionSinger.vue")
+      }
     ]
   },
 

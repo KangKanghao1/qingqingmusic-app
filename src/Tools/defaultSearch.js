@@ -87,7 +87,7 @@ export const ALL_SEARCH_CONTENT =async ({
     })
 
     }
-    console.log(allSearchData);
+ 
     return new Promise((relsove)=> {
       relsove(allSearchData)
     })
@@ -112,4 +112,6 @@ export const SEARCH_TABS_CONTENT = ({$axios, id, val,limit = 20,offset = 0}) => 
 
 // 歌手粉丝数量
 export const singerFansCount = id => `/artist/follow/count?id=${id}`
+
+export const getAlbumDetails = id => `/album?id=${id}`
 
