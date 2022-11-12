@@ -43,7 +43,7 @@ export default {
           shareCount: p.shareCount,
         };
       });
-      console.log(data.playlists);
+
     },
 
     quitmusicrecommend() {

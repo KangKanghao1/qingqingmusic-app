@@ -23,6 +23,7 @@ export const getpersonalizedmv = '/personalized/mv'
 // 必选参数 : id: mv id
 // 可选参数 : r: 分辨率,默认 1080,可从 /mv/detail 接口获取分辨率列表
 // /mv/url?id=5436712 /mv/url?id=10896407&r=1080
+export const getmvplay = id => `/mv/url?id=${id}`
 
 // 获取歌手mv
 // /artist/mv?id=6452

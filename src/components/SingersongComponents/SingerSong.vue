@@ -3,11 +3,10 @@
     <ul class="singer-ul">
       <li v-for="s in singersongdata" :key="s.id">
 
-        <div class="singer-al-name">
-          <!-- <img class="singer-al-img" :src="s.al.picUrl" alt="" /> -->
+        <div class="singer-al-name" @click="changeoverMusci(s)">
           <van-image
           lazy-load
-          :src="s.al.picUrl"
+          :src="s.picUrl"
           class="singer-al-img"
         >
           <template v-slot:loading>
@@ -15,7 +14,7 @@
           </template>
         </van-image>
         
-          <div class="singer-song-name">
+          <div class="singer-song-name" :class="{colorred2:s.id == playingMusic.id}">
             <span>{{ s.name }}</span>
             <p class="singer-name" :class="{colorred2:s.id == playingMusic.id}">{{ singerartistdata.name }}</p>
           </div>
@@ -35,8 +34,14 @@ export default {
   computed: {
     ...mapState(["playingMusic"]),
   },
+  
   methods: {
     ...mapMutations(["changeoverMusci"]),
+    getdada() {
+      console.log(this.singersongdata);
+    }
+
+    
   },
 };
 </script>
@@ -64,10 +69,14 @@ export default {
           display: block;
           width: 50px;
           height: 50px;
-          border-radius: 15px;
+          border-radius: 10px;
+          overflow: hidden;
           margin-right: 10px;
         }
         .singer-song-name {
+           &.colorred2{
+               color: red;
+            }
           .singer-name {
             margin-top: 5px;
             font-size: 12px;

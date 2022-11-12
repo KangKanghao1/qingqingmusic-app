@@ -3,11 +3,11 @@
     <div class="singer-mv-count">{{ singertMv.length }}个视频</div>
     <ul class="singer-mv-list">
       <li v-for="s in singertMv" :key="s.id">
-        <div class="singer-title-mv">
+        <div class="singer-title-mv" @click="gotoMvrouter(s.id)">
           <img class="singermv-img" :src="s.imgurl" alt="" />
           <div class="singer-title-text">
-            <p>{{ s.name }}</p>
-            <p class="title-name">{{s.artistName}}</p>
+            <p class="van-ellipsis">{{ s.name }}</p>
+            <p class="title-name">{{ s.artistName }}</p>
           </div>
         </div>
       </li>
@@ -18,6 +18,13 @@
 export default {
   props: {
     singertMv: Array,
+  },
+
+  
+  methods: {
+    gotoMvrouter(id) {
+      this.$router.push(`/singermv/?mvid=${id}`);
+    },
   },
 };
 </script>
@@ -41,13 +48,14 @@ export default {
 
       .singer-title-text {
         margin-left: 10px;
+        width: 60%;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
 
         .title-name {
-            margin-top: 5px;
-            color: #666;
+          margin-top: 5px;
+          color: #666;
         }
       }
     }

@@ -29,7 +29,6 @@ export default new Vuex.Store({
     // 播放总时长
     duration: 0,
     // 控制上一首下一首music
-
     randommusic: 0,
     // 歌单歌曲封面
     songMusictitle: [],
@@ -174,7 +173,7 @@ export default new Vuex.Store({
         songsList = data.result
         // // 默认播放列表 存到本地缓存中   本地只能存储字符串需要转换
         localStorage.songsList = JSON.stringify(songsList)
-        console.log(123);
+   
         // 当前数据持久话的歌曲
         localStorage.changerMusci = JSON.stringify(songsList[0])
 
@@ -185,7 +184,6 @@ export default new Vuex.Store({
       if (state.playingMusic == {}) {
         commit('setPlayingMusic', JSON.parse(localStorage.changerMusci??"{}"))
       } else {
-
         commit('setPlayingMusic', JSON.parse(localStorage.changerMusci??"{}"))
       }
 
