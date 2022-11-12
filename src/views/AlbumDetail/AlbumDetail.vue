@@ -22,9 +22,11 @@
           </div>
           <div class="time">
             发行时间: {{ onPublishTime(album.publishTime) }}
-            
           </div>
-          <div class="title"><span>{{ album.description }}</span><van-icon name="arrow" size="12px" /></div>
+          <div class="title">
+            <span>{{ album.description }}</span
+            ><van-icon name="arrow" size="12px" />
+          </div>
         </div>
       </div>
       <div class="header-mini-box">
@@ -39,7 +41,9 @@
           <div class="frame-icon">
             <van-icon name="chat-o" size="21" color="#ffffffc9" />
           </div>
-          <div class="amount">{{ playCountLabel(album.info?.commentCount) }}</div>
+          <div class="amount">
+            {{ playCountLabel(album.info?.commentCount) }}
+          </div>
         </div>
         <span>|</span>
         <div class="frame" @click="showShare = true">
@@ -48,17 +52,16 @@
           </div>
           <div class="amount">
             {{ playCountLabel(album.info?.shareCount) }}
-         
           </div>
         </div>
       </div>
     </header>
-    <!-- <van-sticky :offset-top="38">
+    <van-sticky :offset-top="38">
       <div class="play-all-box" v-show="showChoose">
         <van-checkbox
           v-model="checked"
           checked-color="#ee0a24"
-          @click="checkAll"
+         
         >
           <span>全选</span>
         </van-checkbox>
@@ -69,7 +72,7 @@
           <van-icon name="play-circle-o" size="22" color="red" />
         </div>
         <div class="text">播放全部</div>
-        <div class="amount">({{ trackCount }})</div>
+        <div class="amount">({{ songList.length }})</div>
         <div class="download">
           <img src="../../assets/imgs/asf.png" alt="" />
         </div>
@@ -77,51 +80,53 @@
           <img src="../../assets/imgs/cnc.png" />
         </div>
       </div>
-    </van-sticky> -->
+    </van-sticky>
 
     <main>
-      <div
-        class="play-box"
-        v-for="(t, i) in songList"
-        :key="i"
-        :class="{ selected: show == false }"
-      >
-        <div v-show="show == false" class="voice-icon">
-          <i></i>
-          <i></i>
-          <i></i>
-        </div>
-        <div v-show="showChoose">
-          <van-checkbox-group v-model="result" ref="checkboxGroup">
+      <van-checkbox-group v-model="result" ref="checkboxGroup">
+        <div
+          class="play-box"
+          v-for="(t, i) in songList"
+          :key="t.id"
+          @click="selectPlay(i)"
+          :class="{ selected: index == i ||t.id == playingMusic.id }"
+        >
+          <!-- :class="{ selected: show == false }" -->
+          <!-- class="voice-icon" -->
+          <div :class="{ 'voice-icon': index == i ||t.id == playingMusic.id }">
+            <i :class="{ palyanime: audioPlayState }"></i>
+            <i :class="{ palyanime: audioPlayState }"></i>
+            <i :class="{ palyanime: audioPlayState }"></i>
+          </div>
+          <div v-show="showChoose">
             <van-checkbox
               :name="i"
               class="yuan"
               checked-color="#ee0a24"
               v-model="checked"
+              :key="i"
             ></van-checkbox>
-          </van-checkbox-group>
-        </div>
-        <div v-show="showChoose == false">
-          <div class="ranking" v-show="show">
-            {{ i < 9 ? "0" + (i + 1) : i + 1 }}
           </div>
-        </div>
-        <div ref="current" class="works-box" @click="selectPlay(i)">
-          <div class="name">
-            {{ t?.name }}
-            <span v-if="t?.tns">{{ t?.tns[0] ? `(${t?.tns[0]})` : "" }}</span>
-            <span v-if="t?.alia">{{ t.alia[0] ? `(${t?.alia[0]})` : "" }}</span>
+          <div v-show="showChoose == false">
+            <div :class="{show:t.id == playingMusic.id}" class="ranking" v-show="index != i">
+              {{ 9 > i ? "0" + (i + 1) : i + 1 }}
+            </div>
           </div>
-          <div class="author">{{ artistsStr(t.ar) }}</div>
-        </div>
+          <div class="works-box" @click="changeoverMusci(t)">
+            <div class="name">
+              {{ t?.name }}
+            </div>
+            <div class="author">{{ artistsStr(t?.ar) }}</div>
+          </div>
 
-        <div class="mv" v-show="showChoose == false">
-          <img src="../../assets/imgs/d1c.png" alt="" />
+          <div class="mv" v-show="showChoose == false">
+            <img src="@/assets/imgs/d1c.png" alt="" />
+          </div>
+          <div class="more" v-show="showChoose == false" >
+            <img src="@/assets/imgs/more.png" />
+          </div>
         </div>
-        <div class="more" v-show="showChoose == false">
-          <img src="../../assets/imgs/more.png" />
-        </div>
-      </div>
+      </van-checkbox-group>
     </main>
 
     <van-popup
@@ -149,19 +154,19 @@
       </div>
     </van-popup>
 
-    <!-- <van-share-sheet
+    <van-share-sheet
       v-model="showShare"
       title="立即分享给好友"
       :options="options"
       @select="onSelect"
       class="share"
-    /> -->
+    />
   </div>
 </template>
 <script>
 import { getAlbumDetails } from "@/Tools/defaultSearch";
 import { Toast } from "vant";
-
+import {mapMutations,mapState} from 'vuex'
 export default {
   data() {
     return {
@@ -197,6 +202,7 @@ export default {
       checked: false,
       result: [],
       songList: [],
+      index: null,
     };
   },
 
@@ -206,8 +212,11 @@ export default {
   mounted() {
     this.getListDetails();
   },
-  computed: {},
+  computed: {
+    ...mapState([ "audioPlayState","playingMusic"]),
+  },
   methods: {
+    ...mapMutations([ 'changeoverMusci'  ]),
     onPublishTime(d) {
       let y = new Date(d);
 
@@ -221,8 +230,8 @@ export default {
     },
     //获取多个作者名字
     artistsStr(n) {
-      console.log(n);
-      return n?.map((ar) => {
+      return n
+        ?.map((ar) => {
           return ar.name;
         })
         .join("/");
@@ -233,16 +242,14 @@ export default {
       let { data } = await this.$axios(getAlbumDetails(id));
       this.album = data.album;
       this.songList = data.songs;
-      console.log(this.album, this.songList);
 
       // //获取播放全部的数量
       // this.trackCount = this.ListDetailsdata.trackCount;
-      
     },
 
     playCountLabel(Count) {
-      if(Count == 0 || !Count){
-        return ''
+      if (Count == 0 || !Count) {
+        return "";
       }
       let res = Count;
 
@@ -252,15 +259,8 @@ export default {
       } else if (Count >= 100000) {
         res = Math.floor(res / 10000) + "万";
       }
-      
-      return res;
-    },
 
-    selectPlay(i) {
-      console.log(this.$refs.current[i]);
-      if (this.$refs.current[i]) {
-        this.show = !this.show;
-      }
+      return res;
     },
     showPopup() {
       this.showChoose = !this.showChoose;
@@ -284,20 +284,21 @@ export default {
       }
       this.showShare = false;
     },
-    checkAll() {
-      console.log("  this.$refs.checkboxGroup", this.$refs.checkboxGroup);
-    },
 
     goto() {
       this.$router.go(-1);
     },
-    dd() {
-      console.log("this.standingsid==>", this.standingsid);
-    },
+
+    selectPlay(i) {
+      this.index = i;
+    }
   },
 };
 </script>
 <style lang="scss" scoped>
+::v-deep .van-share-sheet__cancel::before{
+  display: none;
+}
 .yuan {
   margin-right: 10px;
 }
@@ -347,7 +348,7 @@ export default {
     width: 100%;
     height: 39px;
     align-items: center;
-    z-index: 2;
+    z-index: 100;
     overflow: hidden;
     background-image: linear-gradient(30deg, #565151 0%, #4a4a4a 100%);
 
@@ -461,9 +462,9 @@ export default {
         }
         .title {
           margin-top: 10px;
-           color: #bbb;
+          color: #bbb;
           span {
-           display: inline-block;
+            display: inline-block;
             font-size: 12px;
             width: 150px;
             overflow: hidden;
@@ -557,7 +558,7 @@ export default {
   }
 
   main {
-    padding: 0 15px;
+    padding: 0 15px 50px;
 
     .play-box {
       display: flex;
@@ -616,6 +617,9 @@ export default {
 
       .ranking {
         margin-right: 10px;
+        &.show{
+          display: none;
+        }
       }
 
       .works-box {

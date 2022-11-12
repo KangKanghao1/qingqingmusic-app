@@ -44,7 +44,6 @@ export default {
 
       if (playList.length >= 1) {
         this.recentlyPlay = playList;
-        console.log(this.recentlyPlay);
         this.show = true;
       } else {
         this.show = false;
@@ -60,9 +59,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .song {
-  height: 100%;
+  height: 80vh;
   width: 100%;
-  overflow-x: auto;
+  overflow-y: auto;
   .unplay-song {
     color: #bbb;
     font-size: 12px;

@@ -2,6 +2,7 @@
   <div class="singer-song-com">
     <ul class="singer-ul">
       <li v-for="s in singersongdata" :key="s.id">
+
         <div class="singer-al-name">
           <!-- <img class="singer-al-img" :src="s.al.picUrl" alt="" /> -->
           <van-image
@@ -13,9 +14,10 @@
             <van-loading type="spinner" size="20" />
           </template>
         </van-image>
+        
           <div class="singer-song-name">
             <span>{{ s.name }}</span>
-            <p class="singer-name">{{ singerartistdata.name }}</p>
+            <p class="singer-name" :class="{colorred2:s.id == playingMusic.id}">{{ singerartistdata.name }}</p>
           </div>
         </div>
         <i class="new-icon"></i>
@@ -24,10 +26,17 @@
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
   props: {
     singersongdata: Array,
     singerartistdata: Object,
+  },
+  computed: {
+    ...mapState(["playingMusic"]),
+  },
+  methods: {
+    ...mapMutations(["changeoverMusci"]),
   },
 };
 </script>
@@ -44,8 +53,13 @@ export default {
       align-items: center;
 
       .singer-al-name {
+        width: 80%;
         display: flex;
         align-items: center;
+
+        &.colorred {
+          color: red;
+        }
         .singer-al-img {
           display: block;
           width: 50px;
@@ -58,6 +72,9 @@ export default {
             margin-top: 5px;
             font-size: 12px;
             color: #999;
+            &.colorred2{
+               color: red;
+            }
           }
         }
       }
