@@ -8,7 +8,12 @@
       <div v-for="n in NewMusic" :key="n.id">
         <div class="music-img-title" @click="changeoverMusci(n)">
           <div class="music-mask">
-            <img class="music-img" v-lazy="n.picUrl" />
+            <!-- <img class="music-img" v-lazy="n.picUrl" /> -->
+            <van-image lazy-load :src="n.picUrl" class="music-img">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
             <div class="mask">
               <div :class="{ maskimg: n.id !== playingMusic.id }"></div>
               <div v-show="n.id == playingMusic.id" class="mask-anime">

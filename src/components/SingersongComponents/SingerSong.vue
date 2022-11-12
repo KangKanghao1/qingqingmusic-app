@@ -2,12 +2,19 @@
   <div class="singer-song-com">
     <ul class="singer-ul">
       <li v-for="s in singersongdata" :key="s.id">
-        <div
-          class="singer-al-name"
-          :class="{ colorred: s.id == playingMusic.id }"
-          @click="changeoverMusci(s)"
+
+        <div class="singer-al-name">
+          <!-- <img class="singer-al-img" :src="s.al.picUrl" alt="" /> -->
+          <van-image
+          lazy-load
+          :src="s.al.picUrl"
+          class="singer-al-img"
         >
-          <img class="singer-al-img" :src="s.picUrl" alt="" />
+          <template v-slot:loading>
+            <van-loading type="spinner" size="20" />
+          </template>
+        </van-image>
+        
           <div class="singer-song-name">
             <span>{{ s.name }}</span>
             <p class="singer-name" :class="{colorred2:s.id == playingMusic.id}">{{ singerartistdata.name }}</p>

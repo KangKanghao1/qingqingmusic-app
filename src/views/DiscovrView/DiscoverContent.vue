@@ -94,7 +94,7 @@ export default {
       this.NewMusic = data.result;
       // 存到本地缓存
       localStorage.songsList = JSON.stringify(this.NewMusic);
-      console.log(this.NewMusic);
+ 
     },
     // 每日推荐mv
     async getpersonalizedmv() {

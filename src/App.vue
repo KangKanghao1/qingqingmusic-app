@@ -4,7 +4,7 @@
 
       <router-view @setAudioCurrentTimevalue="setAudioCurrentTimevalue" />
  
-    <PlayControl />
+    <PlayControl :PlayStyle="PlayStyle" />
     <van-tabbar
       class="router-title"
       fixed
@@ -101,16 +101,17 @@ export default {
   watch: {
     $route(to) {
       if (to.name == "discovr") {
-        console.log("a");
+
         this.PlayStyle = false;
-      } else if (to.name == "mymusic") {
-        console.log("a");
+
+      }else if(to.name == "mymusic"){
+        
         this.PlayStyle = false;
-      } else if (to.name == "video") {
-        console.log("a");
+      }else if(to.name == "video"){
+       
         this.PlayStyle = false;
-      } else if (to.name == "user") {
-        console.log("a");
+      }else if(to.name == "user"){
+      
         this.PlayStyle = false;
       } else {
         this.PlayStyle = true;
