@@ -11,24 +11,48 @@ export const getRankingsComments = id => `/comment/playlist?id=${id}`
 // 获取6个
 export const getNewDiscShelves = "/album/list?limit=6"
 
+//推荐歌曲
+export const getRecommendedSongs = '/personalized/newsong?limit=3'
+
 //数字专辑
 export const getDigitalAlbumdata = type => `/album/songsaleboard?type=${type}&albumType=0`
 
 export const ListOptions = [
     {
-        id: 0,
         name: '日榜',
         type: 'daily',
     },
     {
-        id: 0,
+   
         name: '周榜',
         type: 'week',
     },
     {
-        id: 0,
         name: '总榜',
         type: 'total',
     },
 
 ]
+
+export const getDigitalAlbumdata2 = type => `/album/songsaleboard?type=${type}&albumType=1`
+
+export const ListOptions2 = [
+    {
+        name: '日榜',
+        type: 'daily',
+    },
+    {
+   
+        name: '周榜',
+        type: 'week',
+    },
+    {
+        name: '总榜',
+        type: 'total',
+    },
+
+]
+
+export const getProductiondata =id =>`/album/detail?id=${id}`
+
+export const getalbumComments = id =>`/comment/album?id=${id}`

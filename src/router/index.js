@@ -39,11 +39,14 @@ const routes = [{
     path: "esch-rankingList",
     name: "esch-rankingList",
     component: () => import("../views/TypeNavView/RankingListView/EschRankingList.vue"),
-    children: [{
-      path: "/esch-rankingList/comments-section",
-      name: "/esch-rankingList/comments-section",
-      component: () => import("../views/TypeNavView/RankingListView/CommentsSection.vue")
-    }]
+    children: [ {
+    
+        path: "/esch-rankingList/comments-section",
+        name: "comments-section",
+        component: () => import("../views/TypeNavView/RankingListView/CommentsSection.vue")
+      }]
+    },
+  
 
 
   },

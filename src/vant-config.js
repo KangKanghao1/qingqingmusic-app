@@ -1,6 +1,5 @@
 
-import {Slider, NavBar, Tabbar,PullRefresh, List, TabbarItem, Icon, Search, Swipe, SwipeItem,Toast, Lazyload, Tab, Tabs,Popup,NoticeBar,Dialog ,Sticky,ShareSheet,Checkbox,CheckboxGroup,Loading,Overlay,Collapse, CollapseItem,} from 'vant'
- 
+import {Slider, NavBar, Tabbar,PullRefresh, List, TabbarItem, Icon, Search, Swipe, SwipeItem,Toast, Lazyload, Tab, Tabs,Popup,NoticeBar,Dialog ,Sticky,ShareSheet,Checkbox,CheckboxGroup,Loading,Overlay,Collapse, CollapseItem,Button } from 'vant'
 
 const vantCompontents = [
     Slider,
@@ -28,6 +27,8 @@ const vantCompontents = [
     Overlay,
     Collapse,
     CollapseItem,
+    Button 
+
 ]
 
 export default {
