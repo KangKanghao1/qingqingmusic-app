@@ -41,7 +41,7 @@ export default {
     },
     onPicUrl(){
       
-     return this.playingMusic.picUrl ? this.playingMusic.picUrl:this.playingMusic.al.picUrl;
+     return this.playingMusic?.picUrl ? this.playingMusic.picUrl:this.playingMusic.al.picUrl;
      
     }
   },
