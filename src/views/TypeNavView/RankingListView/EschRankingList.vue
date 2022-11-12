@@ -22,8 +22,11 @@
 
       <div class="header-mini-box">
         <div class="frame">
-          <div class="frame-icon">
+          <div class="frame-icon" v-show="!collection" @click="oncollection">
             <img src="@/assets/imgs/cqc.png" />
+          </div>
+           <div class="frame-icon" v-show="collection" @click="CancelCollection">
+          <van-icon name="passed" size="20"/>
           </div>
           <div class="amount">{{ playCountLabel(subscribedCount) }}</div>
         </div>
@@ -43,6 +46,7 @@
         </div>
       </div>
     </header>
+
     <van-notice-bar left-icon="volume-o" :scrollable="false">
       <van-swipe
         vertical
@@ -50,9 +54,13 @@
         :autoplay="3000"
         :show-indicators="false"
       >
-        <van-swipe-item>内容 1</van-swipe-item>
-        <van-swipe-item>内容 2</van-swipe-item>
-        <van-swipe-item>内容 3</van-swipe-item>
+        <van-swipe-item v-for="r in recommendedsongsdata" :key="r.id" @click="changeoverMusci(r)"> 
+          <div class="mini-img">
+            <img class="auto-img" :src="r.picUrl" alt="">
+          </div>
+          <div class="name">{{r.name}} {{r.song.alias[0]}}</div>
+        </van-swipe-item>
+    
       </van-swipe>
     </van-notice-bar>
 
@@ -73,9 +81,9 @@
         </div>
         <div class="text">播放全部</div>
         <div class="amount">({{ trackCount }})</div>
-        <div class="download">
+        <!-- <div class="download">
           <img src="@/assets/imgs/asf.png" alt="" />
-        </div>
+        </div> -->
         <div class="list" @click="showPopup">
           <img src="@/assets/imgs/cnc.png" />
         </div>
@@ -89,11 +97,11 @@
         v-for="(t, i) in tracksname"
         :key="t.id"
         @click="selectPlay(i)"
-        :class="{ selected: index == i }"
+        :class="{ selected: index == i || t.id == playingMusic.id }"
       >
         <!-- :class="{ selected: show == false }" -->
         <!-- class="voice-icon" -->
-        <div :class="{ 'voice-icon': index == i }">
+        <div :class="{ 'voice-icon': index == i || t.id == playingMusic.id}">
           <i :class="{palyanime : audioPlayState}"></i>
           <i :class="{palyanime : audioPlayState}"></i>
           <i :class="{palyanime : audioPlayState}"></i>
@@ -106,12 +114,13 @@
               checked-color="#ee0a24"
               v-model="checked"
               :key="i"
-              @change="onchange"
+             @click="onchange"
             ></van-checkbox>
       
         </div>
         <div v-show="showChoose == false">
-          <div class="ranking" v-show="index != i">
+          
+          <div class="ranking" v-show="index != i" :class="{show:t.id == playingMusic.id}">
             {{ 9 > i ? "0" + (i + 1) : i + 1 }}
           </div>
         </div>
@@ -121,12 +130,12 @@
             <span v-if="t?.tns">{{ t?.tns[0] ? `(${t?.tns[0]})` : "" }}</span>
             <span v-if="t?.alia">{{ t.alia[0] ? `(${t?.alia[0]})` : "" }}</span>
           </div>
-          <div class="author">{{ t?.ar}} - {{ t?.al }}</div>
+          <div class="author">{{ t?.song.artists[0].name}} - {{ t?.al }}</div>
         </div>
-
+<!-- 
         <div class="mv" v-show="showChoose == false">
           <img src="@/assets/imgs/d1c.png" alt="" />
-        </div>
+        </div> -->
         <div class="more" v-show="showChoose == false" @click="ShowMore">
           <img src="@/assets/imgs/more.png" />
         </div>
@@ -197,6 +206,8 @@
 <script>
 import PlayControl from '@/components/PlayControl.vue'
 import { getListDetails } from "@/apis/rankinglist.js";
+import {getRecommendedSongs} from "@/apis/rankinglist.js";
+import { Dialog } from "vant";
 import { Toast } from "vant";
 import {mapMutations,mapState} from 'vuex'
 export default {
@@ -214,10 +225,12 @@ export default {
       //作品数据
       tracksname: [],
       tns: [],
+      recommendedsongsdata:[],
       //背景图片
       coverImgUrl: "",
       //播放全部数量
       trackCount: "",
+      collection:false,
       Press: false,
       show: false,
       show2: true,
@@ -255,37 +268,16 @@ export default {
   },
   mounted() {
     this.getListDetails();
+    this.getRecommendedSongs();
   },
   computed: {
-  // 计算属性 如果是多个名字
-   ...mapState([ "audioPlayState"]),
-    artists() {
-      let arr = this.tracksname;
-       console.log(this.tracksname);
-      if (arr) {
-        return arr.map((a) => a.name).join("/");
-       
-      }
-       console.log(arr);
-      return 121231;
-    
-    },
+
+   ...mapState([ "audioPlayState","playingMusic"]),
     
   },
   methods: {
        ...mapMutations([ 'changeoverMusci'  ]),
-    //获取多个作者名字
-    artistsStr(n) {
-         console.log(n);
-      return n.map((ar) => {
-          return ar.name;
-          
-        }).join("/");
-       
-        
-     
-    },
-
+  
     async getListDetails() {
       let { data } = await this.$axios(getListDetails(this.standingsid));
 
@@ -298,21 +290,20 @@ export default {
             id: d.id,
             name: d.name,
             picUrl: d.al.picUrl,
-          //    song: {
-          //   artists: [
-          //     {
-          //       name: d.ar.name,
-          //     },
-          //   ],
-          // },
-           ar:d.ar[0].name,
+             song: {
+            artists: [
+              {
+                name: d.ar[0].name,
+              },
+            ],
+          },
+         
             tns:d.tns,
             alia:d.alia,
             al:d.al.name
 
         }
       });
-      console.log( this.tracksname );
       //获取背景图
       this.coverImgUrl = this.ListDetailsdata.coverImgUrl;
       //获取播放全部的数量
@@ -325,6 +316,13 @@ export default {
       this.shareCount = this.ListDetailsdata.shareCount;
       // console.log("  this.ListDetailsdata", this.ListDetailsdata);
     
+    },
+
+  async  getRecommendedSongs(){
+  let { data } = await this.$axios(getRecommendedSongs);
+ 
+  this.recommendedsongsdata=data.result
+  
     },
 
     playCountLabel(Count) {
@@ -348,11 +346,12 @@ export default {
     },
     showPopup() {
       this.showChoose = !this.showChoose;
-      this.index = null;
     },
-    onchange(e) {
-      // console.log(this.checked);
-           console.log(e);
+    onchange(e,i) {
+        this.index = null;
+         this.$refs.active.classList.add('active')
+        console.log(e,i);
+        
     },
      checkAll() {
       this.$refs.checkboxGroup.toggleAll();
@@ -383,7 +382,25 @@ export default {
       }
       this.showShare = false;
     },
-   
+   oncollection(){
+    this.collection=true
+     Toast("收藏成功❤❤❤");
+   },
+   CancelCollection(){
+     Dialog.confirm({
+       title: "确定不再收藏该歌单吗?",
+      confirmButtonColor:'red'
+      })
+        .then(() => {
+          // on confirm
+          this.collection=false
+             Toast("已取消收藏😭😭😭");
+        })
+        .catch(() => {
+          // on cancel
+        });
+   },
+
 
     gotoComments() {
       this.$router.push("/esch-rankingList/comments-section");
@@ -398,6 +415,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.van-notice-bar{
+  color: #fff;
+  background-color: transparent;
+  border-radius: 999px;
+}
+.van-swipe-item{
+  display: flex;
+}
 .van-popup {
   background-color: #fff;
   
@@ -458,7 +483,15 @@ export default {
   z-index: 12;
   color: #fff;
   overflow: auto;
-
+   
+   .mini-img{
+    width: 40px;
+    height: 40px;
+    .auto-img{
+      width: 100%;
+      display: block;
+    }
+   }
   .playControl-box{
     position: fixed;
     left: 0;
@@ -674,6 +707,9 @@ export default {
 
       .ranking {
         margin-right: 10px;
+        &.show{
+          display: none;
+        }
       }
 
       .works-box {

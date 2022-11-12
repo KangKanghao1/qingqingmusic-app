@@ -39,14 +39,19 @@ const routes = [
       component: () => import("../views/TypeNavView/RankingListView/EschRankingList.vue"),
       children: [{
         path: "/esch-rankingList/comments-section",
-        name: "/esch-rankingList/comments-section",
+        name: "comments-section",
         component: () => import("../views/TypeNavView/RankingListView/CommentsSection.vue")
       }]
     },
     {
       path: "digital-album",
       name: "digital-album",
-      component: () => import("../views/TypeNavView/DigitalAlbumView/DigitalAlbum.vue")
+      component: () => import("../views/TypeNavView/DigitalAlbumView/DigitalAlbum.vue"),
+      children: [{
+        path: "/digital-album/albumpiece",
+        name: "albumpiece",
+        component: () => import("../views/TypeNavView/DigitalAlbumView/AlbumPiece.vue")
+      }]
     },
     {
       path: "search",

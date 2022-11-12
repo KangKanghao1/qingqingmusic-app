@@ -1,5 +1,6 @@
 <template>
   <div class="box">
+  
     <div class="nav">
       <van-icon name="arrow-left" size="20" @click="gotoPreviousPage" />
       <div class="text">数字专辑</div>
@@ -9,9 +10,9 @@
       <div class="new-arrival-header">
         <div class="text">最新上架 <van-icon name="arrow" /></div>
       </div>
-
+      
       <div class="new-arrival-content">
-        <div class="new-arrival-minibox" v-for="p in products" :key="p.albumId">
+        <div class="new-arrival-minibox" v-for="p in products" :key="p.albumId" @click="getid(p.albumId)">
           <div class="new-arrival-img">
             <img class="auto-img" :src="p.coverUrl" />
             <img class="dei" src="@/assets/imgs/e0g.png" alt="" />
@@ -21,6 +22,7 @@
           <div class="price">￥{{ p.price }}</div>
         </div>
       </div>
+        
     </div>
 
     <div class="number-announcement-box">
@@ -28,7 +30,7 @@
         <div class="text">数字专辑榜 <van-icon name="arrow" /></div>
       </div>
 
-      <van-tabs animated>
+      <van-tabs animated @click="onClick">
         <van-tab
           class="vantab"
           :title="n.name"
@@ -42,6 +44,7 @@
             class="album-box"
             v-for="(d, i) in DigitalAlbumdata"
             :key="d.albumId"
+            @click="getid(d.albumId)"
           >
             <div class="album-img">
               <img class="auto-img" :src="d.coverUrl" alt="" />
@@ -62,40 +65,56 @@
       </van-tabs>
     </div>
 
-    <div class="number-announcement-box">
+      <div class="number-announcement-box">
       <div class="number-announcement-header">
         <div class="text">数字单曲榜 <van-icon name="arrow" /></div>
       </div>
 
-      <van-tabs animated>
-        <van-tab title="日榜" name="a">
-        
-       <div class="album-box">
+      <van-tabs animated @click="onClick2">
+        <van-tab
+          class="vantab"
+          :title="n.name"
+          :name="n.type"
+          v-for="n in navtab2"
+          :key="n.type"
+        >
+     <swiper  :options="swiperOption">
+          <swiper-slide class="swiper">
+          <div
+            class="album-box"
+            v-for="(d, i) in DigitalAlbumdata2"
+            :key="d.albumId"
+            @click="getid(d.albumId)"
+          >
             <div class="album-img">
-              <img
-                class="auto-img"
-                src="@/assets/imgs/109951167973959576.jpg"
-                alt=""
-              />
-              <img class="dei" src="@/assets/imgs/e0g.png" alt="" />
+              <img class="auto-img" :src="d.coverUrl" alt="" />
+              <img class="dei" src="@/assets/imgs/e0g.png" />
             </div>
-            <div class="ranking">1</div>
-            <div class="album-name">if you</div>
+            <div class="ranking">{{ i + 1 }}</div>
+            <div class="album-name">{{ d.albumName }}</div>
           </div>
-  
-       
+          </swiper-slide>
+           <swiper-slide>     </swiper-slide>
+            <swiper-slide>     </swiper-slide>
+                <swiper-slide>     </swiper-slide>
+            <swiper-slide>     </swiper-slide>
+                <swiper-slide>     </swiper-slide>
+            <swiper-slide>     </swiper-slide>
+ </swiper>
         </van-tab>
-        <van-tab title="周榜" name="b">内容 2</van-tab>
-        <van-tab title="总榜" name="c">内容 3</van-tab>
       </van-tabs>
-  
     </div>
+
+   
+    <router-view />
   </div>
 </template>
 <script>
 import { getNewDiscShelves } from "@/apis/rankinglist";
 import { getDigitalAlbumdata } from "@/apis/rankinglist";
 import { ListOptions } from "@/apis/rankinglist";
+import { getDigitalAlbumdata2 } from "@/apis/rankinglist";
+import { ListOptions2 } from "@/apis/rankinglist";
   import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
   import 'swiper/css/swiper.css'
 export default {
@@ -104,7 +123,11 @@ export default {
       //数据
       products: [],
       navtab: ListOptions,
+      navtab2:ListOptions2,
       DigitalAlbumdata: [],
+      DigitalAlbumdata2: [],
+      getType:'',
+      getType2:'',
       swiperOption: {
           slidesPerView: 'auto',
           spaceBetween: 30,
@@ -115,9 +138,19 @@ export default {
         }
     };
   },
+  
   mounted() {
     this.getNewDiscShelves();
     this.getDigitalAlbumdata();
+    this.getDigitalAlbumdata2();
+  },
+  watch:{
+    getType(){
+      this.getDigitalAlbumdata()
+    },
+     getType2(){
+      this.getDigitalAlbumdata2()
+    }
   },
   methods: {
     gotoPreviousPage() {
@@ -126,15 +159,30 @@ export default {
     async getNewDiscShelves() {
       let { data } = await this.$axios(getNewDiscShelves);
       this.products = data.products;
-      console.log(this.products);
     },
     async getDigitalAlbumdata() {
       let { data } = await this.$axios(
-        getDigitalAlbumdata(this.navtab[0].type)
+        getDigitalAlbumdata(this.getType)
       );
-      console.log(data);
+      console.log(this.getType);
       this.DigitalAlbumdata = data.products;
     },
+     async getDigitalAlbumdata2() {
+      let { data } = await this.$axios(
+        getDigitalAlbumdata2(this.getType2)
+      );
+      this.DigitalAlbumdata2 = data.products;
+    },
+    getid(id){
+     this.$router.push(`/digital-album/albumpiece?id=${id}`);
+    },
+     onClick(type) {
+       this.getType=type
+      
+    },
+    onClick2(type){
+      this.getType2=type
+    }
   },
     components: {
       Swiper,
@@ -143,12 +191,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-// .vantab {
-//   display: flex;
-//   height: 185px;
-//   justify-content: space-between;
-//   flex-direction: column;
-// }
 .swiper{
    display: flex;
   height: 185px;
@@ -161,7 +203,7 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 10;
+  z-index: 20;
   background-color: #fff;
   overflow: auto;
 

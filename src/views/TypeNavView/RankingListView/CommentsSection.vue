@@ -30,7 +30,7 @@
         finished-text="没有更多了"
         @load="onLoad"
       >
-        <div class="comments-box" v-for="c in commentsdata" :key="c.commentId">
+        <div class="comments-box" v-for="(c,i) in commentsdata" :key="c.commentId">
           <div class="comments-section-header">
             <div class="head-portrait">
               <img :src="c.user.avatarUrl" alt="" />
@@ -45,8 +45,8 @@
               <div class="praise-amount">
                 {{ c?.likedCount ? c?.likedCount : "" }}
               </div>
-              <div class="praise-icon">
-                <van-icon name="good-job-o" size="17" color="#ababab" />
+              <div class="praise-icon" >
+                <van-icon name="good-job-o" size="17" color="#ababab" :class="{ 'praise-color':i}" @click="praise"/>
               </div>
             </div>
           </div>
@@ -72,6 +72,7 @@ export default {
       commentsdata: [],
       loading: false,
       finished: false,
+      show:false
     };
   },
   mounted() {
@@ -81,7 +82,6 @@ export default {
   methods: {
     async getRankingsComments() {
       let { data } = await this.$axios(getRankingsComments(this.standingsid));
-      console.log(data);
       this.commentsdata = data.comments;
       this.total = data.total;
     },
@@ -101,10 +101,19 @@ export default {
 
         this.finished = true;
     },
+    praise(){
+           
+    
+   
+      }
+
   },
 };
 </script>
 <style lang="scss" scoped>
+.praise-color{
+  color: red;
+}
 .box {
   position: fixed;
   left: 0;
@@ -112,7 +121,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #000;
-  z-index: 3;
+  z-index: 13;
   .announcement {
     padding: 15px;
     width: 100%;
